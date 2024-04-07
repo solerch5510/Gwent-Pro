@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Dragon_1
   m_EditorClassIdentifier: 
   name: Dragon de Asedio
-  description: Unidad de Asedio. Liberado de sus cadenas, nuevo portador del caos.
+  description: 'Unidad de Asedio. '
   classCard: Silver Card
   summonCost: 1
   power: 4

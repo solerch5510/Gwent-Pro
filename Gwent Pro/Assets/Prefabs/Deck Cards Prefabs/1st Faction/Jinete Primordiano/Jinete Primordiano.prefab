@@ -16,10 +16,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Jinete Primordiano
       objectReference: {fileID: 0}
+    - target: {fileID: 6886779351777593612, guid: c6ab70b57b52e284ab0f7accae36e360, type: 3}
+      propertyPath: card
+      value: 
+      objectReference: {fileID: 11400000, guid: 8b84cf5626c52694693c50f48d886895, type: 2}
     - target: {fileID: 7530631609315662950, guid: c6ab70b57b52e284ab0f7accae36e360, type: 3}
       propertyPath: m_Delegates.Array.data[3].callback.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 7530631609315662950, guid: c6ab70b57b52e284ab0f7accae36e360, type: 3}
+      propertyPath: m_Delegates.Array.data[2].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 11400000, guid: 8b84cf5626c52694693c50f48d886895, type: 2}
     - target: {fileID: 8044222200904523282, guid: c6ab70b57b52e284ab0f7accae36e360, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

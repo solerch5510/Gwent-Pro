@@ -1,57 +1,39 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CardZoom : MonoBehaviour
 {
-    public GameObject Canvas;
+    // Referencia al panel de UI que se usará para mostrar el zoom de la carta
+    public GameObject zoomPanel;
 
-    private GameObject zoomCard; // Variable para almacenar el objeto instanciado
-    
+    // Componente de UI para el nombre dentro del panel de zoom
+    private Text nameText;
+    private CanvasGroup canvasGroup;
 
-    public void Awake()
+    void Start()
     {
-        Canvas = GameObject.Find("MainCanvas");
-        
+        // Inicialización del componente de UI para el nombre
+        nameText = zoomPanel.transform.Find("ZoomNameText").GetComponent<Text>();
+        canvasGroup = zoomPanel.GetComponent<CanvasGroup>();
+
+        // Ocultar inicialmente el panel de zoom
+        canvasGroup.alpha = 0;
     }
 
-    public void OnHoverEnterCard(GameObject cardPrefab)
+    // Método llamado cuando el cursor entra sobre una carta
+    public void OnHoverEnterCard(string cardName)
     {
-        if (zoomCard == null) // Verificar si el objeto ya está instanciado
+        // Actualizar el panel de zoom con el nombre de la carta
+        nameText.text = cardName;
 
-        {
-             // Instanciar el objeto de juego solo si no está instanciado
-            zoomCard = Instantiate(cardPrefab, new Vector2(-378, 241), Quaternion.identity);
-            zoomCard.transform.SetParent(Canvas.transform, false);
-
-            AdjustScale(zoomCard, cardPrefab);
-        }
-
-        AdjustScale(zoomCard, cardPrefab);
+        // Mostrar el panel de zoom
+        canvasGroup.alpha = 1;
     }
 
-    private void AdjustScale(GameObject zoomCard, GameObject cardPrefab) // Ajustar la escala del objeto instanciado y de sus hijos
-    {
-        RectTransform rect = zoomCard.GetComponent<RectTransform>();
-        rect.sizeDelta = new Vector2(285, 480);
-
-        foreach (Transform child in zoomCard.transform)
-        {
-            float scaleFactorX = rect.sizeDelta.x / cardPrefab.GetComponent<RectTransform>().sizeDelta.x;
-            float scaleFactorY = rect.sizeDelta.y / cardPrefab.GetComponent<RectTransform>().sizeDelta.y;
-
-            child.localScale = new Vector3(scaleFactorX, scaleFactorY, 1);
-        }
-    }
-
-        
+    // Método llamado cuando el cursor sale de la carta
     public void OnHoverExit()
     {
-        if (zoomCard != null)
-        {
-            Destroy(zoomCard);
-            zoomCard = null;
-        }
+        // Ocultar el panel de zoom
+        canvasGroup.alpha = 0;
     }
 }

@@ -10,6 +10,9 @@ public class DragDrop : MonoBehaviour
     private GameObject dropZone;
     private GameObject startParent;
     private Vector2 startPosition;
+    public InteractableObject interactableObject;
+
+    
 
 
 
@@ -41,6 +44,10 @@ public class DragDrop : MonoBehaviour
 
     public void StartDrag()
     {
+
+        // Desactivar el GridLayoutGroup al comenzar el arrastre
+        FindObjectOfType<DrawCard>().DisableGridLayoutGroup();
+
         startParent = transform.parent.gameObject;
 
         startPosition = transform.position;
@@ -63,9 +70,12 @@ public class DragDrop : MonoBehaviour
 
             transform.SetParent(startParent.transform, false); 
         }
+
+        //Reactivar el GridLayoutGroup al terminar arrastre
+        FindObjectOfType<DrawCard>().EnableGridLayoutGroup();
     }
 
-    public bool WichZoneIs ()
+    public bool WichZoneIs ()  // Metodo para que la carta solo colisione con su zona correspondiente.
     {
         Zones conditions = dropZone.GetComponent<Zones>();
         

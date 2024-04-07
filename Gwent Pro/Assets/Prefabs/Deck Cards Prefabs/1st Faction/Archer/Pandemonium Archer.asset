@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: Pandemonium Archer
   m_EditorClassIdentifier: 
   name: Arquero Primordiano
-  description: Unidad de rango. Posee un poder letal con su arco
+  description: Unidad de rango. Se potencia en uno por cada unidad de rango en la
+    fila.
   classCard: Silver Card
   summonCost: 1
-  power: 3
+  power: 4
   spriteImage: {fileID: 21300000, guid: 29b47d5fee473284e9dfd443ea4b17a8, type: 3}
   Zone: R

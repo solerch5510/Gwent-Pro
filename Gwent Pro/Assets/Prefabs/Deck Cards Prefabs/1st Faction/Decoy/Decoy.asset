@@ -13,9 +13,8 @@ MonoBehaviour:
   m_Name: Decoy
   m_EditorClassIdentifier: 
   name: 'Hereje '
-  description: Comunmente conocido como carnada. Puede recuperar una carta tipo plata
-    de tu campo.
-  classCard: Silver Card
+  description: Comunmente conocido como carnada. Carta tipo Decoy
+  classCard: Decoy Card
   summonCost: 1
   power: 0
   spriteImage: {fileID: 21300000, guid: b9ad3365c81ea2b4fad254b6e42913c5, type: 3}

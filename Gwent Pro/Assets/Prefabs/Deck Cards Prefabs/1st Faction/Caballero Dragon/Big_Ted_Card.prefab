@@ -12,11 +12,12 @@ GameObject:
   - component: {fileID: 3708914659206770584}
   - component: {fileID: 2671228836387807175}
   - component: {fileID: 7842011074705616142}
-  - component: {fileID: 2696754163032302683}
   - component: {fileID: 7530631609315662950}
   - component: {fileID: -8477376991851741650}
   - component: {fileID: -3396155175711189756}
   - component: {fileID: -5062131316429481596}
+  - component: {fileID: 7942435278962034730}
+  - component: {fileID: -4056899845299845917}
   m_Layer: 6
   m_Name: Big_Ted_Card
   m_TagString: Untagged
@@ -94,19 +95,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d148aab1137531479d6931c6b2d0509, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2696754163032302683
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5618440890545728150}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 919b64f56fa91284e870fb47c8d354d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Canvas: {fileID: 0}
+  interactableObject: {fileID: -4056899845299845917}
 --- !u!114 &7530631609315662950
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -136,18 +125,6 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-        - m_Target: {fileID: 2696754163032302683}
-          m_TargetAssemblyTypeName: CardZoom, Assembly-CSharp
-          m_MethodName: OnHoverExit
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
   - eventID: 14
     callback:
       m_PersistentCalls:
@@ -167,35 +144,11 @@ MonoBehaviour:
   - eventID: 0
     callback:
       m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 2696754163032302683}
-          m_TargetAssemblyTypeName: CardZoom, Assembly-CSharp
-          m_MethodName: OnHoverEnterCard
-          m_Mode: 2
-          m_Arguments:
-            m_ObjectArgument: {fileID: 5618440890545728150}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
+        m_Calls: []
   - eventID: 1
     callback:
       m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 2696754163032302683}
-          m_TargetAssemblyTypeName: CardZoom, Assembly-CSharp
-          m_MethodName: OnHoverExit
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
+        m_Calls: []
 --- !u!114 &-8477376991851741650
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -209,12 +162,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   card: {fileID: 11400000, guid: 6e11a0b9f3bb7344eb55b73b889f0e39, type: 2}
+  interactableObject: {fileID: -4056899845299845917}
   nameText: {fileID: 3010390871591359762}
   descriptionText: {fileID: 9001678382566905956}
   artImage: {fileID: 8331342810969906107}
   powerText: {fileID: 3667283387935797561}
   classCardText: {fileID: 1304085572913521476}
-  cardBack: 0
+  Zone: 
 --- !u!61 &-3396155175711189756
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -287,6 +241,31 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 7
+--- !u!225 &7942435278962034730
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5618440890545728150}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!114 &-4056899845299845917
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5618440890545728150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2df22f372373d348a3edee77b661ee9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isInteractable: 1
 --- !u!1001 &5695675135734513548
 PrefabInstance:
   m_ObjectHideFlags: 0

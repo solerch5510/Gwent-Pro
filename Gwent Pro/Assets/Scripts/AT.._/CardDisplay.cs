@@ -8,6 +8,8 @@ public class CardDisplay : MonoBehaviour
 {
     public Card2 card;
 
+    public InteractableObject interactableObject;
+
     public Text nameText;
     public Text descriptionText;
 
@@ -19,7 +21,6 @@ public class CardDisplay : MonoBehaviour
     public string Zone ;
 
 
-    public bool cardBack;
     public static bool staticCardBack;
 
 
@@ -36,8 +37,4 @@ public class CardDisplay : MonoBehaviour
         powerText.text = card.power.ToString();
     }
 
-    void Update()
-    {
-        staticCardBack = cardBack;
-    }
 }
