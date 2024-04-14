@@ -19,3 +19,4 @@ MonoBehaviour:
   power: 4
   spriteImage: {fileID: 21300000, guid: 46690515f4395d24785cb02ab38ffe0e, type: 3}
   Zone: S
+  playerID: 1

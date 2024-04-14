@@ -17,5 +17,6 @@ MonoBehaviour:
   classCard: SilverCard
   summonCost: 1
   power: 3
-  spriteImage: {fileID: 0}
+  spriteImage: {fileID: 21300000, guid: d16ad7b3a83f9a0449df7a10ccdf459f, type: 3}
   Zone: R1
+  playerID: 0

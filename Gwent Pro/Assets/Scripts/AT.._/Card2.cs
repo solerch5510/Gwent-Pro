@@ -15,6 +15,8 @@ public class Card2 : ScriptableObject
 
     public string Zone;
 
+    public bool playerID; // True para Player1 , False para Player2
+
     
 
 

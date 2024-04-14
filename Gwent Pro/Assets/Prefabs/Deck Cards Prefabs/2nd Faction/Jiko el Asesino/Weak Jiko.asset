@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcc8a7f6126c5df43b8044c2ceee9b3d, type: 3}
   m_Name: Weak Jiko
   m_EditorClassIdentifier: 
-  name: 
-  description: 
-  classCard: 
-  summonCost: 0
-  power: 0
-  spriteImage: {fileID: 0}
-  Zone: 
+  name: Jiko el debil
+  description: Unidad cuerpo a cuerpo. Elimina la carta con mas poder sobre el campo.
+  classCard: GoldenCard
+  summonCost: 1
+  power: 1
+  spriteImage: {fileID: 21300000, guid: 772e7a4e432d8e447bdc864947d8c44a, type: 3}
+  Zone: M1

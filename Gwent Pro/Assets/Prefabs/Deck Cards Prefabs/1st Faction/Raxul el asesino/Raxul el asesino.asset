@@ -18,4 +18,5 @@ MonoBehaviour:
   summonCost: 1
   power: 1
   spriteImage: {fileID: 21300000, guid: 962d6f70727f7664b92c1de8cd186da6, type: 3}
-  Zone: 
+  Zone: M
+  playerID: 1

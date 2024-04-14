@@ -15,8 +15,9 @@ MonoBehaviour:
   name: Maquina de Asedio
   description: Unidad de Asedio. Maquinaria basica de asedio, se desconoce su modo
     de uso).
-  classCard: Silver Card
+  classCard: SilverCard
   summonCost: 1
   power: 6
   spriteImage: {fileID: 21300000, guid: e2b65a3d2c7b72a40a85af0312626770, type: 3}
   Zone: S
+  playerID: 1

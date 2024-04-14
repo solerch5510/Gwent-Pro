@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2016984771963997191, guid: 375d64d0de809474bab992536c9229e1, type: 3}
       propertyPath: m_Name
-      value: Esqueletos Arqueros (19) Variant
+      value: Raxul el asesino
       objectReference: {fileID: 0}
     - target: {fileID: 4154469187276847235, guid: 375d64d0de809474bab992536c9229e1, type: 3}
       propertyPath: m_Pivot.x
@@ -92,6 +92,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6656105037826349247, guid: 375d64d0de809474bab992536c9229e1, type: 3}
+      propertyPath: card
+      value: 
+      objectReference: {fileID: 11400000, guid: 7eb9e603837b6374eb200b20a59b6055, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
