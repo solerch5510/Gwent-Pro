@@ -62,6 +62,8 @@ public class DragDrop : MonoBehaviour
         if (isOverDropZone && WichZoneIs())
         {
             transform.SetParent(dropZone.transform, false);
+
+            GameManager.passTurn(gameObject, gameObject.GetComponent<CardDisplay>().card.playerID);
         }
 
         else 

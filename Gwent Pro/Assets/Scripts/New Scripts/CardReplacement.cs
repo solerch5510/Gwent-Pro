@@ -74,7 +74,7 @@ public class CardReplacement : MonoBehaviour
             //Obtener la referencia al objeto GameManager
             GameManager gameManager = GameObject.FindObjectOfType<GameManager>();
 
-            //Activar el readyToPlay2
+            //Activar el readyToPlay1
             gameManager.readyToPLay1.SetActive(true);
         }                
     }
