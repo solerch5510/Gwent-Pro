@@ -7,10 +7,13 @@ using UnityEngine.UI;
 public class Points_Counter : MonoBehaviour
 {
     public int points;
+    public int finalPoints;
     public Text pointsText;
     public GameObject melee;
     public GameObject range;
     public GameObject siege;
+    public GameObject cementerio;
+    
 
 
     private List<GameObject> filas = new List<GameObject>(3);
@@ -55,7 +58,33 @@ public class Points_Counter : MonoBehaviour
             }
         }
 
+        finalPoints = points;
+
+        if((GameManager.endTurn1 && GameManager.endTurn2) == true)
+        {
+            moveToCementerio();
+        }
+
+        GameManager.pointsPlayer1 = finalPoints;
+
         //Actualizar el texto de los puntos
         pointsText.text = points.ToString();
+    }
+
+    void moveToCementerio ()
+    {
+        foreach(GameObject fila in filas)
+        {
+            foreach(Transform card in fila.transform)
+            {
+                CardDisplay cardComponent = card.GetComponent<CardDisplay>();
+
+                if(cardComponent != null)
+                {
+                    card.SetParent(cementerio.transform, true);
+                }
+            }
+        }
+
     }
 }

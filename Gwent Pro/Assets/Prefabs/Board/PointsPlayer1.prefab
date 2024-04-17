@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1437965324796065961}
   - component: {fileID: 926128364230983529}
   - component: {fileID: 1173834288450201472}
-  - component: {fileID: 3647205605339498209}
+  - component: {fileID: 3699518359923136064}
   m_Layer: 5
   m_Name: PointsPlayer1
   m_TagString: Untagged
@@ -77,7 +77,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &3647205605339498209
+--- !u!114 &3699518359923136064
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -90,6 +90,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   points: 0
+  finalPoints: 0
   pointsText: {fileID: 6567215107275019083}
   melee: {fileID: 0}
   range: {fileID: 0}
