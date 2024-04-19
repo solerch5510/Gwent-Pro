@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 810943256296053781, guid: 8280c87bafa35844ea1ee359ede65a08, type: 3}
       propertyPath: m_Name
-      value: Dragon III Variant
+      value: Dragon III-3
       objectReference: {fileID: 0}
     - target: {fileID: 2962079755639072913, guid: 8280c87bafa35844ea1ee359ede65a08, type: 3}
       propertyPath: m_Pivot.x
@@ -92,6 +92,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5540540431204141229, guid: 8280c87bafa35844ea1ee359ede65a08, type: 3}
+      propertyPath: card
+      value: 
+      objectReference: {fileID: 11400000, guid: df5a3d005df77a0489321e777474a1d0, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

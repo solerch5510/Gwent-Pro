@@ -8,9 +8,13 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1677088773376853414, guid: c87fe68376bbdf84ab026a11a2c9eb89, type: 3}
+      propertyPath: card
+      value: 
+      objectReference: {fileID: 11400000, guid: 0c41873ad0ff0a24b8d11e4aa5733d9e, type: 2}
     - target: {fileID: 5829012413281128734, guid: c87fe68376bbdf84ab026a11a2c9eb89, type: 3}
       propertyPath: m_Name
-      value: M. Asedio II Variant
+      value: M. Asedio II-3
       objectReference: {fileID: 0}
     - target: {fileID: 8268231406871553434, guid: c87fe68376bbdf84ab026a11a2c9eb89, type: 3}
       propertyPath: m_Pivot.x

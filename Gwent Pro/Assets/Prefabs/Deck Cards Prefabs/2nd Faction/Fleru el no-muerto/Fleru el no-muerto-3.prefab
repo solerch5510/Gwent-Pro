@@ -90,8 +90,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3669100066485848523, guid: 9c4a06aff86976049965a6d4598d7721, type: 3}
       propertyPath: m_Name
-      value: Fleru el no-muerto Variant 1
+      value: Fleru el no-muerto-3
       objectReference: {fileID: 0}
+    - target: {fileID: 8451492473776823667, guid: 9c4a06aff86976049965a6d4598d7721, type: 3}
+      propertyPath: card
+      value: 
+      objectReference: {fileID: 11400000, guid: 7e4a5152e803c8e4fad38d9cefc681f7, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

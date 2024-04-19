@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2016984771963997191, guid: 375d64d0de809474bab992536c9229e1, type: 3}
       propertyPath: m_Name
-      value: Esqueletos Arqueros (18) Variant
+      value: Arqueros Oscuros II-1
       objectReference: {fileID: 0}
     - target: {fileID: 4154469187276847235, guid: 375d64d0de809474bab992536c9229e1, type: 3}
       propertyPath: m_Pivot.x
@@ -96,6 +96,10 @@ PrefabInstance:
       propertyPath: card
       value: 
       objectReference: {fileID: 11400000, guid: 3f19fab501e23ff41a59ecb75bbdecad, type: 2}
+    - target: {fileID: 8279335377428288140, guid: 375d64d0de809474bab992536c9229e1, type: 3}
+      propertyPath: cardName
+      value: Arroz
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

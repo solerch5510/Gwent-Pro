@@ -709,6 +709,7 @@ GameObject:
   - component: {fileID: 4578726309147443719}
   - component: {fileID: 6892691159798663109}
   - component: {fileID: 5525555581398916485}
+  - component: {fileID: 1044636698736543627}
   m_Layer: 5
   m_Name: ZoomCard
   m_TagString: Untagged
@@ -786,6 +787,19 @@ CanvasGroup:
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
+--- !u!114 &1044636698736543627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5916503247153099278}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 919b64f56fa91284e870fb47c8d354d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  zoomPanel: {fileID: 5916503247153099278}
 --- !u!1 &7300201907502466891
 GameObject:
   m_ObjectHideFlags: 0

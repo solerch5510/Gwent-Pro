@@ -8,9 +8,13 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 390383540959271426, guid: 5252a392046888947bafb455dd13e615, type: 3}
+      propertyPath: card
+      value: 
+      objectReference: {fileID: 11400000, guid: cf078613dbd6c2944955d2d14f7d13eb, type: 2}
     - target: {fileID: 4812117580046388922, guid: 5252a392046888947bafb455dd13e615, type: 3}
       propertyPath: m_Name
-      value: Dragon_1 Variant
+      value: Dragon_1-3
       objectReference: {fileID: 0}
     - target: {fileID: 6958752131728521790, guid: 5252a392046888947bafb455dd13e615, type: 3}
       propertyPath: m_Pivot.x

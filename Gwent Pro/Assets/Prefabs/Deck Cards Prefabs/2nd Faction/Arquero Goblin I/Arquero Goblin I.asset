@@ -15,7 +15,8 @@ MonoBehaviour:
   name: Arquero Goblin
   description: Unidad de rango.
   classCard: SilverCard
-  summonCost: 1
   power: 3
+  basedPower: 3
   spriteImage: {fileID: 21300000, guid: fd7acd7df8fdfff40afdcbd952069784, type: 3}
   Zone: R1
+  playerID: 0

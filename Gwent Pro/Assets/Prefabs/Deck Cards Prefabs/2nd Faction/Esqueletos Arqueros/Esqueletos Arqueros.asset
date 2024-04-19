@@ -15,8 +15,9 @@ MonoBehaviour:
   name: Esqueletos Arqueros
   description: Unidad de rango basica que se potencia si hay cartas de tipo esqueleto
     en su fila.
-  classCard: Silver Card
-  summonCost: 1
-  power: 1
+  classCard: SilverCard
+  power: 2
+  basedPower: 2
   spriteImage: {fileID: 21300000, guid: 10d8386c795b6e14689574741f32afde, type: 3}
   Zone: R1
+  playerID: 0

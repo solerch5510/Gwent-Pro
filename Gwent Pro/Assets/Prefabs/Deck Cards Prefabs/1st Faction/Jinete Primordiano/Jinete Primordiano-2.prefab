@@ -90,8 +90,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2368278412934333859, guid: 8f279014b5949f046822c6fb9dddcd98, type: 3}
       propertyPath: m_Name
-      value: Jinete Primordiano Variant
+      value: Jinete Primordiano-2
       objectReference: {fileID: 0}
+    - target: {fileID: 7457723598492913947, guid: 8f279014b5949f046822c6fb9dddcd98, type: 3}
+      propertyPath: card
+      value: 
+      objectReference: {fileID: 11400000, guid: 369a5c8b89407d34a9af9a7f2eddb69d, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

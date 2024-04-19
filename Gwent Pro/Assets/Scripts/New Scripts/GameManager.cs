@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -20,6 +22,14 @@ public class GameManager : MonoBehaviour
     public DrawCard drawCard;
 
     public DrawCard2 drawCard2;
+    public GameObject player1S;
+    public GameObject player1R;
+    public GameObject player1M;
+    public GameObject player2S;
+    public GameObject player2R;
+    public GameObject player2M;
+    public GameObject Cementerio1;
+    public GameObject Cementerio2;
 
     public static void passTurn (GameObject thisCard ,bool playerID)
     {
@@ -139,6 +149,29 @@ public class GameManager : MonoBehaviour
 
         if((endTurn1 && endTurn2) == true) //Si la ronda acabo, desactiva todas las cartas de la escena.
         {
+            //Buscar todas las cartas de la escena (componentes CardDisplay)
+            CardDisplay[] allCards = GameObject.FindObjectsOfType<CardDisplay>();
+
+            //Itera sobre cada CardDisplay en la escena
+            foreach (CardDisplay cardDisplay in allCards)
+            {
+                // Restablece el poder de la carta a su basedPower
+                cardDisplay.card.power = cardDisplay.card.basedPower;
+            }
+            GameManager gameManager = GameObject.FindObjectOfType<GameManager>();
+
+            whoWinsTheRound();
+
+            gameManager.roundWinner.SetActive(true); // Activa el roundWinner.
+
+            gameManager.drawCard.drawnTwoCards();
+
+            gameManager.drawCard2.drawnTwoCards();
+
+            CardDisplay cardDisplay1 = GameObject.Find("Void").GetComponent<CardDisplay>();
+            
+            cardDisplay1.ActivateDragDropOnAllCards();
+
             foreach (GameObject card in player1Cards)
             {
                 card.SetActive(false);
@@ -147,13 +180,7 @@ public class GameManager : MonoBehaviour
             foreach(GameObject card in player2Cards)
             {
                 card.SetActive(false);
-            }
-
-            GameManager gameManager = GameObject.FindObjectOfType<GameManager>();
-
-            whoWinsTheRound();
-
-            gameManager.roundWinner.SetActive(true); // Activa el roundWinner.        
+            }        
         }
 
     }
@@ -169,6 +196,14 @@ public class GameManager : MonoBehaviour
             gameManager.readyToPLay1.SetActive(true);
 
             gameManager.readyToPLay2.SetActive(false);
+
+            ClimaDespeje climaDespeje = GameObject.FindObjectOfType<ClimaDespeje>();
+
+            climaDespeje.backToTheNormalPowerInFilas();
+
+            BuffFila buffFila = GameObject.FindObjectOfType<BuffFila>();
+
+            buffFila.backToNormalPowerInCards();
 
             if(whichPlayerIs == false)
             {
@@ -195,13 +230,300 @@ public class GameManager : MonoBehaviour
                 whichPlayerIs = false;
             }
 
-            GameObject trophyInstance = Instantiate(gameManager.trophy, gameManager.mainCanvas.transform, false);
+            GameObject trophyInstance = Instantiate(gameManager.trophy, gameManager.mainCanvas.transform, false);  //Instancia una imagen para simbolizar que player gano la ronda.
 
             trophyInstance.transform.localPosition = new Vector3(-338, 195, 0);
+
+            ClimaDespeje climaDespeje = GameObject.FindObjectOfType<ClimaDespeje>();
+
+            climaDespeje.backToTheNormalPowerInFilas();
+
+            BuffFila buffFila = GameObject.FindObjectOfType<BuffFila>();
+
+            buffFila.backToNormalPowerInCards();
         }
 
 
 
+    }
+
+    public static void Effects(int whichEffectIs)
+    {
+        // Obtener las referencias a las filas
+        GameManager gameManager = GameObject.FindAnyObjectByType<GameManager>();
+
+        //Lista para almacenar los poderes de las cartas
+        List<CardDisplay> cardPowersStrong = new List<CardDisplay>(); // para implementar el efecto de eliminar la carta con mas poder del campo
+
+        List<CardDisplay> cardPowersWeak = new List<CardDisplay>(); // para implementar el efecto de eliminar la carta con menos poder del campo
+
+        // Iterar sobre los hijos de cada fila
+
+        foreach (Transform child in gameManager.player1M.transform)
+        {
+            CardDisplay cardDisplay = child.GetComponent<CardDisplay>();
+            if (cardDisplay != null && cardDisplay.card.classCard != "GoldenCard")
+            {
+                cardPowersStrong.Add(cardDisplay);
+
+                if(whichPlayerIs == false)
+                {
+                    cardPowersWeak.Add(cardDisplay);
+                }
+            }
+        }
+
+        foreach (Transform child in gameManager.player1S.transform)
+        {
+            CardDisplay cardDisplay = child.GetComponent<CardDisplay>();
+            if (cardDisplay != null && cardDisplay.card.classCard != "GoldenCard")
+            {
+                cardPowersStrong.Add(cardDisplay);
+
+                if(whichPlayerIs == false)
+                {
+                    cardPowersWeak.Add(cardDisplay);
+                }
+            }
+        }
+
+        foreach (Transform child in gameManager.player1R.transform)
+        {
+            CardDisplay cardDisplay = child.GetComponent<CardDisplay>();
+            if (cardDisplay != null && cardDisplay.card.classCard != "GoldenCard")
+            {
+                cardPowersStrong.Add(cardDisplay);
+
+                if(whichPlayerIs == false)
+                {
+                    cardPowersWeak.Add(cardDisplay);
+                }
+            }
+        }
+
+        foreach (Transform child in gameManager.player2S.transform)
+        {
+            CardDisplay cardDisplay = child.GetComponent<CardDisplay>();
+            if (cardDisplay != null && cardDisplay.card.classCard != "GoldenCard")
+            {
+                cardPowersStrong.Add(cardDisplay);
+
+                if(whichPlayerIs == true)
+                {
+                    cardPowersWeak.Add(cardDisplay);
+                }
+            }
+        }
+
+        foreach (Transform child in gameManager.player2R.transform)
+        {
+            CardDisplay cardDisplay = child.GetComponent<CardDisplay>();
+            if (cardDisplay != null && cardDisplay.card.classCard != "GoldenCard")
+            {
+                cardPowersStrong.Add(cardDisplay);
+
+                if(whichPlayerIs == true)
+                {
+                    cardPowersWeak.Add(cardDisplay);
+                }
+            }
+        }
+
+        foreach (Transform child in gameManager.player2M.transform)
+        {
+            CardDisplay cardDisplay = child.GetComponent<CardDisplay>();
+            if (cardDisplay != null && cardDisplay.card.classCard != "GoldenCard")
+            {
+                cardPowersStrong.Add(cardDisplay);
+
+                if(whichPlayerIs == true)
+                {
+                    cardPowersWeak.Add(cardDisplay);
+                }
+            }
+        }     
+
+        // Para buscar la carta de menor y mayor poder
+
+        CardDisplay minPowerCardDisplay = null;
+
+        CardDisplay maxPowerCardDisplay = null;
+     
+        int minPower = int.MaxValue;
+        
+        int maxPower = int.MinValue;
+
+        foreach (CardDisplay cardDisplay1 in cardPowersStrong)
+        {
+            if (cardDisplay1.card.power > maxPower && cardDisplay1 != null)
+            {
+                maxPower = cardDisplay1.card.power;
+
+                maxPowerCardDisplay = cardDisplay1;
+            }
+        }
+
+        foreach (CardDisplay cardDisplay1 in cardPowersWeak)
+        {
+            if(cardDisplay1.card.power < minPower && cardDisplay1 != null)
+            {
+                minPower = cardDisplay1.card.power;
+
+                minPowerCardDisplay = cardDisplay1;
+            }
+        }
+
+        if(whichEffectIs == 0)
+        {
+            cardPowersStrong.Clear();
+
+            cardPowersWeak.Clear();
+
+            return;
+        }
+
+        else if(whichEffectIs == 1) // efecto de eliminar la carta mas debil del rival
+        {
+            if(cardPowersWeak == null)
+            {
+                return;
+            }
+
+            if(minPowerCardDisplay.card.playerID && minPowerCardDisplay != null)
+            {
+                minPowerCardDisplay.gameObject.transform.SetParent(gameManager.Cementerio1.transform, false);
+            }
+            
+            else if(minPowerCardDisplay.card.playerID == false && minPowerCardDisplay != null)
+            {
+                minPowerCardDisplay.gameObject.transform.SetParent(gameManager.Cementerio2.transform, false);
+            }
+
+            cardPowersStrong.Clear();
+
+            cardPowersWeak.Clear();
+
+            return;
+        }
+
+        else if(whichEffectIs == 2) // efecto de eliminar la carta mas fuerte del campo
+        { 
+            if (cardPowersStrong == null)
+            {
+                return;
+            }
+
+            if(maxPowerCardDisplay.card.playerID && maxPowerCardDisplay != null)
+            {
+                maxPowerCardDisplay.gameObject.transform.SetParent(gameManager.Cementerio1.transform, false);
+            }
+            
+            else if(maxPowerCardDisplay.card.playerID == false && maxPowerCardDisplay != null)
+            {
+                maxPowerCardDisplay.gameObject.transform.SetParent(gameManager.Cementerio2.transform, false);
+            }
+
+            cardPowersStrong.Clear();
+
+            cardPowersWeak.Clear();
+
+        }
+
+        else if(whichEffectIs == 3) // efecto de robar una carta
+        {
+            if(whichPlayerIs == true)
+            {
+                gameManager.drawCard.drawnOneCards();
+            }
+
+            else 
+            {
+                gameManager.drawCard2.drawnOneCards();
+            }
+
+            cardPowersStrong.Clear();
+
+            cardPowersWeak.Clear();
+        }
+
+        else if(whichEffectIs == 4) // Efecto de eliminar la fila con menos cartas
+        {
+            cardPowersStrong.Clear();
+
+            cardPowersWeak.Clear();
+           
+            GameObject[] rows = new GameObject[] {gameManager.player1M, gameManager.player1R, gameManager.player1S, gameManager.player2S, gameManager.player2M, gameManager.player2R};
+
+            GameObject rowWithLeastCards = FindRowWithLeastCards(rows);
+
+            for(int i = 0 ; i < 4 ; i++)
+            {
+                if (rowWithLeastCards != null)
+                {
+                    MoveCardsToCementery(rowWithLeastCards);
+                }
+            }
+        }
+    }
+
+    private static GameObject FindRowWithLeastCards(GameObject[] rows)
+    {
+        int minCards = int.MaxValue;
+
+        GameObject  rowWithLeastCards = null;
+
+        foreach (GameObject row in rows)
+        {
+            if (row.transform.childCount == 0)
+            {
+                continue; // Si la fila esta vacia, salta a la siguiente  iteracio
+            }
+
+            bool hasCardDisplay = row.transform.Cast<Transform>().Any(child => child.GetComponent<CardDisplay>() != null);
+
+            if (!hasCardDisplay)
+            {
+                continue; // Si la fila no tiene al menos una carta con componente CardDisplay , salta a la siguiente iteracion
+            }
+
+            int currentRowCards = row.transform.childCount;
+
+            if(currentRowCards < minCards)
+            {
+                minCards = currentRowCards;
+
+                rowWithLeastCards = row;
+            }
+        }
+
+        return rowWithLeastCards;
+    }
+
+    private static void MoveCardsToCementery(GameObject rowWithLeastCards)
+    {
+        GameManager gameManager = GameObject.FindObjectOfType<GameManager>();
+
+        foreach (Transform child in rowWithLeastCards.transform)
+        {
+            CardDisplay cardDisplay = child.GetComponent<CardDisplay>();
+
+            if (cardDisplay.card.classCard != "GoldenCard")
+            {
+                if (cardDisplay.card.playerID == true)
+                {
+                    child.transform.SetParent(gameManager.Cementerio1.transform, false);
+
+                    continue;
+                }
+
+                else if(cardDisplay.card.playerID == false)
+                {
+                    child.transform.SetParent(gameManager.Cementerio2.transform, false);
+
+                    continue;
+                }
+            }
+        }
     }
     // Start is called before the first frame update
     void Start()

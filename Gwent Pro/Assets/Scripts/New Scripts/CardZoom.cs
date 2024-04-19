@@ -21,7 +21,7 @@ public class CardZoom : MonoBehaviour
     }
 
     // Método llamado cuando el cursor entra sobre una carta
-    public void OnHoverEnterCard(string cardName)
+    public void ShowCardZoom(string cardName)
     {
         // Actualizar el panel de zoom con el nombre de la carta
         nameText.text = cardName;
@@ -31,7 +31,7 @@ public class CardZoom : MonoBehaviour
     }
 
     // Método llamado cuando el cursor sale de la carta
-    public void OnHoverExit()
+    public void HideCardZoom()
     {
         // Ocultar el panel de zoom
         canvasGroup.alpha = 0;

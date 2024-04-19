@@ -90,8 +90,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2739837340436383870, guid: 9921550efb1c3734d985d975a4efdd40, type: 3}
       propertyPath: m_Name
-      value: M. Asedio II Variant 1
+      value: M. Asedio II-2
       objectReference: {fileID: 0}
+    - target: {fileID: 7036631674369957062, guid: 9921550efb1c3734d985d975a4efdd40, type: 3}
+      propertyPath: card
+      value: 
+      objectReference: {fileID: 11400000, guid: 106b6d6826329bd429a91db78e37372d, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

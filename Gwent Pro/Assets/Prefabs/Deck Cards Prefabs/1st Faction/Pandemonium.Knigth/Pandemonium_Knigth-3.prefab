@@ -90,8 +90,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4186332712588418654, guid: 9f3cd2e4b0370a8448dec02bbd6fc154, type: 3}
       propertyPath: m_Name
-      value: Pandemonium_Knigth-1 Variant
+      value: Pandemonium_Knigth-3
       objectReference: {fileID: 0}
+    - target: {fileID: 9059606233496193766, guid: 9f3cd2e4b0370a8448dec02bbd6fc154, type: 3}
+      propertyPath: card
+      value: 
+      objectReference: {fileID: 11400000, guid: 378bbc0ed2d3d5b40b1e0f6ba4451bc8, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

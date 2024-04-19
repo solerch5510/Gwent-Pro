@@ -15,8 +15,8 @@ MonoBehaviour:
   name: Esqueleto con Espada
   description: Unidad de rango. Se potencia si hay esqueletos en su fila.
   classCard: SilverCard
-  summonCost: 1
   power: 3
+  basedPower: 3
   spriteImage: {fileID: 21300000, guid: 41f658bad3a3ea748987d9dd6d5c3eee, type: 3}
   Zone: M1
   playerID: 0

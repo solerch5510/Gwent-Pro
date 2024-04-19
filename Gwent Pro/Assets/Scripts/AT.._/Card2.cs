@@ -9,20 +9,12 @@ public class Card2 : ScriptableObject
     public new string name;
     public string description;
     public string classCard ;
-    public int summonCost;
-    public int power;
+    public int power; // Poder que varia con los efectos
+    public int basedPower; //Poder base de la carta.
+    public int whichEffectIs;
     public Sprite spriteImage;
 
     public string Zone;
 
     public bool playerID; // True para Player1 , False para Player2
-
-    
-
-
-    public void Print()
-    {
-        Debug.Log(name + ":" + description + "Recuerda solo se puede colocar una carta por turno" + summonCost);
-        
-    }
 }

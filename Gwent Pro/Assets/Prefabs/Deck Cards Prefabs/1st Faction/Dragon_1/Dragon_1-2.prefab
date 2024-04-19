@@ -8,6 +8,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3743355777858403825, guid: ef318a10ef54ae4448145a6ea5ce0c4d, type: 3}
+      propertyPath: card
+      value: 
+      objectReference: {fileID: 11400000, guid: ab44693aa6548f74ba47f6fe14b02050, type: 2}
     - target: {fileID: 6200205227531247053, guid: ef318a10ef54ae4448145a6ea5ce0c4d, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -90,7 +94,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8381738275814861129, guid: ef318a10ef54ae4448145a6ea5ce0c4d, type: 3}
       propertyPath: m_Name
-      value: Dragon_1 Variant 1
+      value: Dragon_1-2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

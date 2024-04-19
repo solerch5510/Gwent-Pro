@@ -8,9 +8,13 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 999651116683815794, guid: e69ba801d795df447bbfd769a7c492cc, type: 3}
+      propertyPath: card
+      value: 
+      objectReference: {fileID: 11400000, guid: ece07d347b90e144d988dd2425aec444, type: 2}
     - target: {fileID: 5367589088903331786, guid: e69ba801d795df447bbfd769a7c492cc, type: 3}
       propertyPath: m_Name
-      value: Caballeria Primordiana Variant 1
+      value: Caballeria Primordiana-3
       objectReference: {fileID: 0}
     - target: {fileID: 7505220836691807054, guid: e69ba801d795df447bbfd769a7c492cc, type: 3}
       propertyPath: m_Pivot.x

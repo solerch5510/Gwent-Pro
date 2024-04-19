@@ -2,6 +2,7 @@ using System.Linq.Expressions;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class DragDrop : MonoBehaviour
 {
@@ -63,7 +64,13 @@ public class DragDrop : MonoBehaviour
         {
             transform.SetParent(dropZone.transform, false);
 
+            GameManager.Effects(gameObject.GetComponent<CardDisplay>().card.whichEffectIs);
+            
             GameManager.passTurn(gameObject, gameObject.GetComponent<CardDisplay>().card.playerID);
+
+            EventTrigger dragDrop = gameObject.GetComponent<EventTrigger>();
+
+            dragDrop.enabled = false;        
         }
 
         else 

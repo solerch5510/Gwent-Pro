@@ -8,6 +8,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3674322161657885366, guid: 482b1bb972439df43bf83696aa99019f, type: 3}
+      propertyPath: card
+      value: 
+      objectReference: {fileID: 11400000, guid: 94e2fc5fe9582814aa7d0d11231fa269, type: 2}
     - target: {fileID: 6270505446509138570, guid: 482b1bb972439df43bf83696aa99019f, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -90,7 +94,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8457522861222667790, guid: 482b1bb972439df43bf83696aa99019f, type: 3}
       propertyPath: m_Name
-      value: Pandemonium_Knigth-1 Variant 1
+      value: Pandemonium_Knigth-2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcc8a7f6126c5df43b8044c2ceee9b3d, type: 3}
+  m_Name: Dragon III 1
+  m_EditorClassIdentifier: 
+  name: Gravios
+  description: Unidad de Asedio
+  classCard: SilverCard
+  power: 4
+  basedPower: 4
+  spriteImage: {fileID: 21300000, guid: 46690515f4395d24785cb02ab38ffe0e, type: 3}
+  Zone: S
+  playerID: 1

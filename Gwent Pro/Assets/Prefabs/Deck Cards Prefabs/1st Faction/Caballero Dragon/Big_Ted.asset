@@ -15,8 +15,9 @@ MonoBehaviour:
   name: 'Verdugo Primordiano '
   description: Unidad cuerpo a cuerpo.
   classCard: GoldenCard
-  summonCost: 1
   power: 6
+  basedPower: 6
+  whichEffectIs: 4
   spriteImage: {fileID: 21300000, guid: e2970be26ca1280408aff390e60f2e44, type: 3}
   Zone: M
   playerID: 1

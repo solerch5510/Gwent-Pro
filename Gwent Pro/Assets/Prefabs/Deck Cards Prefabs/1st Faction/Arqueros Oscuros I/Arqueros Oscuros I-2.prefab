@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1156484646052470739, guid: d0f7ce6a98cfb19449dc4ca9660b470e, type: 3}
       propertyPath: m_Name
-      value: Arqueros Oscuros I Variant 1
+      value: Arqueros Oscuros I-2
       objectReference: {fileID: 0}
     - target: {fileID: 3627315148984609623, guid: d0f7ce6a98cfb19449dc4ca9660b470e, type: 3}
       propertyPath: m_Pivot.x
@@ -92,6 +92,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6318075400270121835, guid: d0f7ce6a98cfb19449dc4ca9660b470e, type: 3}
+      propertyPath: card
+      value: 
+      objectReference: {fileID: 11400000, guid: c9227f4443425ca4fa850f674c3609a3, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

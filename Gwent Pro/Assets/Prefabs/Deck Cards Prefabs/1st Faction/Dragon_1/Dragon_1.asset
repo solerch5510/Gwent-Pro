@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Dragon de Asedio
   description: 'Unidad de Asedio. '
-  classCard: Silver Card
-  summonCost: 1
+  classCard: SilverCard
   power: 4
+  basedPower: 4
   spriteImage: {fileID: 21300000, guid: bfee536a21697a446ae25ded3664357f, type: 3}
   Zone: S
   playerID: 1

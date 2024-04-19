@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2023641137924863884, guid: 36e92b4736af0e24f8ba68c9bf1b68a9, type: 3}
       propertyPath: m_Name
-      value: Murcielagos-1 Variant
+      value: Murcielagos-2
       objectReference: {fileID: 0}
     - target: {fileID: 4489822355586581256, guid: 36e92b4736af0e24f8ba68c9bf1b68a9, type: 3}
       propertyPath: m_Pivot.x
@@ -92,6 +92,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6608911877193491252, guid: 36e92b4736af0e24f8ba68c9bf1b68a9, type: 3}
+      propertyPath: card
+      value: 
+      objectReference: {fileID: 11400000, guid: f07f2db65b12af046bb5625038a069a1, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -8,6 +8,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4071446192368215293, guid: d642918c8a3b8f54c90f72ed336d046d, type: 3}
+      propertyPath: card
+      value: 
+      objectReference: {fileID: 11400000, guid: 0c37790ea824a0e4b80d38303829deb9, type: 2}
     - target: {fileID: 6735187459524232385, guid: d642918c8a3b8f54c90f72ed336d046d, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -90,7 +94,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9160979214703521861, guid: d642918c8a3b8f54c90f72ed336d046d, type: 3}
       propertyPath: m_Name
-      value: Esqueleto espada Variant 1
+      value: Esqueleto espada-2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

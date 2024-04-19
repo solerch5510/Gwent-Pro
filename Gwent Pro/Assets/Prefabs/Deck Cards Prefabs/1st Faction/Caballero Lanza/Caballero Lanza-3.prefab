@@ -8,9 +8,13 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 260273867608509756, guid: 94d3c9d17649db245b5e33f2cccb06ac, type: 3}
+      propertyPath: card
+      value: 
+      objectReference: {fileID: 11400000, guid: e54091fc419678241b8fbd1964cd827d, type: 2}
     - target: {fileID: 4917461329574746500, guid: 94d3c9d17649db245b5e33f2cccb06ac, type: 3}
       propertyPath: m_Name
-      value: Caballero Lanza Variant
+      value: Caballero Lanza-3
       objectReference: {fileID: 0}
     - target: {fileID: 7378077369421901056, guid: 94d3c9d17649db245b5e33f2cccb06ac, type: 3}
       propertyPath: m_Pivot.x

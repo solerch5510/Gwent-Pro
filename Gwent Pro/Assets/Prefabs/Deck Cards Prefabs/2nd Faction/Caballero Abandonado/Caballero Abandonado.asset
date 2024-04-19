@@ -15,7 +15,9 @@ MonoBehaviour:
   name: Caballero Abandonado
   description: Unidad cuerpo a cuerpo
   classCard: SilverCard
-  summonCost: 1
   power: 3
+  basedPower: 3
+  whichEffectIs: 0
   spriteImage: {fileID: 21300000, guid: 5813aaf7db128384b8b16b87e50a3229, type: 3}
   Zone: M1
+  playerID: 0

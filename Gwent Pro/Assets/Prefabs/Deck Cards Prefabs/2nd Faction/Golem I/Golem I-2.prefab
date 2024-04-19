@@ -8,9 +8,13 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2303743663739222764, guid: f87e6d73e8b2ca248a69c39e0c0f8fc0, type: 3}
+      propertyPath: card
+      value: 
+      objectReference: {fileID: 11400000, guid: bdaf5fd7b275cee4190254142acf2a43, type: 2}
     - target: {fileID: 6366526481780256340, guid: f87e6d73e8b2ca248a69c39e0c0f8fc0, type: 3}
       propertyPath: m_Name
-      value: Golem I Variant
+      value: Golem I-2
       objectReference: {fileID: 0}
     - target: {fileID: 8791049952342661840, guid: f87e6d73e8b2ca248a69c39e0c0f8fc0, type: 3}
       propertyPath: m_Pivot.x

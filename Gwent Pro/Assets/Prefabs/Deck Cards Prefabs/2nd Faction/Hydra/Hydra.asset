@@ -15,7 +15,8 @@ MonoBehaviour:
   name: 'Hydra '
   description: Unidad de Asedio
   classCard: SilverCard
-  summonCost: 1
   power: 5
+  basedPower: 5
   spriteImage: {fileID: 21300000, guid: 669db5733d8ae424999bb770172afbed, type: 3}
   Zone: S1
+  playerID: 0

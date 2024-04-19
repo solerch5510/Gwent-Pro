@@ -10,7 +10,23 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6662233645152873913, guid: 79a75adf6b8e69740bbffe70d204404d, type: 3}
       propertyPath: m_Name
-      value: Void Variant 1
+      value: Void-2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8723359810804341577, guid: 79a75adf6b8e69740bbffe70d204404d, type: 3}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8723359810804341577, guid: 79a75adf6b8e69740bbffe70d204404d, type: 3}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8723359810804341577, guid: 79a75adf6b8e69740bbffe70d204404d, type: 3}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8723359810804341577, guid: 79a75adf6b8e69740bbffe70d204404d, type: 3}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: DragDrop, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 9092597719935375677, guid: 79a75adf6b8e69740bbffe70d204404d, type: 3}
       propertyPath: m_Pivot.x

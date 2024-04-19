@@ -15,8 +15,8 @@ MonoBehaviour:
   name: Caballero con Lanza
   description: Unidad cuerpo a cuerpo.
   classCard: SilverCard
-  summonCost: 1
   power: 3
+  basedPower: 3
   spriteImage: {fileID: 21300000, guid: 2508bbf0816b2434a9d891086ea0aec1, type: 3}
   Zone: M
   playerID: 1

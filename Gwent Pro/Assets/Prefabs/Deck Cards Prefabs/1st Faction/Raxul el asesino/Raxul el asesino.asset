@@ -15,8 +15,9 @@ MonoBehaviour:
   name: Raxul el asesino
   description: Unidad cuerpo a cuerpo. Elimina la carta mas fuerte del campo.
   classCard: GoldenCard
-  summonCost: 1
   power: 1
+  basedPower: 1
+  whichEffectIs: 2
   spriteImage: {fileID: 21300000, guid: 962d6f70727f7664b92c1de8cd186da6, type: 3}
   Zone: M
   playerID: 1

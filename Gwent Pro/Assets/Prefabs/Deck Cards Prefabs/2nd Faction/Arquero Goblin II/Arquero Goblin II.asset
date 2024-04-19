@@ -15,7 +15,8 @@ MonoBehaviour:
   name: Duende Arquero
   description: Unidad de Rango
   classCard: SilverCard
-  summonCost: 1
   power: 3
+  basedPower: 3
   spriteImage: {fileID: 21300000, guid: 4bf5fdaa0dd6a67419f912d131d4c2ef, type: 3}
   Zone: R1
+  playerID: 0

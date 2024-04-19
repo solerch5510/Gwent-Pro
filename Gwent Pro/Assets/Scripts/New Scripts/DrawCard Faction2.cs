@@ -12,7 +12,8 @@ public class DrawCard2 : MonoBehaviour
     public GameObject Card11, Card12, Card13, Card14, Card15, Card16, Card17, Card18, Card19, Card20;
     public GameObject Card21, Card22, Card23, Card24, Card25, Card26, Card27, Card28, Card29, Card30;
     public GameObject Card31, Card32, Card33, Card34, Card35, Card36, Card37, Card38, Card39, Card40;
-    public GameObject Card41, Card42;
+    public GameObject Card41, Card42, Card43, Card44, Card45, Card46, Card47, Card48, Card49, Card50;
+    public GameObject Card51, Card52, Card53, Card54;
     public GameObject Hand;
     public Players players;
     List<GameObject> Cards = new List<GameObject>();
@@ -22,6 +23,18 @@ public class DrawCard2 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Cards.Add(Card54); 
+        Cards.Add(Card53);
+        Cards.Add(Card52);
+        Cards.Add(Card51);
+        Cards.Add(Card50);
+        Cards.Add(Card49);
+        Cards.Add(Card48);
+        Cards.Add(Card47);
+        Cards.Add(Card46);
+        Cards.Add(Card45);
+        Cards.Add(Card44);
+        Cards.Add(Card43);
         Cards.Add(Card42);
         Cards.Add(Card41); 
         Cards.Add(Card40);
@@ -106,8 +119,22 @@ public class DrawCard2 : MonoBehaviour
 
     public void drawnTwoCards()
     {
-        int cardsToDrawn = Mathf.Min(2, Cards.Count);
+        int cardsToDrawn;
 
+        if(players.Player2.Cards.Count == 10) // Condiciones para no tener mas de 10 cartas en mano.
+        {
+            cardsToDrawn = 0;
+        }
+
+        else if(players.Player2.Cards.Count == 9)
+        {
+            cardsToDrawn = 1;
+        }
+
+        else
+        {
+            cardsToDrawn = 2;
+        }
         for(var i = 0 ; i < cardsToDrawn ; i++)
         {
 
@@ -116,6 +143,43 @@ public class DrawCard2 : MonoBehaviour
                 Debug.LogError("No hay mas cartas en el deck para dibujar");
             }
             
+            int randomIndex = Random.Range(0, Cards.Count);
+
+            GameObject playerCard = Instantiate(Cards[randomIndex], new Vector3((-450 + (i*100)),0,0), Quaternion.identity ) ;
+                
+            playerCard.transform.SetParent(Hand.transform, false);
+
+            //Asignar las cartas al jugador 1
+            players.Player2.AddCard(playerCard);
+
+            // Eliminar la carta de la lista para evitar repeticion
+            Cards.RemoveAt(randomIndex);
+        }
+
+    }
+
+    public void drawnOneCards() // Metodo para robar una carta del mazo (Efecto#3s)
+    {
+        int cardsToDrawn;
+
+        if(players.Player2.Cards.Count == 10) // Condiciones para no tener mas de 10 cartas en mano.
+        {
+            cardsToDrawn = 0;
+        }
+
+        else
+        {
+            cardsToDrawn = 1;
+        }
+
+        for(var i = 0 ; i < cardsToDrawn ; i++)
+        {
+
+            if (Cards.Count == 0)
+            {
+                Debug.LogError("No hay mas cartas en el deck para dibujar");
+            }
+
             int randomIndex = Random.Range(0, Cards.Count);
 
             GameObject playerCard = Instantiate(Cards[randomIndex], new Vector3((-450 + (i*100)),0,0), Quaternion.identity ) ;

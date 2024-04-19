@@ -90,8 +90,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2625370187861636257, guid: 597f4fcf23f947b449ab911d3472eb1b, type: 3}
       propertyPath: m_Name
-      value: Esqueletos Arqueros Variant
+      value: Esqueletos Arqueros-2
       objectReference: {fileID: 0}
+    - target: {fileID: 7191625131192360985, guid: 597f4fcf23f947b449ab911d3472eb1b, type: 3}
+      propertyPath: card
+      value: 
+      objectReference: {fileID: 11400000, guid: 716743aa8a604594c9ecbe4906d60be2, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -15,7 +15,8 @@ MonoBehaviour:
   name: Fleru el no-muerto
   description: Unidad de asedio
   classCard: SilverCard
-  summonCost: 1
   power: 4
+  basedPower: 4
   spriteImage: {fileID: 21300000, guid: 40e19d950a5e2f44bbf39233755439df, type: 3}
   Zone: S1
+  playerID: 0

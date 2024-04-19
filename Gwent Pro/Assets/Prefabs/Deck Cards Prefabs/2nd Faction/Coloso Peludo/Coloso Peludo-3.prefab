@@ -8,9 +8,13 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1985115386057668683, guid: cedf7bbe38519b1478205b64bdca560c, type: 3}
+      propertyPath: card
+      value: 
+      objectReference: {fileID: 11400000, guid: 09d73445f88f6324bac57cee584f6ecf, type: 2}
     - target: {fileID: 6642373354646646003, guid: cedf7bbe38519b1478205b64bdca560c, type: 3}
       propertyPath: m_Name
-      value: Coloso Peludo Variant 1
+      value: Coloso Peludo-3
       objectReference: {fileID: 0}
     - target: {fileID: 9111930073052862583, guid: cedf7bbe38519b1478205b64bdca560c, type: 3}
       propertyPath: m_Pivot.x

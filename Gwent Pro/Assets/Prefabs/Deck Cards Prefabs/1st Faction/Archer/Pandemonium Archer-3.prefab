@@ -90,8 +90,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3951402327637093132, guid: cc05f4cea88133849a64946f88b0c9d0, type: 3}
       propertyPath: m_Name
-      value: Pandemonium Archer. Variant 1
+      value: Pandemonium Archer-3
       objectReference: {fileID: 0}
+    - target: {fileID: 8175383291397898164, guid: cc05f4cea88133849a64946f88b0c9d0, type: 3}
+      propertyPath: card
+      value: 
+      objectReference: {fileID: 11400000, guid: 40976f9ecfa0ac14aaa9b72b6e571f67, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -8,6 +8,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3358178756409797225, guid: 2a388956a64a5ad42822922e0c6c3f00, type: 3}
+      propertyPath: card
+      value: 
+      objectReference: {fileID: 11400000, guid: 5ae3e46e6f1da9e44ad022d28022ce72, type: 2}
     - target: {fileID: 5431968128235162197, guid: 2a388956a64a5ad42822922e0c6c3f00, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -90,7 +94,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7581912758779330257, guid: 2a388956a64a5ad42822922e0c6c3f00, type: 3}
       propertyPath: m_Name
-      value: Esqueletos Arqueros Variant 1
+      value: Esqueletos Arqueros-3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

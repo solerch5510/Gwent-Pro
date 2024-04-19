@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1212742057942594607, guid: 6a0a15158bde4a74097d2cfe83d224bb, type: 3}
       propertyPath: m_Name
-      value: Caballero Abandonado Variant
+      value: Caballero Abandonado-3
       objectReference: {fileID: 0}
     - target: {fileID: 3643096786544902315, guid: 6a0a15158bde4a74097d2cfe83d224bb, type: 3}
       propertyPath: m_Pivot.x
@@ -92,6 +92,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6302364140820406423, guid: 6a0a15158bde4a74097d2cfe83d224bb, type: 3}
+      propertyPath: card
+      value: 
+      objectReference: {fileID: 11400000, guid: 6f628554f6a8aef4ba67ce5d372d8c58, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

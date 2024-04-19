@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2252701674436476881, guid: 76dcef753ec33644aab6326f0a8e1764, type: 3}
       propertyPath: m_Name
-      value: Pandemonium Archer. Variant
+      value: Pandemonium Archer-2
       objectReference: {fileID: 0}
     - target: {fileID: 4402641905088645973, guid: 76dcef753ec33644aab6326f0a8e1764, type: 3}
       propertyPath: m_Pivot.x
@@ -92,6 +92,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6404625056641330025, guid: 76dcef753ec33644aab6326f0a8e1764, type: 3}
+      propertyPath: card
+      value: 
+      objectReference: {fileID: 11400000, guid: d6fcd53b42569fa4ca895fcfdfa2d5cf, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

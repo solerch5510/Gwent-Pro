@@ -90,8 +90,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3152478829146578884, guid: e1e76ee8f3e6b084fa799316ffecb139, type: 3}
       propertyPath: m_Name
-      value: Hydra Variant 1
+      value: Hydra-3
       objectReference: {fileID: 0}
+    - target: {fileID: 7790420831227743100, guid: e1e76ee8f3e6b084fa799316ffecb139, type: 3}
+      propertyPath: card
+      value: 
+      objectReference: {fileID: 11400000, guid: d27a45df15465d34bb4577e8463523e4, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -8,9 +8,13 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1063412731700656384, guid: fdcf09fd748579a42b6e6e3691f48636, type: 3}
+      propertyPath: card
+      value: 
+      objectReference: {fileID: 11400000, guid: f2c14ddcf10e1c64298efc3b91055c6b, type: 2}
     - target: {fileID: 5287499244184251832, guid: fdcf09fd748579a42b6e6e3691f48636, type: 3}
       propertyPath: m_Name
-      value: Jinete Primordiano Variant 1
+      value: Jinete Primordiano-3
       objectReference: {fileID: 0}
     - target: {fileID: 7726663809431492924, guid: fdcf09fd748579a42b6e6e3691f48636, type: 3}
       propertyPath: m_Pivot.x

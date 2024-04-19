@@ -90,8 +90,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2535834582453950732, guid: e41c0019e74b2644b88f209da5ffd1f3, type: 3}
       propertyPath: m_Name
-      value: Arqueros Oscuros II Variant 1
+      value: Arqueros Oscuros II-2
       objectReference: {fileID: 0}
+    - target: {fileID: 7247383257212980660, guid: e41c0019e74b2644b88f209da5ffd1f3, type: 3}
+      propertyPath: card
+      value: 
+      objectReference: {fileID: 11400000, guid: 73c8f47d560e3394cb547c225a159273, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

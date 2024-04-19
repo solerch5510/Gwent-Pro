@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 990939178503289200, guid: 0ec9cb99990f6d448b20a1c6d25f04ff, type: 3}
       propertyPath: m_Name
-      value: Caballeria Primordiana Variant
+      value: Caballeria Primordiana-2
       objectReference: {fileID: 0}
     - target: {fileID: 3430303305749548532, guid: 0ec9cb99990f6d448b20a1c6d25f04ff, type: 3}
       propertyPath: m_Pivot.x
@@ -92,6 +92,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5359984342186470856, guid: 0ec9cb99990f6d448b20a1c6d25f04ff, type: 3}
+      propertyPath: card
+      value: 
+      objectReference: {fileID: 11400000, guid: 51b2efce18bda9341891c89abd78cdb2, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

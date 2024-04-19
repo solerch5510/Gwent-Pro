@@ -8,9 +8,13 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 45540696243934367, guid: 828daa97a0dab504ea5ae92893faa6ae, type: 3}
+      propertyPath: card
+      value: 
+      objectReference: {fileID: 11400000, guid: c26d882a64fefd442969f8903337e167, type: 2}
     - target: {fileID: 5116990462752391207, guid: 828daa97a0dab504ea5ae92893faa6ae, type: 3}
       propertyPath: m_Name
-      value: Esqueleto espada Variant
+      value: Esqueleto espada-3
       objectReference: {fileID: 0}
     - target: {fileID: 7302961692081878179, guid: 828daa97a0dab504ea5ae92893faa6ae, type: 3}
       propertyPath: m_Pivot.x

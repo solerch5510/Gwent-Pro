@@ -15,7 +15,9 @@ MonoBehaviour:
   name: Golem II
   description: Unidad de asedio.
   classCard: GoldenCard
-  summonCost: 1
   power: 7
+  basedPower: 7
+  whichEffectIs: 3
   spriteImage: {fileID: 21300000, guid: 5e52b82e6543e564a98ff19ebaf8ea28, type: 3}
   Zone: S1
+  playerID: 0

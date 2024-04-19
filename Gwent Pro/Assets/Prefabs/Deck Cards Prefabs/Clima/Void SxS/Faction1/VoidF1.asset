@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Cielo Roto
   description: Vacio que afecta a las unidades de asedio.
-  classCard: Clima (S)
-  summonCost: 1
+  classCard: Clima
   power: 0
+  basedPower: 0
   spriteImage: {fileID: 21300000, guid: 6fabfa7e8430937448ce9c54226912bd, type: 3}
   Zone: C(S)
   playerID: 1

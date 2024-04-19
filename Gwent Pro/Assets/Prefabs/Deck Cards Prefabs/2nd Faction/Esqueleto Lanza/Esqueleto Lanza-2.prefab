@@ -8,9 +8,13 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1345610585608876316, guid: 02192d96304165a45b6a163a4396effd, type: 3}
+      propertyPath: card
+      value: 
+      objectReference: {fileID: 11400000, guid: 899438ebd1aae724586b0c2042cbb642, type: 2}
     - target: {fileID: 6128951593164498340, guid: 02192d96304165a45b6a163a4396effd, type: 3}
       propertyPath: m_Name
-      value: Esqueleto Lanza Variant
+      value: Esqueleto Lanza-2
       objectReference: {fileID: 0}
     - target: {fileID: 8598513256725352736, guid: 02192d96304165a45b6a163a4396effd, type: 3}
       propertyPath: m_Pivot.x

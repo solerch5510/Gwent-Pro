@@ -90,8 +90,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4449524139118766235, guid: 1ca356aeb2f59fb42bba7387ca74e2f9, type: 3}
       propertyPath: m_Name
-      value: Arquero Goblin II Variant
+      value: Arquero Goblin II-2
       objectReference: {fileID: 0}
+    - target: {fileID: 8799217919594183715, guid: 1ca356aeb2f59fb42bba7387ca74e2f9, type: 3}
+      propertyPath: card
+      value: 
+      objectReference: {fileID: 11400000, guid: 5589d3e696fe8284a865003b68b2dbce, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
