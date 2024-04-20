@@ -1,39 +1,77 @@
+using System.Net.Mime;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.XR;
+using System.Numerics;
+using Unity.VisualScripting;
 
 public class CardZoom : MonoBehaviour
 {
-    // Referencia al panel de UI que se usará para mostrar el zoom de la carta
-    public GameObject zoomPanel;
+    public Card2 card;
+    
+    public Text nameText;
+    public Text descriptionText;
 
-    // Componente de UI para el nombre dentro del panel de zoom
-    private Text nameText;
-    private CanvasGroup canvasGroup;
+    public Image artImage;
+    public Text powerText;
+
+    public Text classCardText;
+
+    public string Zone ;   
+
+    //Use this for initialization
 
     void Start()
     {
-        // Inicialización del componente de UI para el nombre
-        nameText = zoomPanel.transform.Find("ZoomNameText").GetComponent<Text>();
-        canvasGroup = zoomPanel.GetComponent<CanvasGroup>();
+        nameText.text = card.name;
+        descriptionText.text = card.description;
+        classCardText.text = card.classCard;
+        artImage.sprite = card.spriteImage;
+        Zone = card.Zone;
+      
+        powerText.text = card.power.ToString();
 
-        // Ocultar inicialmente el panel de zoom
+        CanvasGroup canvasGroup = GetComponent<CanvasGroup>();
+
         canvasGroup.alpha = 0;
     }
 
-    // Método llamado cuando el cursor entra sobre una carta
-    public void ShowCardZoom(string cardName)
+    /*void Update()
     {
-        // Actualizar el panel de zoom con el nombre de la carta
-        nameText.text = cardName;
+        nameText.text = card.name;
+        descriptionText.text = card.description;
+        classCardText.text = card.classCard;
+        artImage.sprite = card.spriteImage;
+        Zone = card.Zone;
+      
+        powerText.text = card.power.ToString();
+    }*/
 
-        // Mostrar el panel de zoom
-        canvasGroup.alpha = 1;
+    public static void ShowComponents(CardDisplay ThisCard)
+    {
+        CanvasGroup canvasGroup1 = GameObject.FindAnyObjectByType<CardZoom>().GetComponent<CanvasGroup>();
+
+        canvasGroup1.alpha = 1;
+
+        CardZoom cardZoom = canvasGroup1.gameObject.GetComponent<CardZoom>();
+
+        cardZoom.nameText.text = ThisCard.card.name;
+
+        cardZoom.powerText.text = ThisCard.card.power.ToString();
+
+        cardZoom.descriptionText.text = ThisCard.card.description;
+
+        cardZoom.classCardText.text = ThisCard.card.classCard;
+
+        cardZoom.artImage.sprite = ThisCard.card.spriteImage;
     }
 
-    // Método llamado cuando el cursor sale de la carta
-    public void HideCardZoom()
+    public static void HideComponents()
     {
-        // Ocultar el panel de zoom
-        canvasGroup.alpha = 0;
+        CanvasGroup canvasGroup1 = GameObject.FindAnyObjectByType<CardZoom>().GetComponent<CanvasGroup>();
+
+        canvasGroup1.alpha = 0;
     }
 }

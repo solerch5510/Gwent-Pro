@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Golem II
   m_EditorClassIdentifier: 
   name: Golem II
-  description: Unidad de asedio.
+  description: Unidad de asedio. Permite robar una carta al jugarse en el campo.
   classCard: GoldenCard
   power: 7
   basedPower: 7

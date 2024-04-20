@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.XR;
-using UnityEditor.SearchService;
 using System.Numerics;
 
 public class CardDisplay : MonoBehaviour
@@ -42,6 +41,16 @@ public class CardDisplay : MonoBehaviour
         powerText.text = card.power.ToString();
     }
 
+    public void OnHoverEnter()
+    {
+        CardZoom.ShowComponents(gameObject.GetComponent<CardDisplay>());
+    }
+
+    public void OnHoverExit()
+    {
+        CardZoom.HideComponents();
+    }
+
     public void OnClick()
     {
         if (ActivateOnClick == true)
@@ -58,6 +67,8 @@ public class CardDisplay : MonoBehaviour
 
          // Actualizar la ultima carta seleccionada
          lastSelectedCard = gameObject;
+
+         CardZoom.HideComponents();
 
          //Verificar si se han seleccionado dos cartas 
          if ( selectedCards.Count == 2)

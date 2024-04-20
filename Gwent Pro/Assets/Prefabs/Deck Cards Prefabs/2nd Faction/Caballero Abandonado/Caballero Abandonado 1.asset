@@ -13,10 +13,12 @@ MonoBehaviour:
   m_Name: Caballero Abandonado 1
   m_EditorClassIdentifier: 
   name: Caballero Abandonado
-  description: Unidad cuerpo a cuerpo
+  description: Unidad cuerpo a cuerpo.  Asigna a cada carta de tipo plata el valor
+    del promedio del poder entre los dos campos y la cantidad de cartas.
   classCard: SilverCard
   power: 3
   basedPower: 3
+  whichEffectIs: 5
   spriteImage: {fileID: 21300000, guid: 5813aaf7db128384b8b16b87e50a3229, type: 3}
   Zone: M1
   playerID: 0

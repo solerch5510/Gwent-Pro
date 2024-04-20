@@ -8,7 +8,7 @@ public class BuffFila : MonoBehaviour
     public GameObject CementerioPlayer1;
     public GameObject CementerioPlayer2;
     private bool enableEffect;
-    public static List<CardDisplay> affectedCards = new List<CardDisplay>(); // Lista para almacenar las cartas a las que ya se les ha aplicado el efecato
+    public static List<CardDisplay> affectedCardsByBuff = new List<CardDisplay>(); // Lista para almacenar las cartas a las que ya se les ha aplicado el efecato del buff
     
     // Metodo  que se llama cuando se agrega un nuevo objeto como hijo
     void  OnTransformChildrenChanged()
@@ -35,7 +35,7 @@ public class BuffFila : MonoBehaviour
         {
             CardDisplay cardDisplay = child.GetComponent<CardDisplay>();
 
-            if(cardDisplay != null && !affectedCards.Contains(cardDisplay) && cardDisplay.card.classCard == "SilverCard" && enableEffect == true)
+            if(cardDisplay != null && !affectedCardsByBuff.Contains(cardDisplay) && cardDisplay.card.classCard == "SilverCard" && enableEffect == true)
             {
                 // Aplica el efecto de multiplicar por 2 el poder de la carta
                 cardDisplay.card.power *= 2;
@@ -43,7 +43,7 @@ public class BuffFila : MonoBehaviour
                 cardDisplay.powerText.text = cardDisplay.card.power.ToString();
 
                 // Agregue la carta a la lista de cartas afectadas
-                affectedCards.Add(cardDisplay);
+                affectedCardsByBuff.Add(cardDisplay);
             }
         }
     }
@@ -110,7 +110,7 @@ public class BuffFila : MonoBehaviour
         {
             CardDisplay cardDisplay = child.GetComponent<CardDisplay>();
 
-            if(cardDisplay != null && affectedCards.Contains(cardDisplay) && cardDisplay.card.classCard == "SilverCard")
+            if(cardDisplay != null && affectedCardsByBuff.Contains(cardDisplay) && cardDisplay.card.classCard == "SilverCard")
             {
                 // Devuelve el poder base de la carta afectada
                 cardDisplay.card.power = cardDisplay.card.basedPower;
@@ -118,7 +118,7 @@ public class BuffFila : MonoBehaviour
                 cardDisplay.powerText.text = cardDisplay.card.power.ToString();
 
                 // Agregue la carta a la lista de cartas afectadas
-                affectedCards.Clear();
+                affectedCardsByBuff.Clear();
             }
         }
     }

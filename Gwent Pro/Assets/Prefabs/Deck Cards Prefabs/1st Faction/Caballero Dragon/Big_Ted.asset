@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Big_Ted
   m_EditorClassIdentifier: 
   name: 'Verdugo Primordiano '
-  description: Unidad cuerpo a cuerpo.
+  description: Unidad cuerpo a cuerpo. Elimina la fila con menor cantidad de cartas
+    en el campo.
   classCard: GoldenCard
   power: 6
   basedPower: 6

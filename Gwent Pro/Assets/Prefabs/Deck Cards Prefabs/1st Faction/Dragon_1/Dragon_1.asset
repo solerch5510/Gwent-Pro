@@ -17,6 +17,7 @@ MonoBehaviour:
   classCard: SilverCard
   power: 4
   basedPower: 4
+  whichEffectIs: 0
   spriteImage: {fileID: 21300000, guid: bfee536a21697a446ae25ded3664357f, type: 3}
   Zone: S
   playerID: 1

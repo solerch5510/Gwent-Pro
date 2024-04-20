@@ -30,6 +30,16 @@ public class ClimaDespeje : MonoBehaviour
                 {
                     backToTheNormalPowerInFilas();
 
+                    if(cardDisplay.card.playerID == true)
+                    {
+                        cardDisplay.gameObject.transform.SetParent(CementerioPlayer1.transform, false);
+                    }
+
+                    else if(cardDisplay.card.playerID == false)
+                    {
+                        cardDisplay.gameObject.transform.SetParent(CementerioPlayer2.transform, false);
+                    }
+
                     return;
                 }
                 enableEffect = true;
@@ -142,7 +152,11 @@ public class ClimaDespeje : MonoBehaviour
 
             affectedCards.Clear();
 
-            BuffFila.affectedCards.Clear();
+            BuffFila.affectedCardsByBuff.Clear();
+
+            SameCardEffect.affectedCardsBySC.Clear();
+
+            SameCardEffect.affectedCardsBySC2.Clear();
         }
 
     }
@@ -154,16 +168,24 @@ public class ClimaDespeje : MonoBehaviour
         {
             CardDisplay cardDisplay = child.GetComponent<CardDisplay>();
 
-            if(cardDisplay != null && !affectedCards.Contains(cardDisplay) && !BuffFila.affectedCards.Contains(cardDisplay) && cardDisplay.card.classCard == "SilverCard" && enableEffect == true)
+            if(cardDisplay != null && !affectedCards.Contains(cardDisplay) && !BuffFila.affectedCardsByBuff.Contains(cardDisplay) && cardDisplay.card.classCard == "SilverCard" && enableEffect == true)
             {
                 cardDisplay.card.power = 1;
 
                 cardDisplay.powerText.text = cardDisplay.card.power.ToString();
 
                 affectedCards.Add(cardDisplay);
+
+                SameCardEffect.affectedCardsBySC.Clear();
+
+                SameCardEffect.samePowerCards.Clear();
+                
+                SameCardEffect.affectedCardsBySC2.Clear();
+
+                SameCardEffect.samePowerCards2.Clear();
             }
 
-            else if(cardDisplay != null && !affectedCards.Contains(cardDisplay) && BuffFila.affectedCards.Contains(cardDisplay) && cardDisplay.card.classCard == "SilverCard" && enableEffect == true)
+            else if(cardDisplay != null && !affectedCards.Contains(cardDisplay) && BuffFila.affectedCardsByBuff.Contains(cardDisplay) && cardDisplay.card.classCard == "SilverCard" && enableEffect == true)
             {
                 cardDisplay.card.power = 1;
 
@@ -171,7 +193,15 @@ public class ClimaDespeje : MonoBehaviour
 
                 affectedCards.Add(cardDisplay);
 
-                BuffFila.affectedCards.Remove(cardDisplay);
+                BuffFila.affectedCardsByBuff.Remove(cardDisplay);
+
+                SameCardEffect.affectedCardsBySC.Clear();
+
+                SameCardEffect.samePowerCards.Clear();
+                
+                SameCardEffect.affectedCardsBySC2.Clear();
+
+                SameCardEffect.samePowerCards2.Clear();
             }
         }
     }

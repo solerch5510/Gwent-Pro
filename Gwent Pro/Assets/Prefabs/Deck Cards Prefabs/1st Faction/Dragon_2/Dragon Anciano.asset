@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: Dragon Anciano
   m_EditorClassIdentifier: 
   name: The Eldest Daora
-  description: Unidad de asedio. Daora, pese a su edad, es uno de los dragones mas
-    temidos de todo el reino.
+  description: Unidad de asedio. Permite robar una carta al ser jugada sobre el campo.
   classCard: GoldenCard
   power: 7
   basedPower: 7

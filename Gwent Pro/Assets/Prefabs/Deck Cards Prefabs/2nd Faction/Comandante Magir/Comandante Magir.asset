@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Comandante Magir
   m_EditorClassIdentifier: 
   name: Comandante Magir
-  description: Unidadd cuerpo a cuerpo. Trae al campo una unidad de esquletos arqueros.
+  description: Unidadd cuerpo a cuerpo. Elimina la fila con menor cantidad de cartas
+    en el campo.
   classCard: GoldenCard
   power: 6
   basedPower: 6

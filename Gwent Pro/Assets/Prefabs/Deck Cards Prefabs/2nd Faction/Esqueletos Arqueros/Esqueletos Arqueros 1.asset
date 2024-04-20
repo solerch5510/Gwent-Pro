@@ -13,11 +13,12 @@ MonoBehaviour:
   m_Name: Esqueletos Arqueros 1
   m_EditorClassIdentifier: 
   name: Esqueletos Arqueros
-  description: Unidad de rango basica que se potencia si hay cartas de tipo esqueleto
-    en su fila.
+  description: Unidad de rango basica .Multiplica su poder por la cantidad de cartas
+    de su mismo tipo presentes en la fila.
   classCard: SilverCard
   power: 2
   basedPower: 2
+  whichEffectIs: 7
   spriteImage: {fileID: 21300000, guid: 10d8386c795b6e14689574741f32afde, type: 3}
   Zone: R1
   playerID: 0

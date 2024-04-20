@@ -1,4 +1,4 @@
-using System;
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -70,8 +70,21 @@ public class Points_Counter2 : MonoBehaviour
         pointsText.text = points.ToString();
     }
 
-    void moveToCementerio ()
+    void moveToCementerio () // este metodo mueve todas las cartas del player2 tras acabar una ronda; ademas implementa el efecto del jefe de la faction2
     {
+        int totalCards = 0; // Contar el total de cartas en todas las filas
+
+        foreach (GameObject fila in filas)
+        {
+            totalCards += fila.transform.childCount;   
+        }
+
+        //Generar un indice aleatorio para seleccionar una carta de todas las filas
+        int randomIndex = Random.Range(0, totalCards);
+
+        //Contador de cartas visitadas
+        int cardCounter = 0;
+
         foreach(GameObject fila in filas)
         {
             foreach(Transform card in fila.transform)
@@ -80,7 +93,15 @@ public class Points_Counter2 : MonoBehaviour
 
                 if(cardComponent != null)
                 {
+                    if(cardCounter == randomIndex)
+                    {
+                        cardCounter ++;
+
+                        continue;
+                    }
                     card.SetParent(cementerio.transform, true);
+
+                    cardCounter ++;
                 }
             }
         }

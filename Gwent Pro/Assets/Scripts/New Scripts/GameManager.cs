@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour
     public static int roundsWonByPlayer2;
     public  GameObject readyToPLay1; 
     public GameObject readyToPLay2;
+    public GameObject CongratulationsPlayer1;
+    public GameObject CongratulationsPlayer2;
     public GameObject trophy; // O chapita de ganar la ronda , como prefieras ... 
     public GameObject roundWinner;
     public GameObject mainCanvas;
@@ -193,6 +195,13 @@ public class GameManager : MonoBehaviour
 
             GameManager gameManager = GameObject.FindAnyObjectByType<GameManager>();
 
+            if(roundsWonByPlayer1 == 2)
+            {
+                gameManager.CongratulationsPlayer1.SetActive(true);
+
+                return;
+            }
+
             gameManager.readyToPLay1.SetActive(true);
 
             gameManager.readyToPLay2.SetActive(false);
@@ -220,6 +229,13 @@ public class GameManager : MonoBehaviour
             roundsWonByPlayer2++ ;
 
             GameManager gameManager = GameObject.FindAnyObjectByType<GameManager>();
+
+            if(roundsWonByPlayer2 == 2)
+            {
+                gameManager.CongratulationsPlayer2.SetActive(true);
+
+                return;
+            }
 
             gameManager.readyToPLay1.SetActive(false);
 
@@ -384,7 +400,7 @@ public class GameManager : MonoBehaviour
 
         else if(whichEffectIs == 1) // efecto de eliminar la carta mas debil del rival
         {
-            if(cardPowersWeak == null)
+            if(minPowerCardDisplay == null)
             {
                 return;
             }
@@ -408,7 +424,7 @@ public class GameManager : MonoBehaviour
 
         else if(whichEffectIs == 2) // efecto de eliminar la carta mas fuerte del campo
         { 
-            if (cardPowersStrong == null)
+            if (maxPowerCardDisplay == null)
             {
                 return;
             }
@@ -464,6 +480,55 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
+
+        else if(whichEffectIs == 5) // Efecto del promedio
+        {
+            cardPowersStrong.Clear();
+
+            cardPowersWeak.Clear();
+
+            GameObject[] rows = new GameObject[] {gameManager.player1M, gameManager.player1R, gameManager.player1S, gameManager.player2S, gameManager.player2M, gameManager.player2R};
+
+            //Sumar loos puntos de ambos jugadores
+            int totalPoints = pointsPlayer1 + pointsPlayer2;
+
+            
+
+            //Contar la cantidad total de cartas en el campo
+            int totalCards = 0;
+
+            foreach(GameObject row in rows)
+            {
+                totalCards += row.transform.childCount;
+            }
+
+            
+
+            // Calcular el promedio de poder
+            int averagePower = (totalPoints + 3) / totalCards;
+
+            if (averagePower == 0)
+            {
+                averagePower=3;
+            }
+
+
+            //Asignar el valor promedio al poder de cada carta en el campo
+            foreach(GameObject row in rows)
+            {
+                foreach(Transform child in row.transform)
+                {
+                    CardDisplay cardDisplay = child.GetComponent<CardDisplay>();
+
+                    if (cardDisplay != null && cardDisplay.card.classCard != "GoldenCard")
+                    {
+                        cardDisplay.card.power = averagePower;
+
+                        cardDisplay.powerText.text = cardDisplay.card.power.ToString();
+                    }
+                }
+            }
+        } 
     }
 
     private static GameObject FindRowWithLeastCards(GameObject[] rows)

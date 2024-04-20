@@ -799,7 +799,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 919b64f56fa91284e870fb47c8d354d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  zoomPanel: {fileID: 5916503247153099278}
+  card: {fileID: 11400000, guid: 5c97743f49e00934c97e0c7695700201, type: 2}
+  nameText: {fileID: 7550182284858247496}
+  descriptionText: {fileID: 1150122384262098909}
+  artImage: {fileID: 1329046139050399924}
+  powerText: {fileID: 7435724433616422268}
+  classCardText: {fileID: 592863727463773702}
+  Zone: 
 --- !u!1 &7300201907502466891
 GameObject:
   m_ObjectHideFlags: 0
