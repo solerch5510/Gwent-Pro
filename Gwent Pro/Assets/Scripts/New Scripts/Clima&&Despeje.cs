@@ -157,6 +157,10 @@ public class ClimaDespeje : MonoBehaviour
             SameCardEffect.affectedCardsBySC.Clear();
 
             SameCardEffect.affectedCardsBySC2.Clear();
+
+            SameCardEffect.samePowerCards.Clear();
+
+            SameCardEffect.samePowerCards2.Clear();
         }
 
     }

@@ -22,7 +22,6 @@ public class GameManager : MonoBehaviour
     public GameObject mainCanvas;
     public GameObject Board;
     public DrawCard drawCard;
-
     public DrawCard2 drawCard2;
     public GameObject player1S;
     public GameObject player1R;

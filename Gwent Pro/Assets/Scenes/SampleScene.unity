@@ -270,7 +270,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fila: {fileID: 305643548}
-  WhoPlayerIs: 0
+  WhoPlayerIs: 1
 --- !u!1001 &130261705
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -979,6 +979,10 @@ PrefabInstance:
       propertyPath: readyToPlayImage
       value: 
       objectReference: {fileID: 502280997}
+    - target: {fileID: 4205508675649937569, guid: 16a1d7f4327da2046bc611f22a70138a, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4628608683682160872, guid: 16a1d7f4327da2046bc611f22a70138a, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -3636,7 +3640,7 @@ PrefabInstance:
       objectReference: {fileID: 1472080128}
     - target: {fileID: 2847797794552491538, guid: 16a1d7f4327da2046bc611f22a70138a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Play
+      value: Menu
       objectReference: {fileID: 0}
     - target: {fileID: 2847797794552491538, guid: 16a1d7f4327da2046bc611f22a70138a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -4968,6 +4972,10 @@ PrefabInstance:
       propertyPath: readyToPlayImage
       value: 
       objectReference: {fileID: 1057389730}
+    - target: {fileID: 4205508675649937569, guid: 16a1d7f4327da2046bc611f22a70138a, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4628608683682160872, guid: 16a1d7f4327da2046bc611f22a70138a, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -6223,6 +6231,10 @@ PrefabInstance:
       propertyPath: readyToPlayImage
       value: 
       objectReference: {fileID: 341744059}
+    - target: {fileID: 4205508675649937569, guid: 16a1d7f4327da2046bc611f22a70138a, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4628608683682160872, guid: 16a1d7f4327da2046bc611f22a70138a, type: 3}
       propertyPath: m_Sprite
       value: 

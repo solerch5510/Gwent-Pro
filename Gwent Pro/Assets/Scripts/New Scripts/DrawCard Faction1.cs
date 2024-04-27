@@ -151,6 +151,8 @@ public class DrawCard : MonoBehaviour
                 
             playerCard.transform.SetParent(Hand.transform, false);
 
+            playerCard.GetComponent<CardDisplay>().ActivateOnClick = false;
+
             //Asignar las cartas al jugador 1
             players.Player1.AddCard(playerCard);
 
@@ -187,6 +189,8 @@ public class DrawCard : MonoBehaviour
             GameObject playerCard = Instantiate(Cards[randomIndex], new Vector3((-450 + (i*100)),0,0), Quaternion.identity ) ;
                 
             playerCard.transform.SetParent(Hand.transform, false);
+
+            playerCard.GetComponent<CardDisplay>().ActivateOnClick = false;
 
             //Asignar las cartas al jugador 1
             players.Player1.AddCard(playerCard);

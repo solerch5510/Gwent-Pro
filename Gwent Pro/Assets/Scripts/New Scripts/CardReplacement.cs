@@ -37,6 +37,8 @@ public class CardReplacement : MonoBehaviour
 
             foreach (GameObject card in playerCards1) //Borrar todas las cartas de la mano del jugador de la escena
             {
+                card.GetComponent<CardDisplay>().ActivateOnClick = false; // Desactivar el bool que permite activar el Metodo OnClick
+                
                 card.SetActive(false); //Desactivar la carta
             }
 
@@ -68,6 +70,8 @@ public class CardReplacement : MonoBehaviour
 
             foreach (GameObject card in playerCards2) //Borrar todas las cartas de la mano del jugador de la escena
             {
+                card.GetComponent<CardDisplay>().ActivateOnClick = false; // Desactivar el bool que permite activar el Metodo OnClick
+
                 card.SetActive(false); //Desactivar la carta
             }
 

@@ -167,7 +167,7 @@ public class DragDrop : MonoBehaviour
         return true;
     }
 
-    void HandleValidCollision(CardDisplay collidedCardDisplay)
+    void HandleValidCollision(CardDisplay collidedCardDisplay) // Colision Valida para el Decoy
     {
         Players players = GameObject.FindAnyObjectByType<Players>();
 

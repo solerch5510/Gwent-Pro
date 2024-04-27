@@ -25,7 +25,7 @@ public class CardDisplay : MonoBehaviour
     public Text classCardText;
 
     public string Zone ;
-    private bool ActivateOnClick = true;
+    public bool ActivateOnClick = true;
 
 
     //Use this for initialization

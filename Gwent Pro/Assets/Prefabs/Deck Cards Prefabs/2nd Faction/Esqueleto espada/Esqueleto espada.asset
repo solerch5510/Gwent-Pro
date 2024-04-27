@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Esqueleto espada
   m_EditorClassIdentifier: 
   name: Esqueleto con Espada
-  description: Unidad de rango.
+  description: Unidad cuerpo a cuerpo.
   classCard: SilverCard
   power: 3
   basedPower: 3
