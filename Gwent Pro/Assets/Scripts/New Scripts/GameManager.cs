@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
     public static int roundsWonByPlayer2;
     public  GameObject readyToPLay1; 
     public GameObject readyToPLay2;
-    public GameObject CongratulationsPlayer1;
+    public GameObject CongratulationsPlayer1;  
     public GameObject CongratulationsPlayer2;
     public GameObject trophy; // O chapita de ganar la ronda , como prefieras ... 
     public GameObject roundWinner;
@@ -28,6 +28,7 @@ public class GameManager : MonoBehaviour
     public GameObject player1M;
     public GameObject player2S;
     public GameObject player2R;
+
     public GameObject player2M;
     public GameObject Cementerio1;
     public GameObject Cementerio2;

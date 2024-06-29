@@ -76,7 +76,7 @@ public class CardDisplay : MonoBehaviour
             foreach (var cardDisplay in FindObjectsOfType<CardDisplay>())
             {
                 cardDisplay.ActivateOnClick = false;
-            }
+            } 
             // Llamar la funcion para intercambiar las cartas con el deck
             CardReplacement.ReplaceSelectedCardsWithDeckCards(selectedCards, gameObject.GetComponent<CardDisplay>().card.playerID);
 

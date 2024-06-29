@@ -17,7 +17,7 @@ public class Points_Counter2 : MonoBehaviour
 
     private List<GameObject> filas = new List<GameObject>(3);
 
-
+// cell size x: 60 y:100  Spacing y:-100
     // Start is called before the first frame update
     void Start()
     {
