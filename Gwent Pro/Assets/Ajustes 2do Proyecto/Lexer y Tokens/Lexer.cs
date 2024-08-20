@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Xml;
+using System;
+using Unity.VisualScripting;
 
 public class Lexer
 {
@@ -31,17 +33,79 @@ public class Lexer
 
         reservedWords.Add("for", new Token(TokenType.For, "for", 0, 0));
 
-        reservedWords.Add("false", new Token(TokenType.False, "false", 0, 0));
+        reservedWords.Add("in", new Token(TokenType.In, "in", 0, 0));
 
-        reservedWords.Add("true", new Token(TokenType.True, "true", 0, 0));
+        reservedWords.Add("Name", new Token(TokenType.Name, "Name", 0, 0));
 
-        reservedWords.Add("card", new Token(TokenType.Card, "card", 0, 0));
+        reservedWords.Add("card", new Token(TokenType.Card, "Card", 0, 0));
 
         reservedWords.Add("effect", new Token(TokenType.Effect, "effect", 0, 0));
 
-        reservedWords.Add("predicate", new Token(TokenType.Predicate, "predicate", 0, 0));
+        reservedWords.Add("Predicate", new Token(TokenType.Predicate, "Predicate", 0, 0));
 
-        reservedWords.Add("postaction", new Token(TokenType.PostAction, "postaction", 0, 0));
+        reservedWords.Add("Params", new Token(TokenType.Params, "Params", 0, 0));
+
+        reservedWords.Add("Number", new Token(TokenType.Var_Int, "Number", 0, 0));
+
+        reservedWords.Add("String", new Token(TokenType.Var_String, "String", 0, 0));
+
+        reservedWords.Add("Bool", new Token(TokenType.Var_Bool, "Bool", 0, 0));
+
+        reservedWords.Add("true", new Token(TokenType.Bool, "true", 0, 0));
+
+        reservedWords.Add("false", new Token(TokenType.Bool, "false", 0, 0));
+
+        reservedWords.Add("TriggerPlayer", new Token(TokenType.Pointer, "TriggerPlayer", 0, 0));
+
+        reservedWords.Add("Action", new Token(TokenType.Action, "Action", 0, 0));
+
+        reservedWords.Add("Hand", new Token(TokenType.Pointer, "Hand", 0, 0));
+
+        reservedWords.Add("Field", new Token(TokenType.Pointer, "Field", 0, 0));
+
+        reservedWords.Add("Graveyard", new Token(TokenType.Pointer, "Graveyard", 0, 0));
+
+        reservedWords.Add("Deck", new Token(TokenType.Pointer, "Deck", 0, 0));
+
+        reservedWords.Add("HandOfPlayer", new Token(TokenType.Function, "HandOfPlayer", 0, 0));
+
+        reservedWords.Add("FieldOfPlayer", new Token(TokenType.Function, "FieldOfPlayer", 0, 0));
+
+        reservedWords.Add("GraveyardOfPlayer", new Token(TokenType.Function, "GraveyardOfPlayer", 0, 0));
+
+        reservedWords.Add("DeckOfPlayer", new Token(TokenType.Function, "DeckOfPlayer", 0, 0));
+
+        reservedWords.Add("Find", new Token(TokenType.Function, "Find", 0, 0));
+
+        reservedWords.Add("Push", new Token(TokenType.Function, "Push", 0, 0));
+
+        reservedWords.Add("SendBottom", new Token(TokenType.Function, "SendBottom", 0, 0));
+
+        reservedWords.Add("Pop", new Token(TokenType.Function, "Pop", 0, 0));
+
+        reservedWords.Add("Remove", new Token(TokenType.Function, "Remove", 0, 0));
+
+        reservedWords.Add("Shuffle", new Token(TokenType.Function, "Shuffle", 0, 0));
+
+        reservedWords.Add("Type", new Token(TokenType.Type, "Type", 0, 0));
+
+        reservedWords.Add("Faction", new Token(TokenType.Faction, "Faction", 0, 0));
+
+        reservedWords.Add("Power", new Token(TokenType.Power, "Power", 0, 0));
+
+        reservedWords.Add("Range", new Token(TokenType.Range, "Range", 0, 0));
+
+        reservedWords.Add("OnActivation", new Token(TokenType.OnActivation, "OnActivation", 0, 0));
+
+        reservedWords.Add("Effect", new Token(TokenType.OnActivation_Effect, "Effect", 0, 0));
+
+        reservedWords.Add("PostAction", new Token(TokenType.PostAction, "PostAction", 0, 0));
+
+        reservedWords.Add("Target", new Token(TokenType.Targets, "Target", 0, 0));
+
+        reservedWords.Add("Context", new Token(TokenType.Context, "Context", 0, 0));
+
+        reservedWords.Add("Single", new Token(TokenType.Single, "Single", 0, 0));
 
     }
 
@@ -58,11 +122,11 @@ public class Lexer
     }
 
     //Anade un nuevo token a la lista de tokens
-    private void AddToken(TokenType type)
+    private void AddToken(TokenType type, int line, int position)
     {
         string text = sourceText.Substring(startPosition, currentPosition - startPosition);
 
-        tokenList.Add(new Token(type, text, currentLine, currentPosition));
+        tokenList.Add(new Token(type, text, line, position));
     }
 
     //Analisis de Tokens
@@ -74,65 +138,68 @@ public class Lexer
         {
             //Casos para operadores y delimitadores.
             case '(':
-                AddToken(TokenType.LeftParenthesis);
+                AddToken(TokenType.LeftParenthesis, currentLine, currentPosition);
                 break;
             case ')':
-                AddToken(TokenType.RightParenthesis);
+                AddToken(TokenType.RightParenthesis, currentLine, currentPosition);
                 break;
             case '{':
-                AddToken(TokenType.LeftBrace);
+                AddToken(TokenType.LeftBrace, currentLine, currentPosition);
                 break;
             case '}':
-                AddToken(TokenType.RightBrace);
+                AddToken(TokenType.RightBrace, currentLine, currentPosition);
                 break;
             case '[':
-                AddToken(TokenType.LeftBracket);
+                AddToken(TokenType.LeftBracket, currentLine, currentPosition);
                 break;
             case ']':
-                AddToken(TokenType.RightBracket);
+                AddToken(TokenType.RightBracket, currentLine, currentPosition);
                 break;
             case ',':
-                AddToken(TokenType.Comma);
+                AddToken(TokenType.Comma, currentLine, currentPosition);
                 break;
             case '.':
-                AddToken(TokenType.Dot);
+                AddToken(TokenType.Dot, currentLine, currentPosition);
                 break;
             case ':':
-                AddToken(TokenType.Colon);
+                AddToken(TokenType.Colon, currentLine, currentPosition);
                 break;
             case ';':
-                AddToken(TokenType.SemiColon);
+                AddToken(TokenType.SemiColon, currentLine, currentPosition);
                 break;
             case '*':
-                AddToken(TokenType.Star);
+                AddToken(TokenType.Multiply, currentLine, currentPosition);
                 break;
             case '!':
-                AddToken(character == '='? TokenType.BangEqual : TokenType.Bang);
+                if(character == '=') AddToken(TokenType.BangEqual, currentLine, currentPosition);
+                else AddToken(TokenType.Bang,currentLine, currentPosition);
                 break;
             case '<':
-                AddToken(character == '='? TokenType.LessEqual : TokenType.Less);
+                if(character == '=') AddToken(TokenType.LessEqual, currentLine, currentPosition);
+                else AddToken(TokenType.Less, currentLine, currentPosition);
                 break;
             case '>':
-                AddToken(character == '='? TokenType.GreaterEqual : TokenType.Greater);
+                if(character == '=') AddToken(TokenType.GreaterEqual, currentLine, currentPosition);
+                else AddToken(TokenType.Greater, currentLine, currentPosition);
                 break;
             case '|':
-                if (IsMatch('|')) AddToken(TokenType.Or);
+                if (IsMatch('|')) AddToken(TokenType.Or, currentLine, currentPosition);
                 break;
             case '&':
-                if (IsMatch('&')) AddToken(TokenType.And);
+                if (IsMatch('&')) AddToken(TokenType.And, currentLine, currentPosition);
                 break;
             case '=':
-                if (IsMatch('=')) AddToken(TokenType.DoubleEqual);
-                else if (IsMatch('>')) AddToken(TokenType.EqualGreater);
-                else AddToken(TokenType.Equal);
+                if (IsMatch('=')) AddToken(TokenType.Equal, currentLine, currentPosition);
+                else if (IsMatch('>')) AddToken(TokenType.EqualGreater, currentLine, currentPosition);
+                else AddToken(TokenType.Assign, currentLine, currentPosition);
                 break;
             case '+':
-                if (IsMatch('+')) AddToken(TokenType.Increment);
-                else AddToken(TokenType.Plus);
+                if (IsMatch('+')) AddToken(TokenType.Plus1, currentLine, currentPosition);
+                else AddToken(TokenType.Plus, currentLine, currentPosition);
                 break;
             case '-':
-                if (IsMatch('-')) AddToken(TokenType.Decrement);
-                else AddToken(TokenType.Minus);
+                if (IsMatch('-')) AddToken(TokenType.Decrement, currentLine, currentPosition);
+                else AddToken(TokenType.Minus, currentLine, currentPosition);
                 break;
             case '/':
                 if (IsMatch('/'))
@@ -142,7 +209,10 @@ public class Lexer
                         Advance();
                     }
                 }
-                else AddToken(TokenType.Slash);
+                else AddToken(TokenType.Slash, currentLine, currentPosition);
+                break;
+            case '%':
+                AddToken(TokenType.Mod, currentLine, currentPosition);
                 break;
             
             //Casos para saltos de linea y espacios
@@ -255,7 +325,7 @@ public class Lexer
             }
         }
 
-        AddToken(TokenType.NumberLiteral);
+        AddToken(TokenType.NumberLiteral, currentLine, currentPosition);
     }
 
     //
@@ -263,7 +333,7 @@ public class Lexer
     {
         while(IsAlphanumeric(Peek())) Advance();
 
-        AddToken(TokenType.Identifier);
+        AddToken(TokenType.Identifier, currentLine, currentPosition);
     }
     // Método para verificar si un carácter es alfabético.
     private bool IsAlpha(char c)

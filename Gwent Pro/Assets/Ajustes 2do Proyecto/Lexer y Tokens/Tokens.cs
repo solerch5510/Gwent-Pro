@@ -1,3 +1,7 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
 public class Token
 {
     // Tipo de Token
@@ -27,19 +31,33 @@ public class Token
 public enum TokenType 
 {
     // Literales
-    Identifier, StringLiteral, NumberLiteral,
+    Identifier, StringLiteral, NumberLiteral, Bool,
 
-    // Palabras Clave
-    And, Else, False, True, For, If, Or, Context, Targets, While, Card, Predicate, Effect, PostAction,
+    // Tokens Condicionales 
+    And, Or, Not, Greater, Less, GreaterEqual, LessEqual, EqualGreater,
+    Equal, Bang, BangEqual, Null,
 
     // Tokens de un solo caracter
-    Colon, SemiColon, Slash, Star, Comma, LeftParenthesis, RightParenthesis, LeftBrace, RightBrace,
+    Colon, SemiColon, Slash,  Comma, LeftParenthesis, RightParenthesis, LeftBrace, RightBrace,
     LeftBracket,RightBracket, Dot,
 
-    // Tokens de dos caracteres
-    Bang, BangEqual, Equal, DoubleEqual, Greater, GreaterEqual, Less, LessEqual, Plus, Minus, Increment, 
-    Decrement,  PlusEqual, MinusEqual, EqualGreater,
+    // Palabras Clave
+    If, For, While, Action, Card, Effect, Name, Params, Type, Faction, Power, Range,
+    OnActivation, Targets, Context, Single, Predicate, PostAction, In, OnActivation_Effect,
 
     // Indicador de fin de archivo.
-    EndOfFile
+    EndOfFile,
+
+    //Funciones
+    Function, Pointer,
+
+    //Declaracion de variables
+    Var_Int, Var_Bool, Var_String,
+
+    //Operadores
+    Plus, Minus, Multiply, Divide, Mod, Pow, Plus1, String_Sum, String_Sum_S, Decrement, Assign
+
+
+
+
 }
