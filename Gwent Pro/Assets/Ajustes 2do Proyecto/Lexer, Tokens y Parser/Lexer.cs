@@ -130,7 +130,7 @@ public class Lexer
     }
 
     //Analisis de Tokens
-    private void LexToken()
+    public void LexToken()
     {
         char character = Advance();
 

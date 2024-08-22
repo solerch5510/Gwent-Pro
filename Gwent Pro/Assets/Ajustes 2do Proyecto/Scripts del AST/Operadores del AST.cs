@@ -1,5 +1,3 @@
-using System.Reflection.PortableExecutable;
-using System.Diagnostics;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
@@ -29,21 +27,21 @@ public class BinaryOperators : AST
     public override void Express(string Height)
     {
         // Imprime el nivel actual en la jerarquía del AST
-        Debug.Debug.Log(height + "-> Binary Operator:");
+        Debug.Log(Height + "-> Binary Operator:");
         
         // Si el operando izquierdo no es nulo, lo expresa
         if (Left != null)
         {
-            Left.Express(height + "\t -> Left Operand: \t");
+            Left.Express(Height + "\t -> Left Operand: \t");
         }
 
         // Imprime el tipo y valor del operador
-        Debug.Debug.Log(height + "-> Operator:" + Operator.TokenType.ToString() + "(" + Operator.value + ")");
+        Debug.Log(Height + "-> Operator:" + Operator.ToString() + "(" + Operator.Lexeme + ")");
         
         // Si el operando derecho no es nulo, lo expresa
         if (Right != null)
         {
-            Right.Express(height + "\t -> Right Operand: \t");
+            Right.Express(Height + "\t -> Right Operand: \t");
         }
     }
 }
@@ -72,12 +70,12 @@ public class UnaryOperators: AST
         Debug.Log(Height + "-> Unary Operator:");
 
         // Imprime el tipo y valor de la operacion
-        Debug.Log(Height + "-> Operator" + Operation.TokenType.ToString() + "(" + Operation.value + ")");
+        Debug.Log(Height + "-> Operator" + Operation.ToString() + "(" + Operation.Lexeme + ")");
         
         // Si la expresion no es nula, la expresa
         if(Expression != null)
         {
-            Expression.Express(height + "-> Expression: \t");
+            Expression.Express(Height + "-> Expression: \t");
         }
     }
 }
