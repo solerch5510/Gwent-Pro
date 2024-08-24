@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 
+// Clase para representar un nodo de carta en el arbol abstracto de sintaxis (AST)
 public class CardNode : AST
 {
+    // Variables para almacenar diferentes atributos de una carta
     public ParamName name;
     public Type type;
     public Faction faction;
@@ -12,7 +14,7 @@ public class CardNode : AST
     public Range range;
     public OnActivation onActivation;
 
-    public CardNode()
+    public CardNode() // Constructor vacio para instancias sin especificar atributos
     {
         name = null;
 
@@ -27,6 +29,7 @@ public class CardNode : AST
         onActivation = null;
     }
 
+    // Constructor sobrecargado para instancias con atributos especificados
     public CardNode(ParamName name, Type type, Faction faction, BasedPower power, Range range, OnActivation onActivation)
     {
         this.name = name;
@@ -46,6 +49,8 @@ public class CardNode : AST
     {
         Debug.Log(Height + "-> Card: ");
 
+        // Llama al método Express de cada atributo si no es nulo
+
         if (name != null) name.Express(Height + "\t");
 
         if (type != null) type.Express(Height + "\t");
@@ -59,6 +64,8 @@ public class CardNode : AST
         if (onActivation != null) onActivation.Express(Height + "\t");
     }
 }
+
+// Clases adicionales para representar diferentes tipos de atributos de una carta
 
 public class Type : AST
 {

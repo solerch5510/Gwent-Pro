@@ -3,15 +3,16 @@ using System.Diagnostics;
 using System.Xml;
 using System;
 using Unity.VisualScripting;
+using TMPro;
 
 public class Lexer
 {
     // Variable para almacenar el texto fuente que se va a analizar
-    private string sourceText;
+    public string sourceText;
     //Lista para almacenar todos los tokens identificados durante el analisis
-    private List<Token> tokenList = new List<Token>();
+    public List<Token> tokenList = new List<Token>();
     // Variable para almacenar el indice de la posicion actual en el texto fuente
-    private int currentPosition = 0;
+    public int currentPosition = 0;
     //Posicion inicial desde donde comenzo el ultimo Token
     private int startPosition = 0;
     // Numero de linea actual en el texto fuente.
@@ -23,6 +24,7 @@ public class Lexer
     public Lexer(string sourceText)
     {
         this.sourceText = sourceText;
+
         InitializeReservedWords();
     }
 
@@ -130,7 +132,7 @@ public class Lexer
     }
 
     //Analisis de Tokens
-    public void LexToken()
+    private void LexToken()
     {
         char character = Advance();
 
@@ -227,6 +229,10 @@ public class Lexer
             //Caso para cadenas de texto.
             case '"':
                 ScanString();
+                break;
+
+            case '\0':
+                tokenList.Add(new Token(TokenType.EndOfFile, "", currentLine, currentPosition));
                 break;
 
             //Caso prederterminado para caracteres no reconocidos.

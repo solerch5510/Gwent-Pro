@@ -38,17 +38,6 @@ public class CardZoom : MonoBehaviour
         canvasGroup.alpha = 0;
     }
 
-    /*void Update()
-    {
-        nameText.text = card.name;
-        descriptionText.text = card.description;
-        classCardText.text = card.classCard;
-        artImage.sprite = card.spriteImage;
-        Zone = card.Zone;
-      
-        powerText.text = card.power.ToString();
-    }*/
-
     public static void ShowComponents(CardDisplay ThisCard)
     {
         CanvasGroup canvasGroup1 = GameObject.FindAnyObjectByType<CardZoom>().GetComponent<CanvasGroup>();

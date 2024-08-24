@@ -1,43 +1,153 @@
-using System;
+using System.Collections;
 using System.Collections.Generic;
-public class Scope
+using UnityEngine;
+
+public class Scope <T>
 {
-    //Dicionario privado para almacenar pares nombre-valor de simbolos/simbolos
-    private Dictionary<string, object> symbols = new Dictionary<string, object>();
-    // Referencia al ambito padre
-    private Scope parent;
+    public Dictionary<string, T> LOCAL_SCOPE;
+    public Scope<T> GLOBAL_SCOPE;
 
-    //Constructor que acepta un ambito padre opcional
-    public Scope(Scope parentScope = null)
+    public Scope()
     {
-        parent = parentScope;
+        GLOBAL_SCOPE = null;
+
+        LOCAL_SCOPE = new Dictionary<string, T>();
+    }
+    public Scope(Scope<T> GLOBAL_SCOPE)
+    {
+        this.GLOBAL_SCOPE = GLOBAL_SCOPE;
+
+        LOCAL_SCOPE = new Dictionary<string, T>();
     }
 
-    //Metodo para definir un simbolo en el ambito actual 
-    public void Define(string name, object value)
-    {
-        symbols[name] = value;
-    }
 
-    // Metodo para buscar un simbolo por su nombre en el ambito actual y todos sus padres 
-    public object Lookup(string name)
+    public bool IsInScope(string name)
     {
-        var scope = this;
-
-        // Busqueda recursiva del simbolo en el ambito actual y todos sus ambitos padres 
-        while (scope != null)
+        if (GLOBAL_SCOPE == null) 
         {
-            if (scope.symbols.TryGetValue(name, out var value))
-            {
-                // Si se encuentra el simbolo, se devuelve su valor
-                return value;
-            }
-
-            // Se pasa al siguiente ambito padre si no se encontro el simbolo en el actual
-            scope = scope.parent;
+            return LOCAL_SCOPE.ContainsKey(name);
         }
 
-        // Si despues de buscar en todos los ambitos no se encuentra el simbolo, se lanza una excepcion.
-        throw new Exception($"Symbol {name} not found"); 
+        else if (LOCAL_SCOPE.ContainsKey(name)) 
+        {
+            return true;
+        }
+
+        else return GLOBAL_SCOPE.IsInScope(name);
+    }
+
+    public bool IsInScope(ParamName name)
+    {
+        return IsInScope(name.paramName);
+    }
+    public bool IsInScope(Var variable)
+    {
+        return IsInScope(variable.value);
+    }
+    public bool IsInScope(EffectNode effect)
+    {
+        return IsInScope(effect.name.paramName);
+    }
+    public bool IsInScope(CardNode card)
+    {
+        return IsInScope(card.name.paramName);
+    }
+
+
+    public T Get(string name)
+    {
+        if (GLOBAL_SCOPE == null)
+        {
+            if (LOCAL_SCOPE.ContainsKey(name)) 
+            {
+                return LOCAL_SCOPE[name];
+            }
+
+            else
+            {
+                Debug.Log($"'{name}' not found");
+                return default;
+            }
+        }
+
+        else if (LOCAL_SCOPE.ContainsKey(name)) 
+        {
+            return LOCAL_SCOPE[name];
+        }
+
+        else return GLOBAL_SCOPE.Get(name);
+    }
+    public T Get(ParamName name)
+    {
+        return Get(name.paramName);
+    }
+    public T Get(Var variable)
+    {
+        return Get(variable.value);
+    }
+    public T Get(EffectNode effect)
+    {
+        return Get(effect.name.paramName);
+    }
+    public T Get(CardNode card)
+    {
+        return Get(card.name.paramName);
+    }
+
+
+    public void Set(string name, T value)
+    {
+        if (!IsInScope(name) || LOCAL_SCOPE.ContainsKey(name)) 
+        {
+            LOCAL_SCOPE[name] = value;
+        }
+
+        else GLOBAL_SCOPE.Set(name, value);
+    }
+    public void Set(ParamName name, T value)
+    {
+        Set(name.paramName, value);
+    }
+    public void Set(Var variable, T value)
+    {
+        Set(variable.value, value);
+    }
+    public void Set(EffectNode effect, T value)
+    {
+        Set(effect.name.paramName, value);
+    }
+    public void Set(CardNode card, T value)
+    {
+        Set(card.name.paramName, value);
+    }
+}
+
+public class MultiScope
+{
+    Scope<object> scope;
+
+    public MultiScope()
+    {
+        scope = new Scope<object>();
+    }
+
+    public MultiScope(MultiScope globalScope)
+    {
+        scope = new Scope<object>(globalScope.scope);
+    }
+
+    public bool IsInScope(string key)
+    {
+        return scope.IsInScope(key);
+    }
+
+    public object Get(string key)
+    {
+        return scope.Get(key);
+    }
+
+    public void Set(string key, object value)
+    {
+        scope.Set(key, value);
     }
 }
