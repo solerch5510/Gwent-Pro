@@ -2,17 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//Define una clase generica Scope<T> para manejar ambitos en el codigo
 public class Scope <T>
 {
+    //Diccionario para almacenar variables locales en el ambito actual
     public Dictionary<string, T> LOCAL_SCOPE;
+    // Referencia al ambito global, si existe
     public Scope<T> GLOBAL_SCOPE;
 
+
+    // Constructor predeterminado que inicializa un nuevo ambito local sin ambito global
     public Scope()
     {
-        GLOBAL_SCOPE = null;
+        GLOBAL_SCOPE = null; // No hay ambito global
 
-        LOCAL_SCOPE = new Dictionary<string, T>();
+        LOCAL_SCOPE = new Dictionary<string, T>(); // Inicializa el ambito local vacio
     }
+
+    // Constructor que acepta un ambito global y crea un nuevo ambito local dentro de el
     public Scope(Scope<T> GLOBAL_SCOPE)
     {
         this.GLOBAL_SCOPE = GLOBAL_SCOPE;
@@ -20,14 +27,16 @@ public class Scope <T>
         LOCAL_SCOPE = new Dictionary<string, T>();
     }
 
-
+     // Verifica si una variable esta definida en el ambito actual o en el ambito global
     public bool IsInScope(string name)
     {
+         // Si no hay ambito global, solo busca en el ambito local
         if (GLOBAL_SCOPE == null) 
         {
             return LOCAL_SCOPE.ContainsKey(name);
         }
 
+        // Si hay ambito global, primero busca en el ambito local, luego en el global
         else if (LOCAL_SCOPE.ContainsKey(name)) 
         {
             return true;
@@ -36,6 +45,7 @@ public class Scope <T>
         else return GLOBAL_SCOPE.IsInScope(name);
     }
 
+    // Metodos similares a IsInScope pero adaptados para diferentes tipos de nombres
     public bool IsInScope(ParamName name)
     {
         return IsInScope(name.paramName);
@@ -122,6 +132,7 @@ public class Scope <T>
     }
 }
 
+// Clase adicional para manejar multiples ambitos (scopes) aniidados
 public class MultiScope
 {
     Scope<object> scope;
