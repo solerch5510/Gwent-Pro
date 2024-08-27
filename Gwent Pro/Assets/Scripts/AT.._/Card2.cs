@@ -12,7 +12,7 @@ public class Card2 : ScriptableObject
     public int whichEffectIs;
     public Sprite spriteImage;
     public string Zone;
-    public bool playerID; // True para Player1 , False para Player2
+    public bool playerID; // True para Player1 [Paladins] , False para Player2 [Monsters]
     public string description = "";
     public string classCard = "SilverCard";
     public Card2()

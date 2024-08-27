@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine;
 
 // Clase para representar un literal entero en el arbol abstracto de sintaxis (AST
-public class Int: AST
+public class Int: ASTType
 {
     // Token que representa la entrada lexica asociada con este literal
     public Token IntToken;
@@ -17,6 +17,8 @@ public class Int: AST
         this.IntToken = token;
 
         value = int.Parse(token.Lexeme);
+
+        type = Type.Int;
     }
 
     public override void Express(string Height)
@@ -26,7 +28,7 @@ public class Int: AST
 }
 
 // Clase para representar un literal de cadena en el AST
-public class String : AST
+public class String : ASTType
 {
     // Token que representa la entrada lexica asociada con esta cadena
     public Token StringToken;
@@ -40,6 +42,8 @@ public class String : AST
         this.StringToken = token;
 
         Expression = token.Lexeme;
+
+        type = Type.String;
     }
 
     public override void Express(string Height)
@@ -50,7 +54,7 @@ public class String : AST
 }
 
 // Clase para representar un literal booleano en el AST
-public class Bool: AST
+public class Bool: ASTType
 {
     // Token que representa la entrada lexica asociada con este valor booleano
     public Token BoolToken;
@@ -64,6 +68,8 @@ public class Bool: AST
         this.BoolToken = token;
 
         TOF = bool.Parse(token.Lexeme);
+
+        type = Type.Bool;
     }
 
     public override void Express(string Height)

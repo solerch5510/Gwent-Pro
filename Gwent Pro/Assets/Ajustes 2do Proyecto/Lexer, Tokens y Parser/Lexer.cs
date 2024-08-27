@@ -109,6 +109,12 @@ public class Lexer
 
         reservedWords.Add("Single", new Token(TokenType.Single, "Single", 0, 0));
 
+        reservedWords.Add("if", new Token(TokenType.If , "if", 0, 0));
+
+        reservedWords.Add("Board", new Token(TokenType.Pointer, "Board", 0, 0));
+
+        reservedWords.Add("Add", new Token(TokenType.Function, "Add", 0, 0));
+
     }
 
     //Verifica si se llego al final del texto fuente

@@ -130,22 +130,25 @@ public class WhileLoop : AST
 }
 
 // Clase para representar una funcion en el AST
-public class Function : AST
+public class Function : ASTType
 {
     // Nombre de la funcion
     public string functionName;
     // Argumentos de la funcion
     public Args args;
-    // Tipo de retorno de la funcion
-    public Var.Type type;
+
+    public Function (string functionName)
+    {
+        this.functionName = functionName;
+
+        TypeToReturn();
+    }
 
     public Function(string functionName, Args args)
     {
         this.functionName = functionName;
 
         this.args = args;
-
-        type = Var.Type.NULL;
 
         TypeToReturn();
     }
@@ -155,52 +158,57 @@ public class Function : AST
         // Determina el tipo de retorno basado en el nombre de la funcion
         if (functionName == "FieldOfPlayer")
         {
-            type = Var.Type.CONTEXT;
+            type = Type.Field;
         }
 
         if (functionName == "HandOfPlayer")
         {
-            type = Var.Type.FIELD;
+            type = Type.Field;
         }
             
         if (functionName == "GraveyardOfPlayer")
         {
-            type = Var.Type.FIELD;
+            type = Type.Field;
         }
             
         if (functionName == "DeckOfPlayer")
         {
-            type = Var.Type.FIELD;
-        }
-            
-        if (functionName == "Find")
-        {
-            type = Var.Type.TARGETS;
+            type = Type.Field;
         }
             
         if (functionName == "Push")
         {
-            type = Var.Type.VOID;
+            type = Type.Void;
         }
             
         if (functionName == "SendBottom")
         {
-            type = Var.Type.VOID;
+            type = Type.Void;
         }
             
         if (functionName == "Pop")
         {
-            type = Var.Type.CARD;
+            type = Type.Card;
         }
             
         if (functionName == "Remove")
         {
-            type = Var.Type.VOID;
+            type = Type.Void;
         }
             
         if (functionName == "Shuffle")
         {
-            type = Var.Type.VOID;
+            type = Type.Void;
+        }
+
+        if (functionName == "Add")
+        {
+            type = Type.Void;
+        }
+
+        if (functionName == "Find")
+        {
+            type = Type.Field;
         }
             
     }
@@ -228,9 +236,9 @@ public class Assign : AST
 {
     public Var left; // Variable a asignar
     public Token op; // Operador de asignación
-    public AST right; // Valor o expresión a asignar
+    public ASTType right; // Valor o expresión a asignar
 
-    public Assign(Var left, Token op, AST right)
+    public Assign(Var left, Token op, ASTType right)
     {
         this.left = left; // Asigna la variable izquierda
 

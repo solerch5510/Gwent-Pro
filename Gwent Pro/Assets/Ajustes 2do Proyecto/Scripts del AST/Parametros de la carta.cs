@@ -4,11 +4,11 @@ using UnityEngine.SceneManagement;
 using UnityEngine;
 
 // Clase para representar un nodo de carta en el arbol abstracto de sintaxis (AST)
-public class CardNode : AST
+public class CardNode : ASTType
 {
     // Variables para almacenar diferentes atributos de una carta
     public ParamName name;
-    public Type type;
+    public TypeNode typeNode;
     public Faction faction;
     public BasedPower power;
     public Range range;
@@ -18,7 +18,7 @@ public class CardNode : AST
     {
         name = null;
 
-        type = null;
+        typeNode = null;
 
         faction = null;
 
@@ -27,14 +27,16 @@ public class CardNode : AST
         range = null;
 
         onActivation = null;
+
+        type = Type.Null;
     }
 
     // Constructor sobrecargado para instancias con atributos especificados
-    public CardNode(ParamName name, Type type, Faction faction, BasedPower power, Range range, OnActivation onActivation)
+    public CardNode(ParamName name, TypeNode typeNode, Faction faction, BasedPower power, Range range, OnActivation onActivation)
     {
         this.name = name;
 
-        this.type = type;
+        this.typeNode = typeNode;
 
         this.faction = faction;
 
@@ -43,6 +45,8 @@ public class CardNode : AST
         this.range = range;
 
         this.onActivation = onActivation;
+
+        type = Type.Card;
     }
 
     public override void Express(string Height)
@@ -53,7 +57,7 @@ public class CardNode : AST
 
         if (name != null) name.Express(Height + "\t");
 
-        if (type != null) type.Express(Height + "\t");
+        if (typeNode != null) typeNode.Express(Height + "\t");
 
         if (faction != null) faction.Express(Height + "\t");
 
@@ -67,11 +71,11 @@ public class CardNode : AST
 
 // Clases adicionales para representar diferentes tipos de atributos de una carta
 
-public class Type : AST
+public class TypeNode : AST
 {
     public string type;
 
-    public Type (Token token)
+    public TypeNode (Token token)
     {
         type = token.Lexeme;
     }
@@ -201,6 +205,20 @@ public class OnActivationElement : AST
         this.postAction = postAction;
     }
 
+    public OnActivationElement(EffectOnActivation effectOnActivation)
+    {
+        this.effectOnActivation = effectOnActivation;
+        selector = null;
+        postAction = null;
+    }
+
+    public OnActivationElement(EffectOnActivation effectOnActivation, PostAction postAction)
+    {
+        this.effectOnActivation = effectOnActivation;
+        selector = null;
+        this.postAction = postAction;
+    }
+
     public override void Express(string Height)
     {
         Debug.Log(Height + "-> OnActivationELEMENT: ");
@@ -257,19 +275,19 @@ public class EffectOnActivation : AST
 
 public class PostAction : AST
 {
-    public Type type;
+    public EffectOnActivation effectOnActivation1;
     public Selector selector;
 
-    public PostAction(Type type)
+    public PostAction(EffectOnActivation effectOnActivation)
     {
-        this.type = type;
+        this.effectOnActivation1 = effectOnActivation;
 
         selector = null;
     }
 
-    public PostAction(Type type, Selector selector)
+    public PostAction(EffectOnActivation effectOnActivation, Selector selector)
     {
-        this.type = type;
+        this.effectOnActivation1 = effectOnActivation;
 
         this.selector = selector;
     }
@@ -278,9 +296,9 @@ public class PostAction : AST
     {
         Debug.Log(Height + "-PostAction: ");
 
-        if (type != null) 
+        if (effectOnActivation1 != null) 
         {
-            type.Express(Height + "\t");
+            effectOnActivation1.Express(Height + "\t");
         }
 
         if (selector != null) 

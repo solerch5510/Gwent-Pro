@@ -4,17 +4,17 @@ using UnityEngine.SceneManagement;
 using UnityEngine;
 
 // Clase para representar operadores binarios en el AST
-public class BinaryOperators : AST
+public class BinaryOperators : ASTType
 {
     //Referencia al operando izquierdo
-    public AST Left;
+    public ASTType Left;
     //Referencia al operador
-    public AST Right;
+    public ASTType Right;
     //Referencia al operando derecho
     public Token Operator;
 
     //Constructor que inicializa los operandos y el operador
-    public BinaryOperators(AST Left, Token Operator, AST Right)
+    public BinaryOperators(ASTType Left, Token Operator, ASTType Right)
     {
         this.Left = Left;
         
@@ -44,19 +44,37 @@ public class BinaryOperators : AST
             Right.Express(Height + "\t -> Right Operand: \t");
         }
     }
+
+    public void FindType()
+    {
+        if(Operator.Type == TokenType.Plus || Operator.Type == TokenType.Minus || Operator.Type == TokenType.Plus1 || Operator.Type == TokenType.Multiply || Operator.Type == TokenType.Divide || Operator.Type == TokenType.Decrement || Operator.Type == TokenType.Mod)
+        {
+            type = Type.Int;
+        }
+
+        if(Operator.Type == TokenType.And || Operator.Type == TokenType.Or || Operator.Type == TokenType.Greater || Operator.Type == TokenType.Less || Operator.Type == TokenType.LessEqual || Operator.Type == TokenType.GreaterEqual || Operator.Type == TokenType.BangEqual || Operator.Type == TokenType.Equal)
+        {
+            type = Type.Bool;
+        }
+
+        if(Operator.Type == TokenType.String_Sum || Operator.Type == TokenType.String_Sum_S) 
+        {
+            type = Type.String;
+        }
+    }
 }
 
 // Clase para representar operadores unarios en el AST
-public class UnaryOperators: AST
+public class UnaryOperators: ASTType
 {
     // Referencia a la operacion
     public Token Operation;
     
     // Referencia a la expresion sobre la cual se aplica la operacion
-    public AST Expression;
+    public ASTType Expression;
 
     // Constructor que inicializa la operacion y la expresion
-    public UnaryOperators(Token Operation, AST Expression)
+    public UnaryOperators(Token Operation, ASTType Expression)
     {
         this.Operation = Operation;
 
@@ -77,5 +95,19 @@ public class UnaryOperators: AST
         {
             Expression.Express(Height + "-> Expression: \t");
         }
+    }
+
+    public void FindType()
+    {
+        if (Operation.Type == TokenType.Not)
+        {
+            type = Type.Bool;
+        }
+
+        else
+        {
+            type = Type.Int;
+        }
+
     }
 }

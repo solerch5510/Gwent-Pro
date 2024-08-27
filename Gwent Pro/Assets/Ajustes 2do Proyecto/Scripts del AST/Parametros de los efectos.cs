@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 
-public class EffectNode : AST
+public class EffectNode : ASTType
 {
     // Nombre del parametro del efecto
     public ParamName name;
@@ -12,6 +12,8 @@ public class EffectNode : AST
     // Accion asociada al efecto
     public Action action;
 
+    public Scope<ASTType.Type> scope;
+
     public EffectNode(ParamName name, Action action)
     {
         this.name = name;
@@ -19,15 +21,23 @@ public class EffectNode : AST
         parameters = null;
 
         this.action = action;
+
+        type = Type.Effect;
+
+        scope = new Scope<ASTType.Type>();
     }
 
-    public EffectNode(ParamName name, Args parameters, Action action)
+    public EffectNode(ParamName name, Args parameters, Action action, Scope<ASTType.Type> scope)
     {
         this.name = name;
 
         this.parameters = parameters;
 
         this.action = action;
+
+        type = Type.Effect;
+
+        this.scope = scope;
     }
 
     // Metodo para expresar el nodo de efecto en un formato legible

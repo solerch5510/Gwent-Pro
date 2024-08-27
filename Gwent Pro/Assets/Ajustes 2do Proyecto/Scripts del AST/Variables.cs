@@ -2,20 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
+using System.Xml.Serialization;
 
 // Clase base para representar una variable en el arbol abstracto de sintaxis (AST)
-public class Var : AST
+public class Var : ASTType
 {
-    // Enumeracion para los diferentes tipos de variables que pueden existir
-    public enum Type
-    {
-        TARGETS, CONTEXT, CARD, FIELD, INT, STRING, BOOL, VOID, NULL
-    }
-
     // Variables para almacenar el token asociado con esta variable, su valor y su tipo
     public Token token;
     public string value;
-    public Type type;
 
     // Constructor que inicializa la variable con un token dado
     public Var(Token token)
@@ -24,17 +18,43 @@ public class Var : AST
 
         value = token.Lexeme;
 
-        // Inicializa el tipo de la variable como NULL por defecto
-        type = Type.NULL;
+        type = Type.Null;
+    }
+
+    public Var (Token token, TokenType type)
+    {
+        this.token = token;
+
+        value = token.Lexeme;
+
+        TypeInParams(type);
     }
 
     public void TypeInParams(TokenType t) // Metodo para determinar el tipo de la variable basandose en el tipo de token
     {
-        if (t == TokenType.Var_Bool) type = Type.BOOL;
+        if (t == TokenType.Var_Bool) 
+        {
+            type = Type.Bool;
+        }
 
-        if (t == TokenType.Var_Int) type = Type.INT;
+        if (t == TokenType.Var_Int) 
+        {
+            type = Type.Int;
+        }
 
-        if (t == TokenType.Var_String) type = Type.STRING;
+        if (t == TokenType.Var_String) 
+        {
+            type = Type.String;
+        }
+    }
+
+    public Var(Token token, Type type)
+    {
+        this.token = token;
+
+        value = token.Lexeme;
+
+        this.type = type;
     }
 
     public override void Express(string Height)
@@ -53,12 +73,12 @@ public class Var : AST
 public class VarComp : Var
 {
     // Lista para almacenar los argumentos o valores asociados con esta variable compuesta
-    public List<AST> args;
+    public List<ASTType> args;
 
     // Constructor que inicializa la variable compuesta con un token dado
     public VarComp(Token token) : base(token)
     {
-        args = new List<AST>();
+        args = new List<ASTType>();
     }
 
     public override void Express(string Height)
@@ -67,10 +87,56 @@ public class VarComp : Var
 
         base.Express(Height);
 
+        string Tab = "\t";
+
         // Si la lista de argumentos no es nula, imprime cada uno de ellos
-        if (args != null) foreach (AST ast in args)
+        if (args != null) 
         {
-            ast.Express(Height + "\t");
+            foreach (AST ast in args)
+            {
+                ast.Express(Height + Tab);
+
+                Tab += "\t";
+            }
+        }
+    }
+}
+
+public class Pointer : ASTType
+{
+    public string pointer;
+
+    public Pointer(Token token)
+    {
+        pointer = token.Lexeme;
+
+        type = Type.Field;
+    }
+
+    public override void Express(string Height)
+    {
+        Debug.Log(Height + "-POINTER: " + pointer);
+    }
+}
+
+public class Indexer : ASTType
+{
+    public ASTType index;
+
+    public Indexer(ASTType index)
+    {
+        this.index = index;
+
+        type = Type.Indexer;
+    }
+
+    public override void Express(string Height)
+    {
+        Debug.Log(Height + "-> Indexer: ");
+
+        if (index != null) 
+        {
+            index.Express(Height + "\t-> Index: ");
         }
     }
 }

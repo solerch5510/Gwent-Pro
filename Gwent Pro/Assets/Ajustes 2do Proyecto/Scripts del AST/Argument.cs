@@ -34,8 +34,13 @@ public class Args : AST
     }
 }
 
-public class NoOp : AST
+public class NoOp : ASTType
 {
+    public NoOp()
+    {
+
+    }
+    
     public override void Express(string Height)
     {
         Debug.Log(Height + "-> Empty");

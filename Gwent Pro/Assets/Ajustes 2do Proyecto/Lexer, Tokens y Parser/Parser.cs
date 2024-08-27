@@ -9,8 +9,10 @@ public class Parser
     public List<Token> TokensList;
     public int NumberOfToken;
     public string CurrentError;
-
     private Token CurrentToken;
+    public Scope <ASTType.Type> GlobalScope;
+    public Dictionary<string, EffectNode> EffectList;
+    public CardNode ThisCardNode;
 
     public Parser(Lexer lexer)
     {
@@ -23,9 +25,50 @@ public class Parser
         CurrentError = "";
 
         CurrentToken = lexer.tokenList[0];
+
+        GlobalScope = new Scope<ASTType.Type>();
+
+        EffectList = new Dictionary<string, EffectNode>();
     }
 
-    public void DebugError()
+    public void ErrorRepeat()
+    {
+        DebugError($"Found invalid repetition of field {CurrentToken.Type} in current context");
+    }
+
+    public void ErrorNotCorrespondingField()
+    {
+        DebugError($"Invalid syntax in current context of {CurrentToken.Type.ToString()} token");
+
+        Eat(CurrentToken.Type);
+    }
+
+    public void ErrorInNodeCreation(AST node)
+    {
+        DebugError($"Invalid construction of {node.GetType().ToString()} maybe you miss fields of {node.GetType().ToString()}");
+    }
+
+    public void ErrorInUnaryOp(UnaryOperators node)
+    {
+        DebugError($"Unvalid use of Unary Operator ({node.Operation.Lexeme}) in {node.Expression.type}  cannot convert {node.Expression.type} to {node.type}");
+    }
+
+    public void ErrorInBinOp(BinaryOperators node)
+    {
+        DebugError($"Invalid Binary Operator: Operator '{node.Operator.Lexeme}' cannot be applied to operands of type '{node.Left.type}' and '{node.Right.type}'");
+    }
+
+    public void ErrorHasNotBeenDeclared(Var variable)
+    {
+        DebugError($"Variable '{variable.value}' has not been declared");
+    }
+
+    public void ErrorInAssignment(Assign assign)
+    {
+        DebugError($"Invalid Assignment, cannot convert {assign.left.type}  to  {assign.right.type}");
+    }
+
+    public void DebugError(string errorTag)
     {
         CurrentError = "Invalid syntax \n";
 
@@ -86,25 +129,23 @@ public void Eat(TokenType tokenType)
             throw;
         }
     }
-public AST Factor()
+public ASTType Factor(Scope<ASTType.Type> scope)
     {
         try
         {
             Token token = CurrentToken;
-            if (token.Type == TokenType.Plus)
+            if (token.Type == TokenType.Plus || token.Type == TokenType.Minus)
             {
-                Eat(TokenType.Plus);
+                Eat(token.Type);
 
-                UnaryOperators node = new UnaryOperators(token, Factor());
+                ASTType factor = Factor(scope);
 
-                return node;
-            }
+                UnaryOperators node = new UnaryOperators(token, factor);
 
-            if (token.Type == TokenType.Minus)
-            {
-                Eat(TokenType.Minus);
-
-                UnaryOperators node = new UnaryOperators(token, Factor());
+                if(!IsPossibleUnaryOp(node))
+                {
+                    ErrorInUnaryOp(node);
+                }
 
                 return node;
             }
@@ -140,7 +181,7 @@ public AST Factor()
             {
                 Eat(TokenType.LeftParenthesis);
 
-                AST result = Expression();
+                ASTType result = Expression(scope);
 
                 Eat(TokenType.RightParenthesis);
 
@@ -149,15 +190,36 @@ public AST Factor()
 
             if (CurrentToken.Type == TokenType.Identifier)
             {
-                return Variable();
+                Var node = Variable(scope);
+
+                if(node.GetType() == typeof(Var) && !scope.IsInScope(node))
+                {
+                    ErrorHasNotBeenDeclared(node);
+                }
+
+                token = CurrentToken;
+
+                if(token.Type == TokenType.Plus1 || token.Type == TokenType.Decrement)
+                {
+                    UnaryOperators unaryNode = new UnaryOperators(token, node);
+
+                    if(node.type != ASTType.Type.Int)
+                    {
+                        ErrorInUnaryOp(unaryNode);
+                    }
+
+                    Eat(token.Type);
+
+                    return node;
+                }
             }
 
             if (CurrentToken.Type == TokenType.Function)
             {
-                return FunctionStatement(CurrentToken.Lexeme);
+                return FunctionStatement(CurrentToken.Lexeme, scope);
             }
 
-            DebugError();
+            DebugError($"Invalid Factor: {token.Lexeme}");
 
             return new NoOp();
         }
@@ -167,11 +229,11 @@ public AST Factor()
         }
     }
 
-    public AST Term()
+    public ASTType Term(Scope<ASTType.Type> scope)
     {
         try
         {
-            AST node = Factor();
+            ASTType node = Factor(scope);
 
             Token token = CurrentToken;
 
@@ -179,7 +241,12 @@ public AST Factor()
             {
                 Eat(token.Type);
 
-                node = new BinaryOperators(node, token, Expression());
+                node = new BinaryOperators(node, token, Term(scope));
+
+                if(!IsPossibleBinOp(node as BinaryOperators))
+                {
+                    ErrorInBinOp(node as BinaryOperators);
+                }
             }
 
             return node;
@@ -191,18 +258,24 @@ public AST Factor()
         }
     }
 
-    public AST Expression()
+    public ASTType Expression(Scope<ASTType.Type> scope)
     {
         try
         {
-            AST node = Term();
+            ASTType node = Term(scope);
 
             Token token = CurrentToken;
-            if (token.Type == TokenType.Plus || token.Type == TokenType.Minus)
+
+            if (token.Type == TokenType.Plus || token.Type == TokenType.Minus || token.Type == TokenType.String_Sum || token.Type == TokenType.String_Sum_S)
             {
                 Eat(token.Type);
 
-                node = new BinaryOperators(node, token, Expression());
+                node = new BinaryOperators(node, token, Expression(scope));
+
+                if(!IsPossibleBinOp(node as BinaryOperators))
+                {
+                    ErrorInBinOp(node as BinaryOperators);
+                }
             }
 
             return node;
@@ -213,7 +286,7 @@ public AST Factor()
         }
     }
 
-    public AST BooleanFactor()
+    public ASTType BooleanFactor(Scope<ASTType.Type> scope)
     {
         try
         {
@@ -225,8 +298,13 @@ public AST Factor()
 
                 Eat(TokenType.LeftParenthesis);
 
-                UnaryOperators unaryOp = new UnaryOperators(token, BooleanExpression());
+                UnaryOperators unaryOp = new UnaryOperators(token, BooleanExpression(scope));
 
+                if (!IsPossibleUnaryOp (unaryOp)) 
+                {
+                    ErrorInUnaryOp(unaryOp);
+                }
+                
                 Eat(TokenType.RightParenthesis);
 
                 return unaryOp;
@@ -236,14 +314,14 @@ public AST Factor()
             {
                 Eat(TokenType.LeftParenthesis);
 
-                AST result = BooleanExpression();
+                ASTType result = BooleanExpression(scope);
 
                 Eat(TokenType.RightParenthesis);
 
                 return result;
             }
 
-            AST left = Expression();
+            ASTType left = Expression(scope);
 
             token = CurrentToken;
 
@@ -277,16 +355,21 @@ public AST Factor()
                 Eat(TokenType.Greater);
             }
 
-            else if (token.Type == TokenType.RightParenthesis) 
+            else if (token.Type == TokenType.RightParenthesis || token.Type == TokenType.And || token.Type == TokenType.Or) 
             {
                 return left;
             }
             
-            else DebugError();
+            else DebugError($"Invalid Boolean operator: '{token.Lexeme}'");
 
-            AST right = Expression();
+            ASTType right = Expression(scope);
 
             BinaryOperators node = new BinaryOperators(left, token, right);
+
+            if (!IsPossibleBinOp (node as BinaryOperators))
+            {
+                ErrorInBinOp(node as BinaryOperators);
+            }
 
             return node;
         }
@@ -297,11 +380,11 @@ public AST Factor()
         }
     }
 
-    public AST BooleanTerm()
+    public ASTType BooleanTerm(Scope<ASTType.Type> scope)
     {
         try
         {
-            AST node = BooleanFactor();
+            ASTType node = BooleanFactor(scope);
 
             Token token = CurrentToken;
 
@@ -309,7 +392,12 @@ public AST Factor()
             {
                 Eat(TokenType.Or);
 
-                return new BinaryOperators(node, token, BooleanExpression());
+                node = new BinaryOperators(node, token, BooleanTerm(scope));
+
+                if( !IsPossibleBinOp (node as BinaryOperators))
+                {
+                    ErrorInBinOp(node as BinaryOperators);
+                }
             }
 
             return node;
@@ -320,11 +408,11 @@ public AST Factor()
         }
     }
 
-    public AST BooleanExpression()
+    public ASTType BooleanExpression(Scope<ASTType.Type> scope)
     {
         try
         {
-            AST node = BooleanTerm();
+            ASTType node = BooleanTerm(scope);
 
             Token token = CurrentToken;
 
@@ -332,7 +420,12 @@ public AST Factor()
             {
                 Eat(TokenType.And);
 
-                node = new BinaryOperators(node, token, BooleanExpression());
+                node = new BinaryOperators(node, token, BooleanExpression(scope));
+
+                if( !IsPossibleBinOp (node as BinaryOperators))
+                {
+                    ErrorInBinOp(node as BinaryOperators);
+                }
             }
 
             return node;
@@ -343,7 +436,7 @@ public AST Factor()
         }
     }
 
-    public Var Variable()
+    public Var Variable(Scope<ASTType.Type> scope)
     {
         try
         {
@@ -351,9 +444,17 @@ public AST Factor()
 
             Eat(TokenType.Identifier);
 
-            if (CurrentToken.Type == TokenType.Dot)
+            VarComp otherNode = new VarComp(node.token);
+
+            if (CurrentToken.Type == TokenType.Dot || CurrentToken.Type == TokenType.LeftBrace)
             {
-                VarComp varComp = new VarComp(node.token);
+                if(CurrentToken.Type == TokenType.LeftBrace)
+                {
+                    Indexer indexer = IndexerParse(scope);
+
+                    otherNode.args.Add(indexer);
+                }
+                
 
                 while (CurrentToken.Type == TokenType.Dot && CurrentToken.Type != TokenType.EndOfFile)
                 {
@@ -361,79 +462,91 @@ public AST Factor()
 
                     if (CurrentToken.Type == TokenType.Function)
                     {
-                        Function function = FunctionStatement(CurrentToken.Lexeme);
+                        Function function = FunctionStatement(CurrentToken.Lexeme, scope);
 
-                        varComp.args.Add(function);
+                        otherNode.args.Add(function);
+
+                        if(CurrentToken.Type == TokenType.LeftBrace)
+                        {
+                            otherNode.args.Add(IndexerParse(scope));
+                        }
                     }
 
                     else
                     {
                         Token token = CurrentToken;
 
-                        if (token.Type == TokenType.Type)
+                        if (token.Type == TokenType.Type || token.Type == TokenType.Name || token.Type == TokenType.Faction || token.Type == TokenType.Power || token.Type == TokenType.Range)
                         {
                             Eat(token.Type);
 
-                            Type cardType = new Type(token);
+                            Var variable = new Var(token, ASTType.Type.String);
 
-                            varComp.args.Add(cardType);
-                        }
+                            if(token.Type == TokenType.Power) 
+                            {
+                                variable.type = ASTType.Type.Int;
+                            }
 
-                        else if (token.Type == TokenType.Name)
-                        {
-                            Eat(token.Type);
-
-                            ParamName cardName = new ParamName(token);
-
-                            varComp.args.Add(cardName);
-                        }
-
-                        else if (token.Type == TokenType.Faction)
-                        {
-                            Eat(token.Type);
-
-                            Faction cardFaction = new Faction(token);
-
-                            varComp.args.Add(cardFaction);
-                        }
-                        else if (token.Type == TokenType.Power)
-                        {
-                            Eat(token.Type);
-                            ShowPower cardShowPower = new ShowPower();
-                            
-                            varComp.args.Add(cardShowPower);
-                        }
-
-                        else if (token.Type == TokenType.Range)
-                        {
-                            Eat(token.Type);
-
-                            Range cardRange = new Range(token);
-
-                            varComp.args.Add(cardRange);
+                            otherNode.args.Add(variable);
                         }
 
                         else if (token.Type == TokenType.Pointer)
                         {
                             Eat(token.Type);
 
-                            Var value = new Var(token);
+                            Pointer pointer = new Pointer(token);
 
-                            value.value = "pointer ->" + value.value;
+                            otherNode.args.Add(pointer);
 
-                            varComp.args.Add(value);
+                            if(CurrentToken.Type == TokenType.LeftBrace)
+                            {
+                                otherNode.args.Add(IndexerParse(scope));
+                            }
                         }
 
                         else
                         {
-                            DebugError();
+                            DebugError($"Invalid Field: '{CurrentToken.Lexeme}'");
 
-                            break;
+                            Eat(CurrentToken.Type);
                         }
                     }
                 }
 
-                node = varComp;
+                node = otherNode;
+            }
+
+            if (node.GetType() == typeof(Var))
+            {
+                if(scope.IsInScope(node)) 
+                {
+                    node.type = scope.Get(node);
+                }
+            }
+
+            else if(!scope.IsInScope(node))
+            {
+                ErrorHasNotBeenDeclared(node);
+            }
+
+            else
+            {
+                VarComp varComp = node as VarComp;
+
+                if(IsPossibleVarComp(varComp, scope))
+                {
+                    ASTType.Type lastType = varComp.args[varComp.args.Count-1].type;
+
+                    if (lastType == ASTType.Type.Indexer)
+                    {
+                        varComp.type = ASTType.Type.Card;
+                    }
+
+                    else 
+                    {
+                        varComp.type = lastType;
+                    }
+                }
             }
 
             return node;
@@ -444,7 +557,7 @@ public AST Factor()
         }
     }
 
-    public Assign AssignmentStatement(Var variable)
+    public Assign AssignmentStatement(Var variable, Scope<ASTType.Type> scope)
     {
         try
         {
@@ -454,45 +567,95 @@ public AST Factor()
 
             Eat(TokenType.Assign);
 
-            AST right = Expression();
+            ASTType right = Expression(scope);
 
             Assign node = new Assign(left, token, right);
 
+            if(token.Lexeme != "=")
+            {
+                if (!scope.IsInScope(variable)) 
+                {
+                    ErrorHasNotBeenDeclared(variable);
+                }
+
+                else if ((token.Lexeme == "+=" || token.Lexeme == "-=" || token.Lexeme == "*=" || token.Lexeme == "/=" || token.Lexeme == "%=")  && (variable.type == node.right.type && variable.type != ASTType.Type.Int))
+                {
+                    ErrorInAssignment(node);
+                }
+
+                else if ((token.Lexeme == "@=") && (variable.type == node.right.type && variable.type != ASTType.Type.String))
+                {
+                    ErrorInAssignment(node);
+                }
+            }
+
+            if (variable.GetType() == typeof(Var))
+            {
+                if (!scope.IsInScope(variable))
+                {
+                    variable.type = node.right.type;
+
+                    scope.Set(variable, variable.type);
+                }
+
+                else if (variable.type != node.right.type) 
+                {
+                    ErrorInAssignment(node);
+                }
+            }
+            
+            else
+            {
+                if (!scope.IsInScope(variable)) 
+                {
+                    ErrorHasNotBeenDeclared(variable);
+                }
+
+                else if (variable.type != node.right.type) 
+                {
+                    ErrorInAssignment(node);
+                }
+            }
+
             return node;
         }
+
         catch (System.Exception)
         {
             throw;
         }
     }
 
-    public Function FunctionStatement(string name)
+    public Function FunctionStatement(string name, Scope<ASTType.Type> scope )
     {
         try
         {
-            Args args = new Args();
-
             Eat(TokenType.Function);
 
             Eat(TokenType.LeftParenthesis);
 
-            while (CurrentToken.Type != TokenType.RightParenthesis && CurrentToken.Type != TokenType.EndOfFile)
+            if (name == "Find") 
             {
-                AST currentArg = Expression();
-
-                args.Add(currentArg);
-
-                if (CurrentToken.Type != TokenType.RightParenthesis)
-                {
-                    Eat(TokenType.Comma);
-                }
+                return FindFunction(scope);
             }
 
-            Eat(TokenType.RightParenthesis);
+            if (name == "HandOfPlayer" || name == "FieldOfPlayer" || name == "DeckOfPlayer" || name == "GraveyardOfPlayer")
+            {
+                return GetPlayerFunction(name, scope);
+            }
 
-            Function node = new Function(name, args);
+            if (name == "Pop" || name == "Shuffle") 
+            {
+                return NoParametersFunction(name);
+            }
 
-            return node;
+            if (name == "Push" || name == "Remove" || name == "Add" || name == "SendBottom") 
+            {
+                return CardParameterFunction(name, scope);
+            }
+
+            return new Function("NULL_FUNCTION");
+            
         }
 
         catch (System.Exception)
@@ -501,19 +664,36 @@ public AST Factor()
         }
     }
 
-    public ForLoop FLStatement()
+    public ForLoop FLStatement(Scope<ASTType.Type> scope)
     {
         try
         {
             Eat(TokenType.For);
 
-            Var target = Variable();
+            Var target = Variable(scope);
+
+            target.type = ASTType.Type.Card;
+
+            if (scope.IsInScope(target) || target.GetType() == typeof(VarComp)) 
+            {
+                ErrorUnvalidAssignment(target);
+            }
+
+            else 
+            {
+                scope.Set(target,target.type);
+            }
 
             Eat(TokenType.In);
 
-            Var targets = Variable();
+            Var targets = Variable(scope);
 
-            Compound body = CompoundStatement();
+            if (!scope.IsInScope(targets) || targets.type != ASTType.Type.Field) 
+            {
+                ErrorUnvalidAssignment(targets);
+            }
+
+            Compound body = CompoundStatement(scope);
 
             ForLoop node = new ForLoop(target, targets, body);
 
@@ -526,7 +706,7 @@ public AST Factor()
         }
     }
 
-    public WhileLoop WLStatement()
+    public WhileLoop WLStatement(Scope<ASTType.Type> scope)
     {
         try
         {
@@ -534,11 +714,11 @@ public AST Factor()
 
             Eat(TokenType.LeftParenthesis);
 
-            AST condition = BooleanExpression();
+            AST condition = BooleanExpression(scope);
 
             Eat(TokenType.RightParenthesis);
 
-            Compound body = CompoundStatement();
+            Compound body = CompoundStatement(scope);
 
             WhileLoop node = new WhileLoop(condition, body);
 
@@ -551,7 +731,7 @@ public AST Factor()
         }
     }
 
-    public IfNode IfNodeStatement()
+    public IfNode IfNodeStatement(Scope<ASTType.Type> scope)
     {
         try
         {
@@ -559,11 +739,11 @@ public AST Factor()
 
             Eat(TokenType.LeftParenthesis);
 
-            AST condition = BooleanExpression();
+            AST condition = BooleanExpression(scope);
 
             Eat(TokenType.RightParenthesis);
 
-            Compound body = CompoundStatement();
+            Compound body = CompoundStatement(scope);
 
             IfNode node = new IfNode(condition, body);
 
@@ -576,62 +756,86 @@ public AST Factor()
         }
     }
 
-    public AST Statement()
+    public AST Statement(Scope<ASTType.Type> scope)
     {
         try
         {
             if (CurrentToken.Type == TokenType.While)
             {
-                return WLStatement();
+                return WLStatement(scope);
             }
 
             if (CurrentToken.Type == TokenType.If)
             {
-                return IfNodeStatement();
+                return IfNodeStatement(scope);
             }
 
             if (CurrentToken.Type == TokenType.For)
             {
-                return FLStatement();
+                return FLStatement(scope);
             }
 
-            if (CurrentToken.Type == TokenType.Function)
+            if (CurrentToken.Type == TokenType.SemiColon)
             {
-                Function node = FunctionStatement(CurrentToken.Lexeme);
-
-                return node;
+                return new NoOp();
             }
 
             if (CurrentToken.Type == TokenType.Identifier)
             {
-                Var variable = Variable();
+                Var variable = Variable(scope);
 
                 if (variable.GetType() == typeof(VarComp) && CurrentToken.Type == TokenType.SemiColon)
                 {
                     VarComp varComp = variable as VarComp;
 
-                    if (varComp.args[varComp.args.Count - 1].GetType() == typeof(Function))
+                    int count = varComp.args.Count - 1;
+
+                    if (varComp.args[count].GetType() == typeof(Function))
                     {
-                        Function f = varComp.args[varComp.args.Count - 1] as Function;
+                        Function f = varComp.args[count] as Function;
 
-                        if (f.type != Var.Type.VOID) DebugError();
+                        if (f.type != ASTType.Type.Void) ErrorInvalidStatement();
                     }
-                    else DebugError();
 
-                    return variable as VarComp;
+                    else 
+                    {
+                        ErrorInvalidStatement();
+                    }
+
+                    return variable;
                 }
 
                 else if (CurrentToken.Type == TokenType.Assign)
                 {
-                    Assign node = AssignmentStatement(variable);
+                    Assign node = AssignmentStatement(variable, scope);
 
                     return node;
                 }
 
+                else if (CurrentToken.Type == TokenType.Decrement || CurrentToken.Type == TokenType.Plus1)
+                {
+                    UnaryOperators plusnode = new UnaryOperators(CurrentToken, variable);
+
+                    if (variable.type != ASTType.Type.Int) 
+                    {
+                        ErrorInUnaryOp(plusnode);
+                    }
+
+                    Assign node = new Assign(variable, CurrentToken, plusnode);
+
+                    Eat(CurrentToken.Type);
+
+                    return node;
+                }
+
+                DebugError($"Invalid Statement: token {CurrentToken.Type}");
+
                 return new NoOp();
             }
 
-            DebugError();
+            DebugError($"Invalid Statement: token {CurrentToken.Type}");
+
+            Eat(CurrentToken.Type);
 
             return new NoOp();
         }
@@ -642,7 +846,7 @@ public AST Factor()
         }
     }
 
-    public List<AST> StatementList()
+    public List<AST> StatementList(Scope<ASTType.Type> scope)
     {
         try
         {
@@ -650,7 +854,7 @@ public AST Factor()
 
             while (CurrentToken.Type != TokenType.RightBracket && CurrentToken.Type != TokenType.EndOfFile)
             {
-                AST node = CompoundStatement();
+                AST node = Statement(scope);
 
                 results.Add(node);
 
@@ -666,13 +870,15 @@ public AST Factor()
         }
     }
 
-    public Compound CompoundStatement()
+    public Compound CompoundStatement(Scope<ASTType.Type> outScope)
     {
         try
         {
+            Scope<ASTType.Type> scope = new Scope<ASTType.Type>(outScope);
+
             Eat(TokenType.LeftBracket);
 
-            List<AST> nodes = StatementList();
+            List<AST> nodes = StatementList(scope);
 
             Eat(TokenType.RightBracket);
 
@@ -692,7 +898,7 @@ public AST Factor()
         }
     }
 
-    public Type TypeParse()
+    public TypeNode TypeParse()
     {
         try
         {
@@ -700,7 +906,12 @@ public AST Factor()
 
             Eat(TokenType.Colon);
 
-            Type node = new Type(CurrentToken);
+            TypeNode node = new TypeNode(CurrentToken);
+
+            if (node.type != "Gold" && node.type != "Silver")
+            {
+                DebugError("Invalid Type of Card: You may try with 'Gold' or 'Silver'");
+            }
 
             Eat(TokenType.StringLiteral);
 
@@ -722,6 +933,11 @@ public AST Factor()
             Eat(TokenType.Colon);
 
             Faction node = new Faction(CurrentToken);
+
+             if (node.faction != "Paladins" && node.faction != "Monsters")
+            {
+                DebugError("Invalid Faction for Card: You may try with 'Paladins' or 'Monsters'");
+            }
 
             Eat(TokenType.StringLiteral);
 
@@ -766,6 +982,11 @@ public AST Factor()
             Eat(TokenType.LeftBrace);
             
             Range node = new Range(CurrentToken);
+
+            if (node.range != "Melee" && node.range != "Range" && node.range != "Siege")
+            {
+                DebugError("Invalid Zone for Card: You may try with 'Melee', 'Range' or 'Siege'");
+            }
             
             Eat(TokenType.StringLiteral);
             
@@ -802,46 +1023,95 @@ public AST Factor()
                     {
                         name = NameParse();
 
+                        if (!GlobalScope.IsInScope(name)) 
+                        {
+                            ErrorEffectCalling(name);
+                        }
+
+                        else
+                        {
+                            if (GlobalScope.Get(name) != ASTType.Type.Effect)
+                            {
+                                ErrorEffectCalling(GlobalScope.Get(name), name);
+                            }
+                                
+                        }
+
                         if (CurrentToken.Type != TokenType.RightBracket) 
                         {
                             Eat(TokenType.Comma);
                         }
                     }
 
-                    else DebugError();
+                    else ErrorRepeat();
                 }
 
                 else if (CurrentToken.Type == TokenType.Identifier)
                 {
-                    Var variable = Variable();
+                     EffectNode effect;
+
+                    Var variable = Variable(GlobalScope);
+
+                    if (variable.GetType() == typeof(VarComp) || variable.type != ASTType.Type.Null) 
+                    {
+                        ErrorUnvalidAssignment(variable);
+                    }
 
                     Token token = CurrentToken;
 
                     Eat(TokenType.Colon);
 
-                    AST value = Expression();
+                    ASTType value = Expression(GlobalScope);
+
+                    variable.type = value.type;
 
                     Assign param = new Assign(variable, token, value);
 
+                    if (name == null) 
+                    {
+                        DebugError("'Name' of effect has not been declared");
+                    }
+
+                    else if (!EffectList.ContainsKey(name.paramName)) 
+                    {
+                        ErrorEffectCalling(name);
+                    }
+
+                    else 
+                    {
+                        effect = EffectList[name.paramName];
+
+                        if (effect.scope.IsInScope(variable))
+                        {
+                            ASTType.Type typeInEffect = effect.scope.Get(variable);
+
+                            if (typeInEffect != variable.type)
+                            {
+                                DebugError($"Invalid type of parameter: cannot convert {typeInEffect} to {variable.type}");
+                            }
+                        }
+
+                        else 
+                        {
+                            DebugError($"Param '{variable.value}' not found in effect '{name.paramName}'");
+                        }
+                    }
+
                     parameters.Add(param);
 
-                    if (CurrentToken.Type != TokenType.RightBracket) Eat(TokenType.Comma);
+                    if (CurrentToken.Type != TokenType.RightBracket) 
+                    {
+                        Eat(TokenType.Comma);
+                    }
                 }
 
                 else
                 { 
-                    DebugError();
-                    
-                    Eat(CurrentToken.Type); 
+                    ErrorNotCorrespondingField(); 
                 }
             }
 
             Eat(TokenType.RightBracket);
-
-            if (name == null) 
-            {
-                DebugError();
-            }
 
             EffectOnActivation node;
 
@@ -853,6 +1123,11 @@ public AST Factor()
             else 
             {
                 node = new EffectOnActivation(name, parameters);
+            }
+
+            if (name == null) 
+            {
+                ErrorInNodeCreation(node);
             }
 
             return node;
@@ -875,6 +1150,12 @@ public AST Factor()
             Token token = CurrentToken;
 
             Eat(TokenType.StringLiteral);
+
+             if (!IsValidSource(token))
+             {
+                DebugError($"'{token.Lexeme}' is not a valid source of context");
+             }
+                
 
             Source node = new Source(token);
 
@@ -920,9 +1201,14 @@ public AST Factor()
 
             Eat(TokenType.LeftParenthesis);
 
-            Var unit = Variable();
+            Var unit = Variable(GlobalScope);
 
-            unit.type = Var.Type.CARD;
+            unit.type = ASTType.Type.Card;
+
+            if (unit.GetType() == typeof(VarComp)) 
+            {
+                ErrorUnvalidAssignment(unit);
+            }
 
             Eat(TokenType.RightParenthesis);
 
@@ -930,7 +1216,11 @@ public AST Factor()
 
             Eat(TokenType.LeftParenthesis);
 
-            AST condition = BooleanExpression();
+            Scope<ASTType.Type> scope = new Scope<ASTType.Type>(GlobalScope);
+
+            scope.Set(unit, unit.type);
+
+            ASTType condition = BooleanExpression(scope);
 
             Eat(TokenType.RightParenthesis);
 
@@ -977,7 +1267,7 @@ public AST Factor()
 
                     else 
                     {
-                        DebugError();
+                        ErrorRepeat();
                     }
                 }
 
@@ -993,7 +1283,10 @@ public AST Factor()
                         }
                     }
 
-                    else DebugError();
+                    else 
+                    {
+                        ErrorRepeat();
+                    }
                 }
 
                 else if (CurrentToken.Type == TokenType.Predicate)
@@ -1008,23 +1301,19 @@ public AST Factor()
                         }
                     }
 
-                    else DebugError();
+                    else 
+                    {
+                        ErrorRepeat();
+                    }
                 }
 
                 else 
                 { 
-                    DebugError(); 
-                    
-                    Eat(CurrentToken.Type); 
+                    ErrorNotCorrespondingField(); 
                 }
             }
 
             Eat(TokenType.RightBracket);
-
-            if (source == null || predicate == null) 
-            {
-                DebugError();
-            }
 
             Selector node;
 
@@ -1036,6 +1325,11 @@ public AST Factor()
             else 
             {
                 node = new Selector(source, single, predicate);
+            }
+
+            if (source == null || predicate == null) 
+            {
+                ErrorInNodeCreation(node);
             }
 
             return node;
@@ -1057,17 +1351,17 @@ public AST Factor()
 
             Eat(TokenType.LeftBracket);
 
-            Type type = null;
+            EffectOnActivation effectOnActivation = null;
 
             Selector selector = null;
 
             while (CurrentToken.Type != TokenType.RightBracket && CurrentToken.Type != TokenType.EndOfFile)
             {
-                if (CurrentToken.Type == TokenType.Type)
+                if (CurrentToken.Type == TokenType.OnActivation_Effect)
                 {
-                    if (type == null)
+                    if (effectOnActivation == null)
                     {
-                        type = TypeParse();
+                        effectOnActivation = EffectOnActivationParse();
 
                         if (CurrentToken.Type != TokenType.RightBracket) 
                         {
@@ -1077,7 +1371,7 @@ public AST Factor()
 
                     else 
                     {
-                        DebugError();
+                        ErrorRepeat();
                     }
                 }
 
@@ -1095,33 +1389,33 @@ public AST Factor()
 
                     else 
                     {
-                        DebugError();
+                        ErrorRepeat();
                     }
                 }
 
                 else 
                 {
-                    DebugError();
+                    ErrorNotCorrespondingField();
                 }
             }
 
             Eat(TokenType.RightBracket);
 
-            if (type == null) 
-            {
-                DebugError();
-            }
-
             PostAction node;
 
             if (selector == null) 
             {
-                node = new PostAction(type);
+                node = new PostAction(effectOnActivation);
             }
 
             else 
             {
-                node = new PostAction(type, selector);
+                node = new PostAction(effectOnActivation, selector);
+            }
+
+            if (effectOnActivation == null) 
+            {
+                ErrorInNodeCreation(node);
             }
 
             return node;
@@ -1160,7 +1454,7 @@ public AST Factor()
                     }
                     else 
                     {
-                        DebugError();
+                        ErrorRepeat();
                     }
                 }
 
@@ -1175,7 +1469,7 @@ public AST Factor()
 
                     else 
                     {
-                        DebugError();
+                        ErrorRepeat();
                     }
                 }
 
@@ -1193,29 +1487,49 @@ public AST Factor()
 
                     else 
                     {
-                        DebugError();
+                        ErrorRepeat();
                     }
                 }
 
                 else 
                 {
-                    DebugError();
+                    ErrorNotCorrespondingField();
                 }
             }
 
             Eat(TokenType.RightBracket);
 
-
-            if (effectOnActivation == null || selector == null) 
-            {
-                DebugError();
-            }
-
             OnActivationElement node;
 
-            if (postAction == null) node = new OnActivationElement(effectOnActivation, selector);
+            if (selector == null && postAction == null) 
+            {
+                node = new OnActivationElement(effectOnActivation);
+            }
 
-            else node = new OnActivationElement(effectOnActivation, selector, postAction);
+            else if (postAction == null) 
+            {
+                node = new OnActivationElement(effectOnActivation, selector);
+            }
+
+            else if (selector == null) 
+            {
+                node = new OnActivationElement(effectOnActivation, postAction);
+            }
+
+            else 
+            {
+                node = new OnActivationElement(effectOnActivation, selector, postAction);
+            }
+
+            if (effectOnActivation == null) 
+            {
+                ErrorInNodeCreation(node);
+            }
+
+            if (selector != null && selector.source.source == "parent") 
+            {
+                DebugError("Invalid source parent, Effect is not a Post Action node");
+            }
 
             return node;
         }
@@ -1247,7 +1561,7 @@ public AST Factor()
 
                 else 
                 {
-                    DebugError();
+                    ErrorNotCorrespondingField();
                 }
             }
 
@@ -1299,7 +1613,7 @@ public AST Factor()
 
             ParamName name = null;
 
-            Type type = null;
+            TypeNode type = null;
 
             Faction faction = null;
 
@@ -1317,12 +1631,25 @@ public AST Factor()
                     {
                         name = NameParse();
 
-                        if (CurrentToken.Type != TokenType.RightBracket) Eat(TokenType.Comma);
+                        if (GlobalScope.IsInScope(name)) 
+                        {
+                            ErrorAlReadyDefinesMember(name.paramName);
+                        }
+
+                        else 
+                        {
+                            GlobalScope.Set(name, ASTType.Type.Card);
+                        }
+
+                        if (CurrentToken.Type != TokenType.RightBracket) 
+                        {
+                            Eat(TokenType.Comma);
+                        }
                     }
                     
                     else 
                     {
-                        DebugError();
+                        ErrorRepeat();
                     }
                 }
 
@@ -1340,7 +1667,7 @@ public AST Factor()
 
                     else 
                     {
-                        DebugError();
+                        ErrorRepeat();
                     }
                 }
 
@@ -1358,7 +1685,7 @@ public AST Factor()
 
                     else 
                     {
-                        DebugError();
+                        ErrorRepeat();
                     }
                 }
 
@@ -1375,7 +1702,7 @@ public AST Factor()
                     }
                     else 
                     {
-                        DebugError();
+                        ErrorRepeat();
                     }
                 }
 
@@ -1393,7 +1720,7 @@ public AST Factor()
 
                     else 
                     {
-                        DebugError();
+                        ErrorRepeat();
                     }
                 }
 
@@ -1411,19 +1738,19 @@ public AST Factor()
                     
                     else 
                     {
-                        DebugError();
+                        ErrorRepeat();
                     }
                 }
 
                 else 
                 { 
-                    DebugError();  
-                    
-                    Eat(CurrentToken.Type); 
+                    ErrorNotCorrespondingField(); 
                 }
             }
 
             Eat(TokenType.RightBracket);
+
+            CardNode node = new CardNode(name, type, faction, power, range, onActivation);
 
             List<AST> listOfParameters = new List<AST> { name, type, faction, power, range, onActivation };
             
@@ -1431,11 +1758,13 @@ public AST Factor()
             {
                 if (child == null) 
                 {
-                    DebugError();
+                    ErrorInNodeCreation(node);
+
+                    break;
                 }
             }
 
-            CardNode node = new CardNode(name, type, faction, power, range, onActivation);
+            ThisCardNode = node;
 
             return node;
         }
@@ -1456,6 +1785,11 @@ public AST Factor()
             
             ParamName node = new ParamName(CurrentToken);
 
+            if (node.paramName == "") 
+            {
+                DebugError("Name must not be an empty string");
+            }
+
             Eat(TokenType.StringLiteral);
 
             return node;
@@ -1468,7 +1802,7 @@ public AST Factor()
         }
     }
 
-    public Args GetParametersInParams()
+    public Args GetParametersInParams(Scope<ASTType.Type> scope)
     {
         try
         {
@@ -1476,13 +1810,20 @@ public AST Factor()
 
             while (CurrentToken.Type != TokenType.RightBracket && CurrentToken.Type != TokenType.EndOfFile)
             {
-                Var variable = Variable();
+                Var variable = Variable(scope);
+
+                if (scope.IsInScope(variable) || variable.GetType() == typeof(VarComp))
+                {
+                    DebugError("Invalid declaration of param");
+                }
 
                 Eat(TokenType.Colon);
 
                 if (CurrentToken.Type == TokenType.Var_Int || CurrentToken.Type == TokenType.Var_String || CurrentToken.Type == TokenType.Var_Bool)
                 {
                     variable.TypeInParams(CurrentToken.Type);
+
+                    scope.Set(variable, variable.type);
 
                     args.Add(variable);
 
@@ -1496,9 +1837,14 @@ public AST Factor()
 
                 else
                 {
-                    DebugError();
+                    DebugError($"Invalid Type '{CurrentToken.Lexeme}' found in current context\n Expecting 'String', 'Bool', 'Number'");
 
-                    return args;
+                    Eat(CurrentToken.Type);
+
+                    if (CurrentToken.Type == TokenType.Comma) 
+                    {
+                        Eat(CurrentToken.Type);
+                    }
                 }
             }
 
@@ -1511,7 +1857,7 @@ public AST Factor()
         }
     }
 
-    public Args ParamsEffectParse()
+    public Args ParamsEffectParse(Scope<ASTType.Type> scope)
     {
         try
         {
@@ -1521,7 +1867,7 @@ public AST Factor()
 
             Eat(TokenType.LeftBracket);
 
-            Args node = GetParametersInParams();
+            Args node = GetParametersInParams(scope);
 
             Eat(TokenType.RightBracket);
 
@@ -1534,7 +1880,7 @@ public AST Factor()
         }
     }
 
-    public Action ActionParse()
+    public Action ActionParse(Scope<ASTType.Type> outScope)
     {
         try
         {
@@ -1544,21 +1890,41 @@ public AST Factor()
 
             Eat(TokenType.LeftParenthesis);
 
-            Var targets = Variable();
+            Var targets = Variable(outScope);
 
-            targets.type = Var.Type.TARGETS;
+            targets.type = ASTType.Type.Field;
+
+            if (outScope.IsInScope(targets) || targets.GetType() == typeof(VarComp))
+            {
+                ErrorUnvalidAssignment(targets);
+            }
+
+            else 
+            {
+                outScope.Set(targets, targets.type);
+            }
 
             Eat(TokenType.Comma);
 
-            Var context = Variable();
+            Var context = Variable(outScope);
 
-            context.type = Var.Type.CONTEXT;
+            context.type = ASTType.Type.Context;
+
+            if (outScope.IsInScope(context) || context.GetType() == typeof(VarComp))
+            {
+                ErrorUnvalidAssignment(context);
+            }   
+
+            else 
+            {
+                outScope.Set(context, context.type);
+            }
 
             Eat(TokenType.RightParenthesis);
 
             Eat(TokenType.EqualGreater);
 
-            Compound body = CompoundStatement();
+            Compound body = CompoundStatement(outScope);
 
             Action node = new Action(targets, context, body);
 
@@ -1579,6 +1945,8 @@ public AST Factor()
 
             Eat(TokenType.LeftBracket);
 
+            Scope<ASTType.Type> scope = new Scope<ASTType.Type>(GlobalScope);
+
             ParamName name = null;
 
             Args parameters = null;
@@ -1593,6 +1961,16 @@ public AST Factor()
                     {
                         name = NameParse();
 
+                        if (GlobalScope.IsInScope(name)) 
+                        {
+                            ErrorAlReadyDefinesMember(name.paramName);
+                        }
+
+                        else 
+                        {
+                            GlobalScope.Set(name, ASTType.Type.Effect);
+                        }
+
                         if (CurrentToken.Type != TokenType.RightBracket)
                         {
                             Eat(TokenType.Comma);
@@ -1601,7 +1979,7 @@ public AST Factor()
 
                     else 
                     {
-                        DebugError();
+                        ErrorRepeat();
                     }
                 }
 
@@ -1609,7 +1987,7 @@ public AST Factor()
                 {
                     if (parameters == null)
                     {
-                        parameters = ParamsEffectParse();
+                        parameters = ParamsEffectParse(scope);
 
                         if (CurrentToken.Type != TokenType.RightBracket)
                         {
@@ -1619,7 +1997,7 @@ public AST Factor()
 
                     else 
                     {
-                        DebugError();
+                        ErrorRepeat();
                     }
                 }
 
@@ -1627,7 +2005,7 @@ public AST Factor()
                 {
                     if (action == null)
                     {
-                        action = ActionParse();
+                        action = ActionParse(scope);
 
                         if (CurrentToken.Type != TokenType.RightBracket)
                         {
@@ -1637,24 +2015,17 @@ public AST Factor()
                     
                     else 
                     {
-                        DebugError();
+                        ErrorRepeat();
                     }
                 }
 
                 else 
                 { 
-                    DebugError(); 
-                    
-                    Eat(CurrentToken.Type); 
+                    ErrorNotCorrespondingField();
                 }
             }
 
             Eat(TokenType.RightBracket);
-
-            if (name == null || action == null)
-            {
-                DebugError();
-            }
 
             EffectNode node;
 
@@ -1664,8 +2035,15 @@ public AST Factor()
             }
             else
             {
-                node = new EffectNode(name, parameters, action);
+                node = new EffectNode(name, parameters, action, scope);
             }
+
+            if (name == null || action == null)
+            {
+                ErrorInNodeCreation(node);
+            }
+
+            EffectList[name.paramName] = node;
 
             return node;
         }
@@ -1700,7 +2078,7 @@ public AST Factor()
 
                 else 
                 {
-                    DebugError();
+                    DebugError($"Expecting (card) or (effect) token, found: {CurrentToken.Type.ToString()}");
 
                     Eat(CurrentToken.Type);
                 }
@@ -1743,7 +2121,7 @@ public AST Factor()
 
             if (CurrentToken.Type != TokenType.EndOfFile)
             {
-                DebugError();
+                DebugError("Cannot parse all of text");
             }
 
             node.Express("");
@@ -1757,5 +2135,330 @@ public AST Factor()
 
             return node;
         }
+    }
+    public bool IsPossibleUnaryOp(UnaryOperators node)
+    {
+        return (node.type == node.Expression.type);
+    }
+
+    public bool IsPossibleBinOp(BinaryOperators node)
+    {
+        if (node.Left.type == node.Right.type)
+        {
+            if (node.type == ASTType.Type.Bool)
+            {
+                if (node.Left.type == ASTType.Type.Bool && (node.Operator.Type == TokenType.Or || node.Operator.Type == TokenType.And))
+                {
+                    return true;
+                }
+
+                if (node.Operator.Type == TokenType.Equal || node.Operator.Type == TokenType.BangEqual)
+                {
+                    return true;
+                }
+                     
+                else 
+                {
+                    return (node.Left.type == ASTType.Type.Int);
+                }
+            }
+
+            else 
+            {
+                return (node.Left.type == node.type);
+            }
+        }
+
+        return false;
+    }
+
+    public bool IsValidIndexer(Indexer node)
+    {
+        return node.index.type == ASTType.Type.Int;
+    }
+
+    public Indexer IndexerParse(Scope<ASTType.Type> scope)
+    {
+        try
+        {
+            Eat(TokenType.LeftBrace);
+
+            ASTType index = Expression(scope);
+
+            Eat(TokenType.RightBrace);
+
+            Indexer node = new Indexer(index);
+
+            if (!IsValidIndexer(node))
+            {
+                DebugError("Invalid indexer: Expression must be type 'INT'");
+            }
+
+            return node;
+        }
+        catch (System.Exception)
+        {
+            throw;
+        }
+    }
+
+    public bool IsPossibleVarComp(VarComp varComp, Scope<ASTType.Type> scope)
+    {
+        for (int i = 0; i < varComp.args.Count; i++)
+        {
+            if (i == 0)
+            {
+                if (!InternalIsPossibleVarComp(scope.Get(varComp.value), varComp.args[i])) 
+                {
+                    return false;
+                }
+            }
+
+            else if (!InternalIsPossibleVarComp(varComp.args[i - 1].type, varComp.args[i])) 
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public bool IsFunction(ASTType node)
+    {
+        return (node.GetType() == typeof(Function));
+    }
+
+    public bool InternalIsPossibleVarComp(ASTType.Type fatherType, ASTType var)
+    {
+        if (fatherType == ASTType.Type.Context)
+        {
+            if (var.GetType() == typeof(Pointer))
+            {
+                Pointer p = var as Pointer;
+
+                string s = p.pointer;
+
+                return (s == "Hand" || s == "Graveyard" || s == "Deck" || s == "Melee" || s == "Range" || s == "Siege");
+            }
+
+            else if (IsFunction(var)) 
+            {
+                return (var.type == ASTType.Type.Context || var.type == ASTType.Type.Field);
+            }
+        }
+
+        if (fatherType == ASTType.Type.Field)
+        {
+            if (var.GetType() == typeof(Indexer)) 
+            {
+                return true;
+            }
+
+            else if (IsFunction(var)) 
+            {
+                return (var.type == ASTType.Type.Field || var.type == ASTType.Type.Void || var.type == ASTType.Type.Card);
+            }
+        }
+
+        if (fatherType == ASTType.Type.Indexer || fatherType == ASTType.Type.Card)
+        {
+            if (var.GetType() == typeof(Var))
+            {
+                Var otherVar = var as Var;
+
+                string s = otherVar.value;
+
+                return (s == "Type" || s == "Name" || s == "Faction" || s == "Range" || s == "Power" || s == "Owner");
+            }
+
+            else return false;
+        }
+
+        if (fatherType == ASTType.Type.Effect)
+        {
+            var otherValue = var as Var;
+
+            string s = otherValue.value;
+
+            return (s == "Name");
+        }
+
+        ErrorInVarCompConstruction(fatherType, var);
+
+        return false;
+    }
+
+    public void ErrorInVarCompConstruction(ASTType.Type fatherType, ASTType var)
+    {
+        if (var.GetType() == typeof(Var))
+        {
+            Var otherValue = var as Var;
+
+            DebugError($"Invalid VarComp construction: '{otherValue.value}' is not a valid field of type '{fatherType.ToString()}'");
+        }
+
+        else DebugError($"Invalid VarComp construction: '{var.ToString()}' is not a valid field of type '{fatherType.ToString()}'");
+    }
+
+    public void ErrorInvalidParameterInFunction(string functionName)
+    {
+        DebugError($"Invalid parameter for Function '{functionName}'");
+    }
+
+    public Function FindFunction(Scope<ASTType.Type> outScope)
+    {
+        try
+        {
+            Scope<ASTType.Type> scope = new Scope<ASTType.Type>(outScope);
+
+            Eat(TokenType.LeftParenthesis);
+
+            Var variable = Variable(scope);
+
+            if (scope.IsInScope(variable) || variable.GetType() == typeof(VarComp)) 
+            {
+                ErrorInvalidParameterInFunction("Find");
+            }
+
+            else
+            {
+                variable.type = ASTType.Type.Card;
+
+                scope.Set(variable, variable.type);
+            }
+            
+            Eat(TokenType.RightParenthesis);
+
+            Eat(TokenType.EqualGreater);
+
+            Eat(TokenType.LeftParenthesis);
+
+            ASTType condition = BooleanExpression(scope);
+
+            Eat(TokenType.RightParenthesis);
+
+            Eat(TokenType.RightParenthesis);
+
+            Args predicate = new Args();
+
+            predicate.Add(variable);
+
+            predicate.Add(condition);
+
+            Function node = new Function("Find", predicate);
+
+            return node;
+        }
+        catch
+        {
+            throw;
+        }
+    }
+
+    public Function GetPlayerFunction (string name, Scope<ASTType.Type> scope)
+    {
+        try
+        {
+            Var player = Variable(scope);
+
+            if (!scope.IsInScope(player) || player.type != ASTType.Type.Context) 
+            {
+                ErrorInvalidParameterInFunction(name);
+            }
+
+            Args args = new Args();
+
+            args.Add(player);
+
+            Function node = new Function(name, args);
+
+            Eat(TokenType.RightParenthesis);
+
+            return node;
+        }
+
+        catch
+        {
+            throw;
+        }
+    }
+
+    public Function NoParametersFunction (string name)
+    {
+        try
+        {
+            Function node = new Function(name);
+
+            Eat(TokenType.RightParenthesis);
+
+            return node;
+        }
+
+        catch
+        {
+            throw;
+        }
+    }
+
+    public Function CardParameterFunction (string name, Scope<ASTType.Type> scope)
+    {
+        try
+        {
+            Var card = Variable(scope);
+
+            if (!scope.IsInScope(card) || card.type != ASTType.Type.Card)
+            {
+                ErrorInvalidParameterInFunction(name);
+            }
+
+            Args args = new Args();
+
+            args.Add(card);
+            
+            Function node = new Function(name, args);
+            
+            Eat(TokenType.RightParenthesis);
+            
+            return node;
+        }
+
+        catch
+        {
+            throw;
+        }
+    }
+
+    public void ErrorUnvalidAssignment(Var variable)
+    {
+        DebugError($"Unvalid Assignment of '{variable.value}'");
+    }
+
+    public void ErrorInvalidStatement()
+    {
+        DebugError("Only assignment, call, increment, decrement, await, and new object expressions can be used as a statement");
+    }
+
+    public void ErrorEffectCalling(ParamName name)
+    {
+        DebugError($"Effect '{name.paramName}' has not been declared");
+    }
+
+    public void ErrorEffectCalling(ASTType.Type type, ParamName name)
+    {
+        Var aux = new Var(new Token(TokenType.Identifier, name.paramName ,0 ,0), type);
+
+        ErrorUnvalidAssignment(aux);
+    }
+
+    public bool IsValidSource(Token token)
+    {
+        string s = token.Lexeme;
+
+        return (s == "board" || s == "hand" || s == "deck" || s == "field" || s == "parent" || s == "otherBoard" || s == "otherHand" || s == "otherDeck" || s == "otherField");
+    }
+
+    public void ErrorAlReadyDefinesMember(string name)
+    {
+        DebugError($"Card Editor already defines a member '{name}'");
     }
 }
