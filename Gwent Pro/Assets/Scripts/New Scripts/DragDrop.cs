@@ -87,8 +87,10 @@ public class DragDrop : MonoBehaviour
             
             if(gameObject.GetComponent<CardDisplay>().card.whichEffectIs != 6 && gameObject.GetComponent<CardDisplay>().card.whichEffectIs != 7)
             {
-                GameManager.Effects(gameObject.GetComponent<CardDisplay>().card.whichEffectIs);
+                gameObject.GetComponent<Effects>().ApplyEffect(gameObject.GetComponent<CardDisplay>().card.whichEffectIs);
             }
+
+            
             
             GameManager.passTurn(gameObject, gameObject.GetComponent<CardDisplay>().card.playerID);
 
@@ -104,8 +106,10 @@ public class DragDrop : MonoBehaviour
 
             if(gameObject.GetComponent<CardDisplay>().card.whichEffectIs != 6 && gameObject.GetComponent<CardDisplay>().card.whichEffectIs != 7)
             {
-                GameManager.Effects(gameObject.GetComponent<CardDisplay>().card.whichEffectIs);
+                gameObject.GetComponent<Effects>().ApplyEffect(gameObject.GetComponent<CardDisplay>().card.whichEffectIs);
             }
+
+            
             
             GameManager.passTurn(gameObject, gameObject.GetComponent<CardDisplay>().card.playerID);
 
@@ -133,14 +137,14 @@ public class DragDrop : MonoBehaviour
         
         string l = gameObject.GetComponent<CardDisplay>().Zone;
         
-        if (k==l) 
+        if (k==l && conditions.WhatPlayerIs == gameObject.GetComponent<CardDisplay>().card.playerID) 
         {
             return true;
         }
         else
         {
             return false;
-        }
+        } 
     }
     bool IsValidCollision(CardDisplay collidedCardDisplay)
     {

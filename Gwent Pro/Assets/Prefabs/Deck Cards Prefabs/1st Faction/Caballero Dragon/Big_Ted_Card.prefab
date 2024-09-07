@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: -5062131316429481596}
   - component: {fileID: 7942435278962034730}
   - component: {fileID: -4056899845299845917}
+  - component: {fileID: 1398727978539066515}
   m_Layer: 6
   m_Name: Big_Ted_Card
   m_TagString: Untagged
@@ -206,6 +207,7 @@ MonoBehaviour:
   powerText: {fileID: 3667283387935797561}
   classCardText: {fileID: 1304085572913521476}
   Zone: 
+  ActivateOnClick: 1
 --- !u!61 &-3396155175711189756
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -303,6 +305,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInteractable: 1
+--- !u!114 &1398727978539066515
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5618440890545728150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef12c25641a1c5946b6917db0b5fa7a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Params: 0
+  effectName: 
 --- !u!1 &8463553284951313315
 GameObject:
   m_ObjectHideFlags: 0
