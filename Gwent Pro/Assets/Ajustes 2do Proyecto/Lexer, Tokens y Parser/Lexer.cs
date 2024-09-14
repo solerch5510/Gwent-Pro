@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using System.Diagnostics;
+using UnityEngine;
 using System.Xml;
 using System;
 using Unity.VisualScripting;
@@ -24,6 +24,16 @@ public class Lexer
     public Lexer(string sourceText)
     {
         this.sourceText = sourceText;
+
+        for(int i = 0 ; i < sourceText.Length + 1; i ++ )
+        {
+            if(i == sourceText.Length)
+            {
+                AddToken(TokenType.EndOfFile, currentLine , currentPosition);
+            }
+
+            LexToken();
+        }
 
         InitializeReservedWords();
     }
@@ -126,6 +136,11 @@ public class Lexer
     //Avanza la posicion actual (currentPosition) y devuelve el caracter sin avanzar
     private char Advance()
     {
+        if(sourceText.Length == currentPosition || sourceText.Length == currentPosition + 1)
+        {
+            return '\0';
+        }
+
         return sourceText[currentPosition++];
     }
 
@@ -135,10 +150,12 @@ public class Lexer
         string text = sourceText.Substring(startPosition, currentPosition - startPosition);
 
         tokenList.Add(new Token(type, text, line, position));
+
+        startPosition = currentPosition;
     }
 
     //Analisis de Tokens
-    private void LexToken()
+    public void LexToken()
     {
         char character = Advance();
 
@@ -191,22 +208,53 @@ public class Lexer
                 else AddToken(TokenType.Greater, currentLine, currentPosition);
                 break;
             case '|':
-                if (IsMatch('|')) AddToken(TokenType.Or, currentLine, currentPosition);
+                if (IsMatch('|')) 
+                {
+                    AddToken(TokenType.Or, currentLine, currentPosition+1);
+                    
+                    currentPosition++;
+                }
                 break;
             case '&':
-                if (IsMatch('&')) AddToken(TokenType.And, currentLine, currentPosition);
+                if (IsMatch('&')) 
+                {
+                    AddToken(TokenType.And, currentLine, currentPosition+1);
+                    
+                    currentPosition++;
+                }
                 break;
             case '=':
-                if (IsMatch('=')) AddToken(TokenType.Equal, currentLine, currentPosition);
-                else if (IsMatch('>')) AddToken(TokenType.EqualGreater, currentLine, currentPosition);
+                if (IsMatch('=')) 
+                {
+                    AddToken(TokenType.Equal, currentLine, currentPosition+1);
+                    
+                    currentPosition++;
+                }
+                else if (IsMatch('>')) 
+                {
+                    AddToken(TokenType.EqualGreater, currentLine, currentPosition+1);
+                
+                    currentPosition++;
+                }
                 else AddToken(TokenType.Assign, currentLine, currentPosition);
                 break;
             case '+':
-                if (IsMatch('+')) AddToken(TokenType.Plus1, currentLine, currentPosition);
+                if (IsMatch('+')) 
+                {
+                    AddToken(TokenType.Plus1, currentLine, currentPosition+1);
+                    
+                    currentPosition++;
+                }
+                
                 else AddToken(TokenType.Plus, currentLine, currentPosition);
                 break;
             case '-':
-                if (IsMatch('-')) AddToken(TokenType.Decrement, currentLine, currentPosition);
+                if (IsMatch('-')) 
+                {
+                    AddToken(TokenType.Decrement, currentLine, currentPosition+1);
+                    
+                    currentPosition++;
+                }
                 else AddToken(TokenType.Minus, currentLine, currentPosition);
                 break;
             case '/':
@@ -292,11 +340,21 @@ public class Lexer
     // Método para escanear cadenas de texto.
     private void ScanString()
     {
-        while (Peek()!= '"' && isAtEnd())
+        string text = "";
+
+        startPosition = currentPosition;
+
+        Debug.Log(sourceText[currentPosition]);
+
+        while (sourceText[currentPosition] != '"')
         {
             if (Peek() == '\n') currentLine++;
 
-            Advance();
+            text += sourceText[currentPosition];
+
+            Debug.Log(text);
+
+            currentPosition++;
         }
 
         if (isAtEnd())
@@ -306,11 +364,12 @@ public class Lexer
             return;
         }
 
-        Advance();
+        currentPosition++;        
 
-        string value = sourceText.Substring(startPosition + 1, currentPosition - startPosition - 1);
+        tokenList.Add(new Token(TokenType.StringLiteral, text, currentLine, currentPosition));
 
-        tokenList.Add(new Token(TokenType.StringLiteral, value, currentLine, currentPosition));
+        startPosition = currentPosition;
+
     }
 
     // Método para verificar si un carácter es un dígito.

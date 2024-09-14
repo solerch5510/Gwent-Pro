@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: Arqueros Oscuros II
   m_EditorClassIdentifier: 
   name: Arqueros Oscuros
-  description: Unidad de Rango.
-  classCard: SilverCard
   power: 3
   basedPower: 3
   whichEffectIs: 0
   spriteImage: {fileID: 21300000, guid: d16359bee318df24db27cc34440c7884, type: 3}
-  Zone: R
+  Zone: Range
   playerID: 1
+  description: Unidad de Rango.
+  classCard: SilverCard

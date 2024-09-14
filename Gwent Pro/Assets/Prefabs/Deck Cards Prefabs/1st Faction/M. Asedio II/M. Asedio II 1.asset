@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: M. Asedio II 1
   m_EditorClassIdentifier: 
   name: Ballesta Pesada
-  description: Unidad de Asedio. Esta si que puede resultar de utilidad.
-  classCard: SilverCard
   power: 6
   basedPower: 6
+  whichEffectIs: 0
   spriteImage: {fileID: 21300000, guid: 68edcf9203ea99b4bb97e53198a2f52f, type: 3}
-  Zone: S
+  Zone: Siege
   playerID: 1
+  description: Unidad de Asedio. Esta si que puede resultar de utilidad.
+  classCard: SilverCard

@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: Coloso Peludo
   m_EditorClassIdentifier: 
   name: Coloso Lanudo
-  description: Unidad de asedio.
-  classCard: SilverCard
   power: 4
   basedPower: 4
+  whichEffectIs: 0
   spriteImage: {fileID: 21300000, guid: 26d3b65aeef6bf84db5a73b854e11c9f, type: 3}
-  Zone: S1
+  Zone: Siege
   playerID: 0
+  description: Unidad de asedio.
+  classCard: SilverCard

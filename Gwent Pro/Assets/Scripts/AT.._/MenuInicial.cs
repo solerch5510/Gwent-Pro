@@ -10,6 +10,11 @@ public class MenuInicial : MonoBehaviour
         SceneManager.LoadScene(1);
     }
 
+    public void Edit()
+    {
+        SceneManager.LoadScene(2);
+    }
+
     public void Exit()
     {
         Application.Quit();

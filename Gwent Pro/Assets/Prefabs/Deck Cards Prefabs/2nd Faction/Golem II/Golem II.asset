@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: Golem II
   m_EditorClassIdentifier: 
   name: Golem II
-  description: Unidad de asedio. Permite robar una carta al jugarse en el campo.
-  classCard: GoldenCard
   power: 7
   basedPower: 7
   whichEffectIs: 3
   spriteImage: {fileID: 21300000, guid: 5e52b82e6543e564a98ff19ebaf8ea28, type: 3}
-  Zone: S1
+  Zone: Siege
   playerID: 0
+  description: Unidad de asedio. Permite robar una carta al jugarse en el campo.
+  classCard: GoldenCard

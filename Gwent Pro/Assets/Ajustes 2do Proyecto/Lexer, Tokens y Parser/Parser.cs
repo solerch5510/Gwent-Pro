@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class Parser
@@ -128,7 +127,7 @@ public class Parser
         {
             NumberOfToken ++;
 
-            CurrentToken = TokensList[NumberOfToken - 1];
+            CurrentToken = TokensList[NumberOfToken + 1];
         }
     }
     

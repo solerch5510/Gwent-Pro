@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: Dragon Anciano
   m_EditorClassIdentifier: 
   name: The Eldest Daora
-  description: Unidad de asedio. Permite robar una carta al ser jugada sobre el campo.
-  classCard: GoldenCard
   power: 7
   basedPower: 7
   whichEffectIs: 3
   spriteImage: {fileID: 21300000, guid: 16d178323bf71a44ca227da33354b3c6, type: 3}
-  Zone: S
+  Zone: Siege
   playerID: 1
+  description: Unidad de asedio. Permite robar una carta al ser jugada sobre el campo.
+  classCard: GoldenCard

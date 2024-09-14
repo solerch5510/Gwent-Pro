@@ -579,8 +579,8 @@ MonoBehaviour:
   player2S: {fileID: 415963786}
   player2R: {fileID: 973173780}
   player2M: {fileID: 2043690287}
-  Cementerio1: {fileID: 1467335584}
-  Cementerio2: {fileID: 1290633000}
+  Graveyard1: {fileID: 0}
+  Graveyard2: {fileID: 0}
 --- !u!114 &148785185
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2788,7 +2788,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5456619830776950727, guid: f1a3064a11826554aa94c6c20aa7eb36, type: 3}
       propertyPath: ZoneNames
-      value: B1
+      value: Buff
       objectReference: {fileID: 0}
     - target: {fileID: 5999822958717729620, guid: f1a3064a11826554aa94c6c20aa7eb36, type: 3}
       propertyPath: m_CellSize.x
@@ -2943,7 +2943,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5456619830776950727, guid: f1a3064a11826554aa94c6c20aa7eb36, type: 3}
       propertyPath: ZoneNames
-      value: B1
+      value: Buff
       objectReference: {fileID: 0}
     - target: {fileID: 5999822958717729620, guid: f1a3064a11826554aa94c6c20aa7eb36, type: 3}
       propertyPath: m_CellSize.x
@@ -4003,7 +4003,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5456619830776950727, guid: f1a3064a11826554aa94c6c20aa7eb36, type: 3}
       propertyPath: ZoneNames
-      value: B1
+      value: Buff
       objectReference: {fileID: 0}
     - target: {fileID: 5999822958717729620, guid: f1a3064a11826554aa94c6c20aa7eb36, type: 3}
       propertyPath: m_CellSize.x
@@ -4280,7 +4280,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5456619830776950727, guid: f1a3064a11826554aa94c6c20aa7eb36, type: 3}
       propertyPath: ZoneNames
-      value: B
+      value: Buff
+      objectReference: {fileID: 0}
+    - target: {fileID: 5456619830776950727, guid: f1a3064a11826554aa94c6c20aa7eb36, type: 3}
+      propertyPath: WhatPlayerIs
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5999822958717729620, guid: f1a3064a11826554aa94c6c20aa7eb36, type: 3}
       propertyPath: m_CellSize.x
@@ -5107,7 +5111,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5456619830776950727, guid: f1a3064a11826554aa94c6c20aa7eb36, type: 3}
       propertyPath: ZoneNames
-      value: B
+      value: Buff
+      objectReference: {fileID: 0}
+    - target: {fileID: 5456619830776950727, guid: f1a3064a11826554aa94c6c20aa7eb36, type: 3}
+      propertyPath: WhatPlayerIs
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5999822958717729620, guid: f1a3064a11826554aa94c6c20aa7eb36, type: 3}
       propertyPath: m_CellSize.x
@@ -5230,7 +5238,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5456619830776950727, guid: f1a3064a11826554aa94c6c20aa7eb36, type: 3}
       propertyPath: ZoneNames
-      value: B
+      value: Buff
+      objectReference: {fileID: 0}
+    - target: {fileID: 5456619830776950727, guid: f1a3064a11826554aa94c6c20aa7eb36, type: 3}
+      propertyPath: WhatPlayerIs
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5999822958717729620, guid: f1a3064a11826554aa94c6c20aa7eb36, type: 3}
       propertyPath: m_CellSize.x
@@ -5904,7 +5916,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5456619830776950727, guid: f1a3064a11826554aa94c6c20aa7eb36, type: 3}
       propertyPath: ZoneNames
-      value: M
+      value: Melee
+      objectReference: {fileID: 0}
+    - target: {fileID: 5456619830776950727, guid: f1a3064a11826554aa94c6c20aa7eb36, type: 3}
+      propertyPath: WhatPlayerIs
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7978821949860200947, guid: f1a3064a11826554aa94c6c20aa7eb36, type: 3}
       propertyPath: m_Pivot.x
@@ -7296,7 +7312,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67f987a9ea26c184ea05eb894ccde021, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ZoneNames: S
+  ZoneNames: Siege
+  WhatPlayerIs: 1
 --- !u!224 &7978821949926308855 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1731997517080196372, guid: 033d7561d0116664b96e923983501e21, type: 3}
@@ -7314,7 +7331,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67f987a9ea26c184ea05eb894ccde021, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ZoneNames: M1
+  ZoneNames: Melee
+  WhatPlayerIs: 0
 --- !u!224 &7978821949980758707 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7906187798472498655, guid: 13dc50898a5ae1f4395e0e49bbfa57f1, type: 3}
@@ -7332,7 +7350,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67f987a9ea26c184ea05eb894ccde021, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ZoneNames: R1
+  ZoneNames: Range
+  WhatPlayerIs: 0
 --- !u!224 &7978821950392720362 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3162234736530983421, guid: 8c01db246b7bda140b36ccbe67a4f5ef, type: 3}
@@ -7350,7 +7369,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67f987a9ea26c184ea05eb894ccde021, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ZoneNames: S1
+  ZoneNames: Siege
+  WhatPlayerIs: 0
 --- !u!224 &7978821951082277735 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3192489669478878934, guid: 4dda821a7303b494581c61cd777473bf, type: 3}
@@ -7368,7 +7388,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67f987a9ea26c184ea05eb894ccde021, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ZoneNames: R
+  ZoneNames: Range
+  WhatPlayerIs: 1
 --- !u!1001 &8211558002912774056
 PrefabInstance:
   m_ObjectHideFlags: 0

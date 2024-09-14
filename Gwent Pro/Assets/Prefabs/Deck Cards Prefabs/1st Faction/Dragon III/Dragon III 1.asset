@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: Dragon III 1
   m_EditorClassIdentifier: 
   name: Gravios
-  description: Unidad de Asedio
-  classCard: SilverCard
   power: 4
   basedPower: 4
+  whichEffectIs: 0
   spriteImage: {fileID: 21300000, guid: 46690515f4395d24785cb02ab38ffe0e, type: 3}
-  Zone: S
+  Zone: Siege
   playerID: 1
+  description: Unidad de Asedio
+  classCard: SilverCard

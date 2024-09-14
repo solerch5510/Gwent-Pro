@@ -316,3 +316,137 @@ public class FieldStruct : Struct
         }
     }
 }
+
+/*public class ContextStruct : Struct
+{
+    public List<FieldStruct> fieldList;
+    public FieldStruct allCards;
+
+    public ContextStruct()
+    {
+        gameBoardReferences = GameObject.Find("GameBoardReferences").GetComponent<GameBoardReferences>();
+        
+        fieldList = new List<FieldStruct>();
+        
+        allCards = new FieldStruct();
+    }
+
+    public void Add(FieldStruct field)
+    {
+        fieldList.Add(field);
+        foreach (CardStruct card in field.cardList)
+        {
+            allCards.Add(card);
+        }
+    }
+
+    /*public override object Acces(object key)
+    {
+        string k = key as string;
+
+        string faction = (allCards.cardList.Count > 0) ?
+            allCards.cardList[0].Acces("Faction") as string : MyTools.GetFaction();
+
+        if (faction == "Shrek")
+        {
+            if (k == "Hand") return refToBoard.shrekHand;
+            if (k == "Graveyard") return refToBoard.shrekGraveyard;
+            if (k == "Deck") return refToBoard.shrekDeck;
+            if (k == "Melee") return refToBoard.shrekMelee;
+            if (k == "Range") return refToBoard.shrekRange;
+            if (k == "Siege") return refToBoard.shrekSiege;
+            if (k == "TriggerPlayer") return refToBoard.shrekFaction;
+        }
+        else
+        {
+            if (k == "Hand") return refToBoard.badHand;
+            if (k == "Graveyard") return refToBoard.badGraveyard;
+            if (k == "Deck") return refToBoard.badDeck;
+            if (k == "Melee") return refToBoard.badMelee;
+            if (k == "Range") return refToBoard.badRange;
+            if (k == "Siege") return refToBoard.badSiege;
+            if (k == "TriggerPlayer") return refToBoard.badFaction;
+        }
+
+        return default;
+    }
+
+    public override object SetAcces(object key, object value, bool isLast = false)
+    {
+        string k = key as string;
+        string faction = (allCards.cardList.Count > 0) ?
+            allCards.cardList[0].Acces("Faction") as string : MyTools.GetFaction();
+
+        if (isLast)
+        {
+            if (faction == "Shrek")
+            {
+                if (k == "Hand") refToBoard.shrekHand = value as FieldStruct;
+                if (k == "Graveyard") refToBoard.shrekGraveyard = value as FieldStruct;
+                if (k == "Deck") refToBoard.shrekDeck = value as FieldStruct;
+                if (k == "Melee") refToBoard.shrekMelee = value as FieldStruct;
+                if (k == "Range") refToBoard.shrekRange = value as FieldStruct;
+                if (k == "Siege") refToBoard.shrekSiege = value as FieldStruct;
+            }
+            else
+            {
+                if (k == "Hand") refToBoard.badHand = value as FieldStruct;
+                if (k == "Graveyard") refToBoard.badGraveyard = value as FieldStruct;
+                if (k == "Deck") refToBoard.badDeck = value as FieldStruct;
+                if (k == "Melee") refToBoard.badMelee = value as FieldStruct;
+                if (k == "Range") refToBoard.badRange = value as FieldStruct;
+                if (k == "Siege") refToBoard.badSiege = value as FieldStruct;
+            }
+        }
+
+        return Acces(k);
+    }
+
+    public FieldStruct DeckOfPlayer(ContextStruct player)
+    {
+        if (player == refToBoard.shrekFaction)
+        {
+            return refToBoard.shrekDeck;
+        }
+        else
+        {
+            return refToBoard.badDeck;
+        }
+    }
+
+    public FieldStruct HandOfPlayer(ContextStruct player)
+    {
+        if (player == refToBoard.shrekFaction)
+        {
+            return refToBoard.shrekHand;
+        }
+        else
+        {
+            return refToBoard.badHand;
+        }
+    }
+
+    public FieldStruct GraveyardOfPlayer(ContextStruct player)
+    {
+        if (player == refToBoard.shrekFaction)
+        {
+            return refToBoard.shrekGraveyard;
+        }
+        else
+        {
+            return refToBoard.badGraveyard;
+        }
+    }
+
+    public FieldStruct FieldOfPlayer(ContextStruct player)
+    {
+        if (player == refToBoard.shrekFaction)
+        {
+            return refToBoard.shrekFaction.allCards;
+        }
+        else
+        {
+            return refToBoard.badFaction.allCards;
+        }
+    }
+}*/

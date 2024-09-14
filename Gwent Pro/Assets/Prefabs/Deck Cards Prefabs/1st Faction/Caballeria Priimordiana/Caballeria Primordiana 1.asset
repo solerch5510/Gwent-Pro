@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: Caballeria Primordiana 1
   m_EditorClassIdentifier: 
   name: Caballeria Primordiana
-  description: Unidad cuerpo a cuerpo.
-  classCard: SilverCard
   power: 4
   basedPower: 4
+  whichEffectIs: 0
   spriteImage: {fileID: 21300000, guid: c28c8d1d7c570dc4c9159ba693d2a191, type: 3}
-  Zone: M
+  Zone: Melee
   playerID: 1
+  description: Unidad cuerpo a cuerpo.
+  classCard: SilverCard

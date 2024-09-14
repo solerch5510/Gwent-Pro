@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: Golem I 2
   m_EditorClassIdentifier: 
   name: Golem I
-  description: Unidad de asedio
-  classCard: SilverCard
   power: 6
   basedPower: 6
+  whichEffectIs: 0
   spriteImage: {fileID: 21300000, guid: 8e3de9f02c1e08b4fb8e95ba23c1a780, type: 3}
-  Zone: S1
+  Zone: Siege
   playerID: 0
+  description: Unidad de asedio
+  classCard: SilverCard

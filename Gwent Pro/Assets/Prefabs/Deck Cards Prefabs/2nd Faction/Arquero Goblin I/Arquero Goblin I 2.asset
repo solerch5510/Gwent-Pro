@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: Arquero Goblin I 2
   m_EditorClassIdentifier: 
   name: Arquero Goblin
-  description: Unidad de rango.
-  classCard: SilverCard
   power: 3
   basedPower: 3
+  whichEffectIs: 0
   spriteImage: {fileID: 21300000, guid: fd7acd7df8fdfff40afdcbd952069784, type: 3}
-  Zone: R1
+  Zone: Range
   playerID: 0
+  description: Unidad de rango.
+  classCard: SilverCard

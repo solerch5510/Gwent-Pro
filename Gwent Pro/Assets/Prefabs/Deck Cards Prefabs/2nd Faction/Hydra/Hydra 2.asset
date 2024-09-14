@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: Hydra 2
   m_EditorClassIdentifier: 
   name: 'Hydra '
-  description: Unidad de Asedio
-  classCard: SilverCard
   power: 5
   basedPower: 5
+  whichEffectIs: 0
   spriteImage: {fileID: 21300000, guid: 669db5733d8ae424999bb770172afbed, type: 3}
-  Zone: S1
+  Zone: Siege
   playerID: 0
+  description: Unidad de Asedio
+  classCard: SilverCard

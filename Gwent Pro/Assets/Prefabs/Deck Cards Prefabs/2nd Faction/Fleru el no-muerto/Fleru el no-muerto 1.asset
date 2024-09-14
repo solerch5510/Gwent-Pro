@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: Fleru el no-muerto 1
   m_EditorClassIdentifier: 
   name: Fleru el no-muerto
-  description: Unidad de asedio
-  classCard: SilverCard
   power: 4
   basedPower: 4
+  whichEffectIs: 0
   spriteImage: {fileID: 21300000, guid: 40e19d950a5e2f44bbf39233755439df, type: 3}
-  Zone: S1
+  Zone: Siege
   playerID: 0
+  description: Unidad de asedio
+  classCard: SilverCard

@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: Esqueleto espada 2
   m_EditorClassIdentifier: 
   name: Esqueleto con Espada
-  description: Unidad de cuerpo a cuerpo.
-  classCard: SilverCard
   power: 3
   basedPower: 3
   whichEffectIs: 0
   spriteImage: {fileID: 21300000, guid: 41f658bad3a3ea748987d9dd6d5c3eee, type: 3}
-  Zone: M1
+  Zone: Melee
   playerID: 0
+  description: Unidad de cuerpo a cuerpo.
+  classCard: SilverCard

@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: Dragon_1 2
   m_EditorClassIdentifier: 
   name: Dragon de Asedio
-  description: 'Unidad de Asedio. '
-  classCard: SilverCard
   power: 4
   basedPower: 4
+  whichEffectIs: 0
   spriteImage: {fileID: 21300000, guid: bfee536a21697a446ae25ded3664357f, type: 3}
-  Zone: S
+  Zone: Siege
   playerID: 1
+  description: 'Unidad de Asedio. '
+  classCard: SilverCard

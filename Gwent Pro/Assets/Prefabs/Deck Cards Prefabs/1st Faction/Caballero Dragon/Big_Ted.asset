@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: Big_Ted
   m_EditorClassIdentifier: 
   name: 'Verdugo Primordiano '
-  description: Unidad cuerpo a cuerpo. Elimina la fila con menor cantidad de cartas
-    en el campo.
-  classCard: GoldenCard
   power: 6
   basedPower: 6
   whichEffectIs: 4
   spriteImage: {fileID: 21300000, guid: e2970be26ca1280408aff390e60f2e44, type: 3}
-  Zone: M
+  Zone: Melee
   playerID: 1
+  description: Unidad cuerpo a cuerpo. Elimina la fila con menor cantidad de cartas
+    en el campo.
+  classCard: GoldenCard
