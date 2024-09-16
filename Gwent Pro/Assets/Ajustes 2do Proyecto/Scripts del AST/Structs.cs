@@ -1,38 +1,52 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
+// Clase abstracta base para estructuras de datos
 public abstract class Struct
 {
-    public GameBoardReferences gameBoardReferences;
+    // Referencia al gestor del juego
+    public GameManager gameBoardReferences;
 
+    // Metodo abstracto para acceder a un elemento
     public abstract object Acces(object key);
 
+    // Metodo abstracto para establecer un elemento
     public abstract object SetAcces(object key, object value, bool isLast = false);
 }
 
+// Clase concreta para representar una carta
 public class CardStruct : Struct
 {
+    // Referencia al objeto de la carta en el juego
     public GameObject card;
 
+    // Metodo para acceder a informacion de la carta
     public override object Acces(object key)
     {
+        // Convertir la clave a string
         string k = key as string;
 
+        // Obtener el componente CardDisplay de la carta
         CardDisplay cardDisplay = card.GetComponent<CardDisplay>();
 
+        // Verificar el tipo de informacion solicitada
         if (k == "Power") 
         {
+            // Retornar el poder base de la carta
             return cardDisplay.card.basedPower;
         }
 
         if (k == "Name") 
         {
+            // Retornar el nombre de la carta
             return cardDisplay.card.name;
         }
 
         if (k == "Type") 
         {
+            // Determinar el tipo de carta (GoldenCard o SilverCard)
             if(cardDisplay.card.classCard == "GoldenCard")
             {
                 return  "GoldenCard";
@@ -46,6 +60,7 @@ public class CardStruct : Struct
         
         if (k == "Range")
         {
+            // Determinar la zona de la carta
             string zone = cardDisplay.card.Zone;
             
             if (zone == "Melee") 
@@ -73,6 +88,7 @@ public class CardStruct : Struct
 
         if (k == "Faction")
         {   
+            // Determinar la facción de la carta
             // Player uno es la faccion con true
             if( cardDisplay.card.playerID == true)
             {
@@ -85,23 +101,30 @@ public class CardStruct : Struct
                 return false;
             }
         } 
-        
+
+        // Si no se encuentra la información solicitada, retornar el valor por defecto
         return default;
     }
 
+    // Metodo para establecer informacion de la carta
     public override object SetAcces(object key, object value, bool isLast = false)
     {
+        // Convertir la clave a string
         string k = key as string;
 
+        // Obtener el componente CardDisplay de la carta
         CardDisplay cardDisplay = card.GetComponent<CardDisplay>();
 
+        // Verificar si es la ultima operacion
         if (isLast)
         {
+            // Establecer el poder base de la carta
             if (k == "Power")
             {
                 cardDisplay.card.basedPower = ((int)value);
             }
 
+            // Establecer el nombre de la carta
             if (k == "Name")
             {
                 cardDisplay.card.name = value as string;
@@ -109,6 +132,7 @@ public class CardStruct : Struct
                 cardDisplay.Start();
             }
 
+            // Establecer el tipo de carta
             if (k == "Type")
             {
                 if (value as string == "Oro") 
@@ -122,6 +146,7 @@ public class CardStruct : Struct
                 }
             }
 
+            // Establecer la zona de la carta
             if (k == "Range")
             {
                 if (value as string == "Melee")
@@ -151,6 +176,7 @@ public class CardStruct : Struct
                 
             }
 
+            // Establecer la faccion de la carta
             if (k == "Faction")
             {
                 if (value as string == "Paladins") 
@@ -166,79 +192,99 @@ public class CardStruct : Struct
             }
         }
         
+        // Si no se encuentra la informacion solicitada, retornar el valor por defecto
         return default;
     }
 
+    // Constructor para inicializar una nueva CardStruct
     public CardStruct(GameObject card)
     {
         this.card = card;
 
-        gameBoardReferences = GameObject.Find("GameBoardReferences").GetComponent<GameBoardReferences>();
+        gameBoardReferences = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
 }
 
+// Clase para representar un campo del tablero (mano, fila, mazo, cementerio)
 public class FieldStruct : Struct
 {
+    // Lista de cartas en este campo
     public List<CardStruct> cardList;
 
+    // Metodo para acceder a una carta especifica del campo
     public override object Acces (object key)
     {
+        // Convertir la clave a indice entero
         int index = (int)key;
 
+        // Retornar la carta en el indice especificado
         return cardList[index];
     }
 
+    // Metodo para establecer una carta especifica del campo
     public override object SetAcces(object key, object value, bool isLast = false)
     {
+        // Convertir la clave a indice entero
         int index = (int)key;
 
+        // Si es la ultima operacion
         if (isLast)
         {
+            // Establecer la carta en el indice especificado
             cardList[index] = value as CardStruct;
         }
 
+        // Retornar la carta en el indice especificado
         return cardList[index];
     }
 
+    // Metodo para verificar si el campo contiene una carta especifica
     public bool Contains(CardStruct card)
     {
+        // Retornar si la lista de cartas contiene la carta especificada
         return cardList.Contains(card);
     }
 
+    // Constructor para inicializar un nuevo FieldStruct
     public FieldStruct()
     {
-        gameBoardReferences= GameObject.Find("GameBoardReferences").GetComponent<GameBoardReferences>();
+        // Inicializar la referencia al gestor del juego
+        gameBoardReferences= GameObject.Find("GameManager").GetComponent<GameManager>();
 
+        // Inicializar la lista de cartas
         cardList = new List<CardStruct>();
     }
 
-    /*public FieldStruct(GameObject cardZone)
+    // Constructor para inicializar un FieldStruct con un GameObject
+    public FieldStruct(GameObject cardZone)
     {
+        // Inicializar la lista de cartas
         cardList = new List<CardStruct>();
 
-        gameBoardReferences = GameObject.Find("GameBoardReferences").GetComponent<GameBoardReferences>();
-
-        string name = cardZone.name;
-
-        if (name == "GraveyardPaladins" || name == "GraveyardMonsters")
+        // Inicializar la referencia al gestor del juego
+        gameBoardReferences = GameObject.Find("GameManager").GetComponent<GameManager>();
+ 
+        // Añadir todas las cartas del GameObject al campo
+        foreach (Transform card in cardZone.transform)
         {
-            if(name == "GraveyardPaladins")
-            {
-                GetDisplay(.GetComponent<GameManager>().Graveyard1);
-            }
-            
+            cardList.Add(new CardStruct(card.gameObject));
         }
-        else if (name == "PlayerDeck" || name == "PlayerDeckBad")
-        {
-            GetDisplay(cardZone.GetComponent<Deck>().deck);
-        }
-        else 
-            foreach (Transform card in cardZone.transform)
-            {
-                cardList.Add(new CardStruct(card.gameObject));
-            }
-    }*/
+    }
 
+    // Constructor para inicializar un FieldStruct con una lista de GameObjects
+    public FieldStruct(List<GameObject> list)
+    {
+        // Inicializar la lista de cartas
+        cardList = new List<CardStruct>();
+
+        // Inicializar la referencia al gestor del juego
+        gameBoardReferences = GameObject.Find("GameManager").GetComponent<GameManager>();
+
+        // Llamar al metodo GetDisplay para procesar la lista de GameObjects
+        GetDisplay(list);
+    }
+
+    // Metodo para procesar una lista de GameObjects y añadirlos al campo
     void GetDisplay(List<GameObject> list)
     {
         foreach (GameObject card in list)
@@ -249,20 +295,27 @@ public class FieldStruct : Struct
         }
     }
 
+    // Constructor para inicializar un FieldStruct con una lista de CardStructs
     public FieldStruct(List<CardStruct> cardList)
     {
-        gameBoardReferences = GameObject.Find("GameBoardReferences").GetComponent<GameBoardReferences>();
+        // Inicializar la referencia al gestor del juego
+        gameBoardReferences = GameObject.Find("GameManager").GetComponent<GameManager>();
         
+        // Establecer la lista de cartas
         this.cardList = cardList;
     }
 
+    // Metodo para añadir una carta al campo
     public void Add(CardStruct card)
     {
+        // Añadir la carta a la lista de cartas
         cardList.Add(card);
     }
 
+    // Metodo para barajar las cartas del campo
     public void Shuffle() // See this crap...
     {
+        // Barajar las cartas de la lista
         for (int i = 0; i < cardList.Count; i++)
         {
             CardStruct temp = cardList[i];
@@ -275,6 +328,7 @@ public class FieldStruct : Struct
         }
     }
 
+    // Metodo para eliminar una carta del campo
     public void Remove(CardStruct card)
     {
         int index = -1;
@@ -290,6 +344,7 @@ public class FieldStruct : Struct
         if (index != -1) cardList.RemoveAt(index);
     }
 
+    // Metodo para eliminar y devolver la primera carta del campo
     public CardStruct Pop()
     {
         CardStruct toReturn = cardList[0];
@@ -297,17 +352,20 @@ public class FieldStruct : Struct
         return toReturn;
     }
 
+    // Metodo para mover una carta al fondo del campo
     public void SendBottom(CardStruct card)
     {
         Remove(card);
         Add(card);
     }
 
+    // Metodo para añadir una carta al principio del campo
     public void Push(CardStruct card)
     {
         cardList.Insert(0, card);
     }
 
+    // Metodo para unir dos campos
     public void Join(FieldStruct fieldToJoin)
     {
         foreach (CardStruct card in fieldToJoin.cardList)
@@ -317,136 +375,372 @@ public class FieldStruct : Struct
     }
 }
 
-/*public class ContextStruct : Struct
+
+public class ContextStruct : Struct
 {
+    // Lista de estructuras de campo en este contexto
     public List<FieldStruct> fieldList;
+
+    // Estructura que contiene todas las cartas del juego
     public FieldStruct allCards;
 
+    // Constructor para inicializar un nuevo ContextStruct
     public ContextStruct()
     {
-        gameBoardReferences = GameObject.Find("GameBoardReferences").GetComponent<GameBoardReferences>();
+        // Inicializar la referencia al gestor del juego
+        gameBoardReferences = GameObject.Find("GameManager").GetComponent<GameManager>();
         
+        // Inicializar la lista de campos
         fieldList = new List<FieldStruct>();
         
+        // Inicializar la estructura de todas las cartas
         allCards = new FieldStruct();
     }
 
+    // Metodo para añadir un campo al contexto
     public void Add(FieldStruct field)
     {
+        // Añadir el campo a la lista de campos
         fieldList.Add(field);
+
+        // Añadir todas las cartas del campo a la estructura de todas las cartas
         foreach (CardStruct card in field.cardList)
         {
             allCards.Add(card);
         }
     }
 
-    /*public override object Acces(object key)
+    // Metodo para acceder a informacion del contexto
+    public override object Acces(object key)
     {
+        // Convertir la clave a string
         string k = key as string;
 
-        string faction = (allCards.cardList.Count > 0) ?
-            allCards.cardList[0].Acces("Faction") as string : MyTools.GetFaction();
+        // Determinar la faccion actual
+        string faction ;
 
-        if (faction == "Shrek")
+        if(allCards.cardList.Count > 0)
         {
-            if (k == "Hand") return refToBoard.shrekHand;
-            if (k == "Graveyard") return refToBoard.shrekGraveyard;
-            if (k == "Deck") return refToBoard.shrekDeck;
-            if (k == "Melee") return refToBoard.shrekMelee;
-            if (k == "Range") return refToBoard.shrekRange;
-            if (k == "Siege") return refToBoard.shrekSiege;
-            if (k == "TriggerPlayer") return refToBoard.shrekFaction;
-        }
+            faction = allCards.cardList[0].Acces("Faction") as string;
+        } 
+
         else
         {
-            if (k == "Hand") return refToBoard.badHand;
-            if (k == "Graveyard") return refToBoard.badGraveyard;
-            if (k == "Deck") return refToBoard.badDeck;
-            if (k == "Melee") return refToBoard.badMelee;
-            if (k == "Range") return refToBoard.badRange;
-            if (k == "Siege") return refToBoard.badSiege;
-            if (k == "TriggerPlayer") return refToBoard.badFaction;
+            faction = GetFaction(GameManager.whichPlayerIs);
         }
 
+        // Acceder a informacion especifica basada en la faccion y la clave
+        if (faction == "Paladins")
+        {
+            if (k == "Hand") 
+            {
+                return gameBoardReferences.PaladinsHand;
+            }
+
+            if (k == "Graveyard") 
+            {
+                return gameBoardReferences.PGraveyard;
+            }
+
+            if (k == "Deck") 
+            {
+                return gameBoardReferences.PDeck;
+            }
+
+            if (k == "Melee") 
+            {
+                return gameBoardReferences.PMelee;
+            }
+
+            if (k == "Range") 
+            {
+                return gameBoardReferences.PRange;
+            }
+
+            if (k == "Siege") 
+            {
+                return gameBoardReferences.PSiege;
+            }
+
+            if (k == "TriggerPlayer") 
+            {
+                return gameBoardReferences.PaladinsFaction;
+            }
+        }
+
+        else
+        {
+            if (k == "Hand") 
+            {
+                return gameBoardReferences.MonstersHand;
+            }
+
+            if (k == "Graveyard") 
+            {
+                return gameBoardReferences.MGraveyard;
+            }
+
+            if (k == "Deck") 
+            {
+                return gameBoardReferences.MDeck;
+            }
+
+            if (k == "Melee") 
+            {
+                return gameBoardReferences.MMelee;
+            }
+
+            if (k == "Range") 
+            {
+                return gameBoardReferences.MRange;
+            }
+
+            if (k == "Siege") 
+            {
+                return gameBoardReferences.MSiege;
+            }
+
+            if (k == "TriggerPlayer") 
+            {
+                return gameBoardReferences.MonsterFaction;
+            }
+        }
+
+        // Si no se encuentra la informacion solicitada, retornar el valor por defecto
         return default;
     }
 
+    // Metodo para establecer informacion en el contexto
     public override object SetAcces(object key, object value, bool isLast = false)
     {
+        // Convertir la clave a string
         string k = key as string;
-        string faction = (allCards.cardList.Count > 0) ?
-            allCards.cardList[0].Acces("Faction") as string : MyTools.GetFaction();
 
+        // Determinar la faccion actual
+        string faction ;
+
+        if(allCards.cardList.Count > 0) 
+        {
+            faction = allCards.cardList[0].Acces("Faction") as string;
+        }
+
+        else
+        {
+            faction = GetFaction(GameManager.whichPlayerIs);
+        }
+
+        // Establecer informacion especifica basada en la faccion y la clave
         if (isLast)
         {
-            if (faction == "Shrek")
+            if (faction == "Paladins")
             {
-                if (k == "Hand") refToBoard.shrekHand = value as FieldStruct;
-                if (k == "Graveyard") refToBoard.shrekGraveyard = value as FieldStruct;
-                if (k == "Deck") refToBoard.shrekDeck = value as FieldStruct;
-                if (k == "Melee") refToBoard.shrekMelee = value as FieldStruct;
-                if (k == "Range") refToBoard.shrekRange = value as FieldStruct;
-                if (k == "Siege") refToBoard.shrekSiege = value as FieldStruct;
+                if (k == "Hand") 
+                {
+                    gameBoardReferences.PaladinsHand = value as FieldStruct;
+                }
+
+                if (k == "Graveyard") 
+                {
+                    gameBoardReferences.PGraveyard = value as FieldStruct;
+                }
+
+                if (k == "Deck") 
+                {
+                    gameBoardReferences.PDeck = value as FieldStruct;
+                }
+                if (k == "Melee") 
+                {
+                    gameBoardReferences.PMelee = value as FieldStruct;
+                }
+
+                if (k == "Range") 
+                {
+                    gameBoardReferences.PRange = value as FieldStruct;
+                }
+
+                if (k == "Siege") 
+                {
+                    gameBoardReferences.PSiege = value as FieldStruct;
+                }
             }
+
             else
             {
-                if (k == "Hand") refToBoard.badHand = value as FieldStruct;
-                if (k == "Graveyard") refToBoard.badGraveyard = value as FieldStruct;
-                if (k == "Deck") refToBoard.badDeck = value as FieldStruct;
-                if (k == "Melee") refToBoard.badMelee = value as FieldStruct;
-                if (k == "Range") refToBoard.badRange = value as FieldStruct;
-                if (k == "Siege") refToBoard.badSiege = value as FieldStruct;
+                if (k == "Hand") 
+                {
+                    gameBoardReferences.MonstersHand = value as FieldStruct;
+                }
+
+                if (k == "Graveyard") 
+                {
+                    gameBoardReferences.MGraveyard = value as FieldStruct;
+                }
+
+                if (k == "Deck") 
+                {
+                    gameBoardReferences.MDeck = value as FieldStruct;
+                }
+
+                if (k == "Melee") 
+                {
+                    gameBoardReferences.MMelee = value as FieldStruct;
+                }
+
+                if (k == "Range") 
+                {
+                    gameBoardReferences.MRange = value as FieldStruct;
+                }
+
+                if (k == "Siege") 
+                {
+                    gameBoardReferences.MSiege = value as FieldStruct;
+                }
             }
         }
 
+        // Retornar el resultado de Acces
         return Acces(k);
     }
 
+    // Metodo para obtener el mazo de un jugador especifico
     public FieldStruct DeckOfPlayer(ContextStruct player)
     {
-        if (player == refToBoard.shrekFaction)
+        if (player == gameBoardReferences.PaladinsFaction)
         {
-            return refToBoard.shrekDeck;
+            return gameBoardReferences.PDeck;
         }
         else
         {
-            return refToBoard.badDeck;
+            return gameBoardReferences.MDeck;
         }
     }
 
+    // Metodo para obtener la mano de un jugador especifico
     public FieldStruct HandOfPlayer(ContextStruct player)
     {
-        if (player == refToBoard.shrekFaction)
+        if (player == gameBoardReferences.PaladinsFaction)
         {
-            return refToBoard.shrekHand;
+            return gameBoardReferences.PaladinsHand;
         }
         else
         {
-            return refToBoard.badHand;
+            return gameBoardReferences.MonstersHand;
         }
     }
 
+    // Metodo para obtener el cementerio de un jugador especifico
     public FieldStruct GraveyardOfPlayer(ContextStruct player)
     {
-        if (player == refToBoard.shrekFaction)
+        if (player == gameBoardReferences.PaladinsFaction)
         {
-            return refToBoard.shrekGraveyard;
+            return gameBoardReferences.PGraveyard;
         }
         else
         {
-            return refToBoard.badGraveyard;
+            return gameBoardReferences.MGraveyard;
         }
     }
 
+    // Metodo para obtener todas las cartas de un jugador especifico
     public FieldStruct FieldOfPlayer(ContextStruct player)
     {
-        if (player == refToBoard.shrekFaction)
+        if (player == gameBoardReferences.PaladinsFaction)
         {
-            return refToBoard.shrekFaction.allCards;
+            return gameBoardReferences.PaladinsFaction.allCards;
         }
         else
         {
-            return refToBoard.badFaction.allCards;
+            return gameBoardReferences.MonsterFaction.allCards;
         }
     }
-}*/
+
+    // Metodo estatico para obtener la faccion de un jugador
+    public static string GetFaction(bool whichPlayerIs)
+    {
+        if (whichPlayerIs == true)
+        {
+            return "Paladins";
+        }
+
+        else
+        {
+            return "Monsters";
+        }
+    }
+
+    // Metodo estatico para establecer un puntero en el tablero
+    public static GameObject SetPointer(GameManager refToBoard, Pointer pointer)
+    {
+        string k = pointer.pointer;
+
+        string faction = GetFaction(GameManager.whichPlayerIs);
+
+        if (faction == "Paladins")
+        {
+            if (k == "Hand") 
+            {
+                return refToBoard.gameObject;
+            }
+
+            if (k == "Graveyard") 
+            {
+                return refToBoard.Graveyard1;
+            }
+
+            if (k == "Deck") 
+            {
+                return refToBoard.gameObject;
+            }
+
+            if (k == "Melee") 
+            {
+                return refToBoard.player1M;
+            }
+
+            if (k == "Range") 
+            {
+                return refToBoard.player1R;
+            }
+
+            if (k == "Siege") 
+            {
+                return refToBoard.player1S;
+            }
+        }
+        else
+        {
+            if (k == "Hand") 
+            {
+                return refToBoard.gameObject;
+            }
+
+            if (k == "Graveyard") 
+            {
+                return refToBoard.Graveyard2;
+            }
+
+            if (k == "Deck") 
+            {
+                return refToBoard.gameObject;
+            }
+
+            if (k == "Melee") 
+            {
+                return refToBoard.player2M;
+            }
+
+            if (k == "Range") 
+            {
+                return refToBoard.player2R;
+            }
+
+            if (k == "Siege") 
+            {
+                return refToBoard.player2S;
+            }
+        }
+
+        // Si no se encuentra la informacion solicitada, retornar el valor por defecto
+        return default;
+    }
+}

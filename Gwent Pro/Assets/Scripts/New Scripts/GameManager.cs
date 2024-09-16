@@ -28,10 +28,30 @@ public class GameManager : MonoBehaviour
     public GameObject player1M;
     public GameObject player2S;
     public GameObject player2R;
-
     public GameObject player2M;
     public GameObject Graveyard1;
     public GameObject Graveyard2;
+    public Players players;
+
+    //Estructuras//
+
+    public FieldStruct PaladinsHand;
+    public FieldStruct MonstersHand;
+    public FieldStruct PSiege;
+    public FieldStruct MSiege;
+    public FieldStruct PRange;
+    public FieldStruct MRange;
+    public FieldStruct PMelee;
+    public FieldStruct MMelee;
+    public FieldStruct PGraveyard;
+    public FieldStruct MGraveyard;
+    public FieldStruct PDeck;
+    public FieldStruct MDeck;
+    public string Player1Faction = "Paladins";
+    public string Player2Faction = "Monsters";
+    public ContextStruct PaladinsFaction;
+    public ContextStruct MonsterFaction;
+    public ContextStruct allBoard;
 
     public static void passTurn (GameObject thisCard ,bool playerID)
     {
@@ -322,5 +342,207 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+
+    // Metodo para restablecer el estado del tablero
+    public void ResetBoard()
+    {
+        // Reiniciar el tablero completo
+        allBoard = new ContextStruct();
+    
+        // Reiniciar las facciones
+        PaladinsFaction = new ContextStruct();
+        MonsterFaction = new ContextStruct();
+    
+        // Reiniciar las manos de los jugadores
+        PaladinsHand = new FieldStruct(players.Player1.Cards);
+        MonstersHand = new FieldStruct(players.Player2.Cards);
+    
+        // Reiniciar las filas del tablero
+        PSiege = new FieldStruct(player1S);
+        MSiege = new FieldStruct(player2S);
+        PRange = new FieldStruct(player1R);
+        MRange = new FieldStruct(player2R);
+        PMelee = new FieldStruct(player1M);
+        MMelee = new FieldStruct(player2M);
+    
+        // Reiniciar los mazos y cementerios
+        PDeck = new FieldStruct(drawCard.Cards);
+        MDeck = new FieldStruct(drawCard2.Cards);
+        PGraveyard = new FieldStruct(Graveyard1);
+        MGraveyard = new FieldStruct(Graveyard2);
+    
+        // Agregar todas las estructuras a sus facciones correspondientes
+        PaladinsFaction.Add(PaladinsHand); 
+        MonsterFaction.Add(MonstersHand);
+        PaladinsFaction.Add(PSiege); 
+        MonsterFaction.Add(MSiege);
+        PaladinsFaction.Add(PRange); 
+        MonsterFaction.Add(MRange);
+        PaladinsFaction.Add(PMelee); 
+        MonsterFaction.Add(MMelee);
+        PaladinsFaction.Add(PDeck); 
+        MonsterFaction.Add(MDeck);
+        PaladinsFaction.Add(PGraveyard); 
+        MonsterFaction.Add(MGraveyard);
+    
+        // Agregar todas las estructuras al tablero completo
+        allBoard.Add(PaladinsHand); 
+        allBoard.Add(MonstersHand);
+        allBoard.Add(PSiege); 
+        allBoard.Add(MSiege);
+        allBoard.Add(PRange); 
+        allBoard.Add(MRange);
+        allBoard.Add(PMelee); 
+        allBoard.Add(MMelee);
+        allBoard.Add(PDeck); 
+        allBoard.Add(MDeck);
+        allBoard.Add(PGraveyard); 
+        allBoard.Add(MGraveyard);
+    }
+
+    private void Start()
+    {
+        StartCoroutine(StartDalayedCoroutine());
+    }
+
+    IEnumerator StartDalayedCoroutine()
+    {
+        yield return new WaitForEndOfFrame();
+        
+        ResetBoard();
+    }
+
+    // Metodo para llenar el tablero completo
+    public ContextStruct FillBoard()
+    {
+        // Crear una nueva estructura de contexto vacía
+        ContextStruct context = new ContextStruct();
+    
+        // Agregar todas las estructuras de campo al contexto
+        context.Add(PaladinsHand); 
+        context.Add(MonstersHand); 
+        context.Add(PSiege); 
+        context.Add(MSiege); 
+        context.Add(PRange); 
+        context.Add(MRange); 
+        context.Add(PMelee); 
+        context.Add(MMelee); 
+        context.Add(PDeck); 
+        context.Add(MDeck); 
+        context.Add(PGraveyard); 
+        context.Add(MGraveyard);
+    
+        // Retornar el contexto lleno
+        return context;
+    }
+
+    // Método para establecer un campo específico del tablero
+    public FieldStruct SetField(FieldStruct field, FieldStruct target, bool single = false)
+    {
+        // Estructura de contexto donde se añadira el resultado
+        ContextStruct toAdd;
+
+        // Determinar a que faccion pertenece el campo objetivo
+        if(target == PDeck || target == PaladinsHand || target == PSiege || target == PRange || target == PMelee || target ==PGraveyard)
+        {
+            toAdd = PaladinsFaction;
+        }
+
+        else
+        {
+            toAdd = MonsterFaction;
+        }
+
+        // Filtrar las cartas del campo objetivo
+        target = FilterCards(field, target);
+
+        // Si se especifico single, reducir el campo a una sola carta
+        if (single) 
+        {
+            target = SingleFilter(target);
+        }
+
+        // Agregar el campo filtrado a la faccion correspondiente y al tablero completo
+        toAdd.Add(target);
+
+        allBoard.Add(target);
+
+        // Retornar el campo actualizado
+        return target;
+    }
+
+    // Metodo para aplicar un filtro predeterminado a todo el tablero
+    public void AfterPredicateFilter(FieldStruct field, bool single = false)
+    {
+        // Reiniciar el tablero completo y las facciones
+        allBoard = new ContextStruct();
+
+        PaladinsFaction = new ContextStruct();
+
+        MonsterFaction = new ContextStruct();
+
+        // Aplicar el metodo SetField a cada campo del tablero
+        PDeck = SetField(field, PDeck, single);
+
+        MDeck = SetField(field, MDeck, single);
+
+        PaladinsHand = SetField(field, PaladinsHand, single);
+
+        MonstersHand = SetField(field, MonstersHand, single);
+
+        PSiege = SetField(field, PSiege, single);
+
+        MSiege = SetField(field, MSiege, single);
+
+        PRange = SetField(field, PRange, single);
+
+        MRange = SetField(field, MRange, single);
+
+        PMelee = SetField(field, PMelee, single);
+
+        MMelee = SetField(field, MMelee, single);
+
+        PGraveyard = SetField(field, PGraveyard, single);
+        
+        MGraveyard = SetField(field, MGraveyard, single);
+    }
+
+    // Metodo para filtrar cartas de un campo objetivo
+    public FieldStruct FilterCards(FieldStruct toGet, FieldStruct target)
+    {
+        // Crear una nueva estructura de campo vacia para almacenar las cartas filtradas
+        FieldStruct toReturn = new FieldStruct();
+
+        // Iterar sobre todas las cartas del campo objetivo
+        foreach (CardStruct card in target.cardList)
+        {
+            // Verificar si la carta está contenida en el campo toGet
+            if (toGet.Contains(card)) 
+            {
+                // Si esta contenida, añadirla al campo de retorno
+                toReturn.Add(card);
+            }
+        }
+
+        // Retornar el campo filtrado
+        return toReturn;
+    }
+
+    // Metodo para reducir un campo a una sola carta
+    public FieldStruct SingleFilter(FieldStruct target)
+    {
+        // Verificar si el campo tiene cartas
+        if (target.cardList.Count > 0)
+        {
+            // Si tiene mas de una carta, eliminar todas excepto la primera
+            while (target.cardList.Count != 1)
+            {
+                target.cardList.RemoveAt(1);
+            }
+        }
+            
+        // Retornar el campo con solo una carta
+        return target;
+    }  
 
 }

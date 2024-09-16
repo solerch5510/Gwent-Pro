@@ -16,7 +16,7 @@ public class DrawCard : MonoBehaviour
     public GameObject Card51, Card52, Card53, Card54;
     public GameObject Hand;
     public Players players;
-    List<GameObject> Cards = new List<GameObject>();
+    public List<GameObject> Cards = new List<GameObject>();
 
     private GridLayoutGroup gridLayoutGroup; //Referencia al GridLayout Group
 
@@ -142,7 +142,7 @@ public class DrawCard : MonoBehaviour
 
             if (Cards.Count == 0)
             {
-                Debug.LogError("No hay mas cartas en el deck para dibujar");
+                Debug.LogError("No hay mas cartas en el deck para dar");
             }
 
             int randomIndex = Random.Range(0, Cards.Count);

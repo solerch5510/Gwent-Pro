@@ -25,37 +25,21 @@ public class EditionButtom : MonoBehaviour
         {
             Debug.Log(ReadInput);
 
-            int i = 0;
 
             Lexer lexer = new Lexer(ReadInput);
 
-            while(true)
-            {
-                if(lexer.tokenList[i].Type == TokenType.EndOfFile)
-                {
-                    break;
-                }
-                
-
-                Debug.Log(lexer.tokenList[i].Lexeme);
-
-                i++;
-
-                lexer.LexToken();
-            }
-
-            Debug.Log(lexer.tokenList.Count);
-
-            foreach ( Token token in lexer.tokenList )
+           /* foreach ( Token token in lexer.tokenList )
             {
                 Debug.Log(token.Lexeme);
 
                 Debug.Log(token.Type);
-            }
+            }*/
 
-           /*Parser parser = new Parser(lexer);
+            Debug.Log(lexer.tokenList.Count);
 
-           parser.Parse();*/
+           Parser parser = new Parser(lexer);
+
+           parser.Parse();
         }
 
         else
@@ -64,6 +48,5 @@ public class EditionButtom : MonoBehaviour
 
             Debug.Log(ReadInput);
         }
-        //Parser parser= new Parser(lexer);
     }
 }

@@ -25,17 +25,19 @@ public class Lexer
     {
         this.sourceText = sourceText;
 
+        InitializeReservedWords();
+
         for(int i = 0 ; i < sourceText.Length + 1; i ++ )
         {
-            if(i == sourceText.Length)
+            if(i == sourceText.Length )
             {
                 AddToken(TokenType.EndOfFile, currentLine , currentPosition);
+
+                break;
             }
 
             LexToken();
         }
-
-        InitializeReservedWords();
     }
 
     // Metdo privado para inicializar el diccionario de palabras reservadas.
@@ -51,7 +53,7 @@ public class Lexer
 
         reservedWords.Add("card", new Token(TokenType.Card, "Card", 0, 0));
 
-        reservedWords.Add("effect", new Token(TokenType.Effect, "effect", 0, 0));
+        reservedWords.Add("effect", new Token(TokenType.Effect, "Effect", 0, 0));
 
         reservedWords.Add("Predicate", new Token(TokenType.Predicate, "Predicate", 0, 0));
 
@@ -109,11 +111,11 @@ public class Lexer
 
         reservedWords.Add("OnActivation", new Token(TokenType.OnActivation, "OnActivation", 0, 0));
 
-        reservedWords.Add("Effect", new Token(TokenType.OnActivation_Effect, "Effect", 0, 0));
+        reservedWords.Add("OnActivationEffect", new Token(TokenType.OnActivation_Effect, "OnActivation Effect", 0, 0));
 
         reservedWords.Add("PostAction", new Token(TokenType.PostAction, "PostAction", 0, 0));
 
-        reservedWords.Add("Target", new Token(TokenType.Targets, "Target", 0, 0));
+        reservedWords.Add("targets", new Token(TokenType.Targets, "Target", 0, 0));
 
         reservedWords.Add("Context", new Token(TokenType.Context, "Context", 0, 0));
 
@@ -210,7 +212,7 @@ public class Lexer
             case '|':
                 if (IsMatch('|')) 
                 {
-                    AddToken(TokenType.Or, currentLine, currentPosition+1);
+                    AddToken(TokenType.Or, currentLine, ++currentPosition);
                     
                     currentPosition++;
                 }
@@ -218,7 +220,7 @@ public class Lexer
             case '&':
                 if (IsMatch('&')) 
                 {
-                    AddToken(TokenType.And, currentLine, currentPosition+1);
+                    AddToken(TokenType.And, currentLine, ++currentPosition);
                     
                     currentPosition++;
                 }
@@ -226,13 +228,13 @@ public class Lexer
             case '=':
                 if (IsMatch('=')) 
                 {
-                    AddToken(TokenType.Equal, currentLine, currentPosition+1);
+                    AddToken(TokenType.Equal, currentLine, ++currentPosition);
                     
                     currentPosition++;
                 }
                 else if (IsMatch('>')) 
                 {
-                    AddToken(TokenType.EqualGreater, currentLine, currentPosition+1);
+                    AddToken(TokenType.EqualGreater, currentLine, ++currentPosition);
                 
                     currentPosition++;
                 }
@@ -241,7 +243,7 @@ public class Lexer
             case '+':
                 if (IsMatch('+')) 
                 {
-                    AddToken(TokenType.Plus1, currentLine, currentPosition+1);
+                    AddToken(TokenType.Plus1, currentLine, ++currentPosition);
                     
                     currentPosition++;
                 }
@@ -251,7 +253,7 @@ public class Lexer
             case '-':
                 if (IsMatch('-')) 
                 {
-                    AddToken(TokenType.Decrement, currentLine, currentPosition+1);
+                    AddToken(TokenType.Decrement, currentLine, ++currentPosition);
                     
                     currentPosition++;
                 }
@@ -286,7 +288,6 @@ public class Lexer
                 break;
 
             case '\0':
-                tokenList.Add(new Token(TokenType.EndOfFile, "", currentLine, currentPosition));
                 break;
 
             //Caso prederterminado para caracteres no reconocidos.
@@ -306,19 +307,6 @@ public class Lexer
                 break;
 
         }
-    }
-
-    // Método para escanear múltiples tokens hasta llegar al final del texto
-    private void ScanToken()
-    {
-        while (!isAtEnd())
-        {
-            startPosition = currentPosition;
-
-            ScanToken();
-        }
-
-        tokenList.Add(new Token(TokenType.EndOfFile, "", currentLine, currentPosition));
     }
 
     // Método para verificar si el próximo carácter coincide con el esperado
@@ -344,7 +332,7 @@ public class Lexer
 
         startPosition = currentPosition;
 
-        Debug.Log(sourceText[currentPosition]);
+        //Debug.Log(sourceText[currentPosition]);
 
         while (sourceText[currentPosition] != '"')
         {
@@ -352,7 +340,7 @@ public class Lexer
 
             text += sourceText[currentPosition];
 
-            Debug.Log(text);
+            //Debug.Log(text);
 
             currentPosition++;
         }
@@ -402,9 +390,33 @@ public class Lexer
     //
     private void ScanIdentifier()
     {
-        while(IsAlphanumeric(Peek())) Advance();
+        string text = "";
 
-        AddToken(TokenType.Identifier, currentLine, currentPosition);
+        while(sourceText[startPosition] == ' ')
+        {
+            startPosition++;
+        }
+
+        text+= sourceText[startPosition];
+
+        while(IsAlphanumeric(Peek())) 
+        {
+            text += sourceText[currentPosition];
+
+            Advance();
+        }
+
+        if(reservedWords.ContainsKey(text))
+        {
+            TokenType type = reservedWords[text].Type;
+
+            AddToken(type, currentLine, currentPosition);
+        }
+
+        else
+        {
+           AddToken(TokenType.Identifier, currentLine, currentPosition); 
+        }
     }
     // Método para verificar si un carácter es alfabético.
     private bool IsAlpha(char c)
