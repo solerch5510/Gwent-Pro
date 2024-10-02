@@ -22,3 +22,4 @@ MonoBehaviour:
   description: Unidad cuerpo a cuerpo. Asigna a cada carta de tipo plata el valor
     del promedio del poder entre los dos campos y la cantidad de cartas.
   classCard: SilverCard
+  Faction: 0

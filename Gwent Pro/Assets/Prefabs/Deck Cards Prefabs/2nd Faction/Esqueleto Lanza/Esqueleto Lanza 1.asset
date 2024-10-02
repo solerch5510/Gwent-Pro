@@ -22,3 +22,4 @@ MonoBehaviour:
   description: Unidad cuerpo a cuerpo. Elimina a la carta de menor poder del campo
     del adversario.
   classCard: SilverCard
+  Faction: 0

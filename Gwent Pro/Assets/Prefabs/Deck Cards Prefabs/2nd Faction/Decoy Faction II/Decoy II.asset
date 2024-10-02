@@ -12,10 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcc8a7f6126c5df43b8044c2ceee9b3d, type: 3}
   m_Name: Decoy II
   m_EditorClassIdentifier: 
-  name: Cambia Formas.
-  description: Cambia Formas. Conocido como Decoy
-  classCard: Decoy Card
-  summonCost: 1
+  name: Decoy
   power: 0
+  basedPower: 0
+  whichEffectIs: 0
   spriteImage: {fileID: 21300000, guid: 19f9d858d2ddb4e4296f6e889f9bf97a, type: 3}
   Zone: 
+  playerID: 0
+  description: Cambia Formas. Conocido como Decoy
+  classCard: Decoy Card
+  Faction: 0

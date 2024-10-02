@@ -22,3 +22,4 @@ MonoBehaviour:
   description: Unidad cuerpo a cuerpo. Elimina la fila con menor cantidad de cartas
     en el campo.
   classCard: GoldenCard
+  Faction: 0

@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: PowerUpF1
   m_EditorClassIdentifier: 
   name: For Honor
-  description: Multiplica por 2 el poder de las cartas de la fila.
-  classCard: Buff
   power: 0
   basedPower: 0
   whichEffectIs: 0
   spriteImage: {fileID: 21300000, guid: 0fa6ec2f05409c840ba09bcd41e060db, type: 3}
-  Zone: B
+  Zone: Buff
   playerID: 1
+  description: Multiplica por 2 el poder de las cartas de la fila.
+  classCard: Buff

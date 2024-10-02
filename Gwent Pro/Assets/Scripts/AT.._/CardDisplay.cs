@@ -24,8 +24,12 @@ public class CardDisplay : MonoBehaviour
 
     public Text classCardText;
 
+    public Interpreter interpreter;
+
     public string Zone ;
     public bool ActivateOnClick = true;
+
+    public int cardFaction;
 
 
     //Use this for initialization
@@ -37,8 +41,12 @@ public class CardDisplay : MonoBehaviour
         classCardText.text = card.classCard;
         artImage.sprite = card.spriteImage;
         Zone = card.Zone;
+
+        cardFaction=card.Faction;
       
         powerText.text = card.power.ToString();
+
+        interpreter = card.interpreter;
     }
 
     public void OnHoverEnter()

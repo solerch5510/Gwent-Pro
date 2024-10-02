@@ -23,7 +23,7 @@ public class Int: ASTType
 
     public override void Express(string Height)
     {
-        Debug.Log(Height + "-> Int:  \n Token:"  + IntToken.Type.ToString() + " " + IntToken.Lexeme);
+        Debug.Log(Height + "-> Int:  Token:"  + IntToken.Type.ToString() + " " + IntToken.Lexeme);
     }
 }
 
@@ -74,6 +74,6 @@ public class Bool: ASTType
 
     public override void Express(string Height)
     {
-        Debug.Log(Height + "-> Bool: \n Value:" + TOF);
+        Debug.Log(Height + "-> Bool:  Value:" + TOF);
     }
 }

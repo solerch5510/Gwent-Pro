@@ -21,3 +21,4 @@ MonoBehaviour:
   playerID: 1
   description: Unidad de rango. Elimina a la carta de menor poder del campo rival.
   classCard: SilverCard
+  Faction: 0

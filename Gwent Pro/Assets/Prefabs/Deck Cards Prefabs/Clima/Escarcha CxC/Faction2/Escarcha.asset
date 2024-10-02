@@ -13,10 +13,12 @@ MonoBehaviour:
   m_Name: Escarcha
   m_EditorClassIdentifier: 
   name: Escarcha Densa
-  description: Abalancha de nieve que afecta a las unidades cuerpo a cuerpo.
-  classCard: Clima
   power: 0
   basedPower: 0
+  whichEffectIs: 0
   spriteImage: {fileID: 21300000, guid: 098c8ebf2daa9134b8944ac7351f2071, type: 3}
   Zone: C(M)
   playerID: 0
+  description: Abalancha de nieve que afecta a las unidades cuerpo a cuerpo.
+  classCard: Clima
+  Faction: 0

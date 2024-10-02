@@ -22,3 +22,4 @@ MonoBehaviour:
   description: Unidad de Asedio. Maquinaria basica de asedio, se desconoce su modo
     de uso).
   classCard: SilverCard
+  Faction: 0

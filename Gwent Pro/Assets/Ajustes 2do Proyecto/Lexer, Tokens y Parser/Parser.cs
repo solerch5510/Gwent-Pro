@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Timers;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Parser
@@ -105,6 +107,8 @@ public class Parser
 
         CurrentError = "Invalid syntax \n";
 
+        CurrentError += errorTag + "\n";
+
         CurrentError += "Current token type: " + CurrentToken.Type + "\n";
 
         CurrentError += "Current token value: " + CurrentToken.Lexeme + "\n";
@@ -127,7 +131,7 @@ public class Parser
         {
             NumberOfToken ++;
 
-            CurrentToken = TokensList[NumberOfToken + 1];
+            CurrentToken = TokensList[NumberOfToken];
         }
     }
     
@@ -148,9 +152,9 @@ public class Parser
 
                 CurrentError = "Invalid syntax: ";
 
-                CurrentError += "Current token type: " + CurrentToken.Type + ". ";
+                CurrentError += "Current token type: " + CurrentToken.Type + ". " + "\n";
 
-                CurrentError += "Expected token type: " + tokenType + ". ";
+                CurrentError += "Expected token type: " + tokenType + ". " + "\n";
 
                 CurrentError += "Code:\n";
 
@@ -208,6 +212,8 @@ public class Parser
             {
                 Eat(TokenType.NumberLiteral);
 
+               // Debug.Log("teoricamente trago el 0, ahora viene: " + CurrentToken.Type);
+
                 Int node = new Int(token);
 
                 return node;
@@ -238,6 +244,7 @@ public class Parser
             // Manejo de identificadores
             if (CurrentToken.Type == TokenType.Identifier)
             {
+               // Debug.Log("amount??? :  " + CurrentToken.Lexeme);
                 Var node = Variable(scope);
 
                 if(node.GetType() == typeof(Var) && !scope.IsInScope(node))
@@ -258,6 +265,11 @@ public class Parser
 
                     Eat(token.Type);
 
+                    return node;
+                }
+
+                else
+                {
                     return node;
                 }
             }
@@ -349,6 +361,8 @@ public class Parser
         {
             Token token = CurrentToken;
 
+            Debug.Log("pasa x aqui?? : " + CurrentToken.Type);
+
             // Manejo del operador NOT
             if (token.Type == TokenType.Not)
             {
@@ -383,6 +397,8 @@ public class Parser
             // Manejo de comparaciones
             ASTType left = Expression(scope);
 
+            Debug.Log("que sale desp de Expresion: " + CurrentToken.Type);
+
             token = CurrentToken;
 
             if (token.Type == TokenType.Equal) 
@@ -390,9 +406,9 @@ public class Parser
                 Eat(TokenType.Equal);
             }
 
-            else if (token.Type == TokenType.BangEqual) 
+            else if (token.Type == TokenType.Differ) 
             {
-                Eat(TokenType.BangEqual);
+                Eat(TokenType.Differ);
             }
 
             else if (token.Type == TokenType.GreaterEqual)
@@ -422,7 +438,13 @@ public class Parser
             
             else DebugError($"Invalid Boolean operator: '{token.Lexeme}'");
 
+            //Debug.Log("se espera AMount :  " + CurrentToken.Lexeme);
+
             ASTType right = Expression(scope);
+
+            Debug.Log("el operador izquierdo es de tipo: " + left.type);
+            Debug.Log("el operador derecho es de tipo: " + right.type);
+            Debug.Log(" el token del operador es : " + token.Type);
 
             BinaryOperators node = new BinaryOperators(left, token, right);
 
@@ -430,6 +452,9 @@ public class Parser
             {
                 ErrorInBinOp(node as BinaryOperators);
             }
+
+            Debug.Log("el nodo resultante es : " + node.type);
+            Debug.Log(" y los nodos hijos son : " + node.Left.type + " y  " + node.Right.type );
 
             return node;
         }
@@ -508,16 +533,19 @@ public class Parser
             // Inicializar una nueva variable con el token actual
             Var node = new Var(CurrentToken);
 
+           // Debug.Log("este es el token que se almaceno en la var: "  + CurrentToken.Lexeme) ; 
             // Consumir el token de identificador
             Eat(TokenType.Identifier);
+
+            //Debug.Log("luego de comer el identifier : " + CurrentToken.Type);
 
             // Crear una variable compuesta para almacenar los argumentos
             VarComp otherNode = new VarComp(node.token);
 
             // Manejar indices y llamadas a funciones
-            if (CurrentToken.Type == TokenType.Dot || CurrentToken.Type == TokenType.LeftBrace)
+            if (CurrentToken.Type == TokenType.Dot || CurrentToken.Type == TokenType.LeftBracket)
             {
-                if(CurrentToken.Type == TokenType.LeftBrace)
+                if(CurrentToken.Type == TokenType.LeftBracket)
                 {
                     // Parsear un indice
                     Indexer indexer = IndexerParse(scope);
@@ -549,7 +577,7 @@ public class Parser
                     {
                         Token token = CurrentToken;
 
-                        if (token.Type == TokenType.Type || token.Type == TokenType.Name || token.Type == TokenType.Faction || token.Type == TokenType.Power || token.Type == TokenType.Range)
+                        if (token.Type == TokenType.Type || token.Type == TokenType.Name || token.Type == TokenType.Faction || token.Type == TokenType.Power || token.Type == TokenType.Range || token.Type == TokenType.Owner)
                         {
                             Eat(token.Type);
 
@@ -560,6 +588,13 @@ public class Parser
                             {
                                 variable.type = ASTType.Type.Int;
                             }
+
+                            if(token.Type == TokenType.Owner)
+                            {
+                                variable.type = ASTType.Type.Context;
+                            }
+
+                            //Debug.Log("llega aqui sin lio, declara el target.power sin lio : " + CurrentToken.Type + "  se esperaba *");
 
                             otherNode.args.Add(variable);
                         }
@@ -596,6 +631,7 @@ public class Parser
             // Determinar el tipo de la variable si esta dentro del alcance
             if (node.GetType() == typeof(Var))
             {
+                //Debug.Log("paso x determinar el tipo de variable");
                 if(scope.IsInScope(node)) 
                 {
                     node.type = scope.Get(node);
@@ -605,12 +641,14 @@ public class Parser
             // Manejar variables no declaradas
             else if(!scope.IsInScope(node))
             {
+                //Debug.Log("va a arrojar error");
                 ErrorHasNotBeenDeclared(node);
             }
 
             // Manejar variables compuestas
             else
             {
+                //Debug.Log("va a intentar manejar variables compuestas");
                 VarComp varComp = node as VarComp;
 
                 if(IsPossibleVarComp(varComp, scope))
@@ -625,10 +663,12 @@ public class Parser
                     else 
                     {
                         varComp.type = lastType;
+                        //Debug.Log("se espera que sea de tipo int: "  + varComp.type);
                     }
                 }
             }
 
+            //Debug.Log("va a retornar el nodo siguiente: " + node.value + " y el token actual es: " + CurrentToken.Type);
             return node;
         }
         catch (System.Exception)
@@ -653,15 +693,19 @@ public class Parser
             // Parsear la expresion de la derecha
             ASTType right = Expression(scope);
 
+
             // Crear un nuevo nodo de asignacion
             Assign node = new Assign(left, token, right);
 
+            Debug.Log("el token actual es : ");
+
             // Verificar si es una asignacion compuesta
-            if(token.Lexeme != "=")
+            if(token.Type != TokenType.Assign)
             {
                 // Verificar si la variable esta declarada
                 if (!scope.IsInScope(variable)) 
                 {
+                    Debug.Log("Variable no declarada??");
                     ErrorHasNotBeenDeclared(variable);
                 }
 
@@ -773,6 +817,8 @@ public class Parser
 
             // Obtener la variable objetivo del bucle
             Var target = Variable(scope);
+
+           // Debug.Log("salio este token luego de tragar Target: " + CurrentToken.Type);
             
             // Establecer el tipo de la variable objetivo como Card
             target.type = ASTType.Type.Card;
@@ -793,8 +839,12 @@ public class Parser
             // Consumir el token 'in'
             Eat(TokenType.In);
 
+           // Debug.Log("luego de tragar el in : " + CurrentToken.Lexeme);
+
             // Obtener la variable objetivo del iterador
             Var targets = Variable(scope);
+
+            //Debug.Log("luego de comer Targets: " + CurrentToken.Lexeme);
 
             // Verificar si la variable del iterador es un campo valido
             if (!scope.IsInScope(targets) || targets.type != ASTType.Type.Field) 
@@ -802,6 +852,8 @@ public class Parser
                 // Generar un error si no es un campo valido
                 ErrorUnvalidAssignment(targets);
             }
+
+            //Debug.Log("Antes de entrar en el cuerpo del for: " + CurrentToken.Type);
 
             // Parsear el cuerpo del bucle
             Compound body = CompoundStatement(scope);
@@ -899,6 +951,7 @@ public class Parser
 
             if (CurrentToken.Type == TokenType.For)
             {
+                //Debug.Log("entro en el bucle For");
                 // Bucle for
                 return FLStatement(scope);
             }
@@ -913,6 +966,10 @@ public class Parser
             {
                 // Declaracion de variable o llamada a funcion
                 Var variable = Variable(scope);
+
+                Debug.Log("se espera * : " + CurrentToken.Type);
+
+                //Debug.Log("luego de asignar I: " + CurrentToken.Type);
 
                 // Manejar diferentes casos de uso de la variable
                 if (variable.GetType() == typeof(VarComp) && CurrentToken.Type == TokenType.SemiColon)
@@ -935,6 +992,7 @@ public class Parser
                         ErrorInvalidStatement();
                     }
 
+                    //Debug.Log("se llevo el punto y coma?? : " + CurrentToken.Type);
                     return variable;
                 }
 
@@ -992,7 +1050,7 @@ public class Parser
             List<AST> results = new List<AST>();
 
             // Bucle hasta encontrar el final del bloque o el fin del archivo
-            while (CurrentToken.Type != TokenType.RightBracket && CurrentToken.Type != TokenType.EndOfFile)
+            while (CurrentToken.Type != TokenType.RightBrace && CurrentToken.Type != TokenType.EndOfFile)
             {
                 // Parsear una declaracion
                 AST node = Statement(scope);
@@ -1002,6 +1060,8 @@ public class Parser
 
                 // Consumir el punto y coma
                 Eat(TokenType.SemiColon);
+
+                //Debug.Log("antes de volver a entrar en los estados:" + CurrentToken.Type);
             }
 
             return results;
@@ -1021,13 +1081,15 @@ public class Parser
             Scope<ASTType.Type> scope = new Scope<ASTType.Type>(outScope);
 
             // Consumir el corchete izquierdo
-            Eat(TokenType.LeftBracket);
+            Eat(TokenType.LeftBrace);
+
+            //Debug.Log("este es el llamado " + count++ + " luego de comer llave y entrar en el cuerpo de la accion" );
 
             // Parsear la lista de declaraciones
             List<AST> nodes = StatementList(scope);
 
             // Consumir el corchete derecho
-            Eat(TokenType.RightBracket);
+            Eat(TokenType.RightBrace);
 
             // Crear un nuevo nodo compuesto
             Compound root = new Compound();
@@ -1147,7 +1209,7 @@ public class Parser
             Eat(TokenType.Colon);
             
             // Consumir el corchete izquierdo
-            Eat(TokenType.LeftBrace);
+            Eat(TokenType.LeftBracket);
 
             // Crear un nuevo nodo de rango            
             Range node = new Range(CurrentToken);
@@ -1162,8 +1224,9 @@ public class Parser
             // Consumir el literal de cadena del rango            
             Eat(TokenType.StringLiteral);
 
+        // Debug.Log(CurrentToken.Type + " esto es en el range");
             // Consumir el corchete derecho            
-            Eat(TokenType.RightBrace);
+            Eat(TokenType.RightBracket);
             
             return node;
         }
@@ -1181,11 +1244,16 @@ public class Parser
             // Consumir el token de efecto al activarse
             Eat(TokenType.OnActivation_Effect);
 
+            Debug.Log("Este es el token antes de los dos puntos: " + CurrentToken.Type);
+
             // Consumir el token de dos puntos
             Eat(TokenType.Colon);
 
+            Debug.Log("este es el token antes de consumir la llave: " + CurrentToken.Type);
             // Consumir el corchete izquierdo
-            Eat(TokenType.LeftBracket);
+            Eat(TokenType.LeftBrace);
+
+            Debug.Log("este es el token luego de la llave: " + CurrentToken.Type);
 
             // Inicializar nombre y parametros
             ParamName name = null;
@@ -1193,7 +1261,7 @@ public class Parser
             Args parameters = new Args();
 
             // Bucle para procesar nombres y parametros
-            while (CurrentToken.Type != TokenType.RightBracket && CurrentToken.Type != TokenType.EndOfFile)
+            while (CurrentToken.Type != TokenType.RightBrace && CurrentToken.Type != TokenType.EndOfFile)
             {
                 // Manejar nombres de efectos
                 if (CurrentToken.Type == TokenType.Name)
@@ -1234,7 +1302,7 @@ public class Parser
                 // Manejar identificadores (variables o funciones)
                 else if (CurrentToken.Type == TokenType.Identifier)
                 {
-                     EffectNode effect;
+                    EffectNode effect;
 
                     Var variable = Variable(GlobalScope);
 
@@ -1285,7 +1353,7 @@ public class Parser
 
                     parameters.Add(param);
 
-                    if (CurrentToken.Type != TokenType.RightBracket) 
+                    if (CurrentToken.Type != TokenType.RightBrace) 
                     {
                         Eat(TokenType.Comma);
                     }
@@ -1299,7 +1367,7 @@ public class Parser
             }
 
             // Consumir el corchete derecho
-            Eat(TokenType.RightBracket);
+            Eat(TokenType.RightBrace);
 
             // Crear el nodo de efecto al activarse
             EffectOnActivation node;
@@ -1423,7 +1491,7 @@ public class Parser
             Eat(TokenType.EqualGreater);
 
             // Consumir el parentesis izquierdo
-            Eat(TokenType.LeftParenthesis);
+            //Eat(TokenType.LeftParenthesis);
 
             // Crear un nuevo alcance para la condicion
             Scope<ASTType.Type> scope = new Scope<ASTType.Type>(GlobalScope);
@@ -1435,7 +1503,7 @@ public class Parser
             ASTType condition = BooleanExpression(scope);
 
             // Consumir el parentesis derecho
-            Eat(TokenType.RightParenthesis);
+            //Eat(TokenType.RightParenthesis);
 
             // Crear un nuevo nodo de predicado
             Predicate node = new Predicate(unit, condition);
@@ -1460,7 +1528,7 @@ public class Parser
             Eat(TokenType.Colon);
 
             // Consumir el corchete izquierdo
-            Eat(TokenType.LeftBracket);
+            Eat(TokenType.LeftBrace);
 
             // Inicializar variables para almacenar los resultados
             Source source = null;
@@ -1470,7 +1538,7 @@ public class Parser
             Predicate predicate = null;
 
             // Bucle para procesar diferentes partes del selector
-            while (CurrentToken.Type != TokenType.RightBracket && CurrentToken.Type != TokenType.EndOfFile)
+            while (CurrentToken.Type != TokenType.RightBrace && CurrentToken.Type != TokenType.EndOfFile)
             {
                 // Manejar el contexto
                 if (CurrentToken.Type == TokenType.Context)
@@ -1479,7 +1547,7 @@ public class Parser
                     {
                         source = ContextParse();
 
-                        if (CurrentToken.Type != TokenType.RightBracket) 
+                        if (CurrentToken.Type != TokenType.RightBrace) 
                         {
                             Eat(TokenType.Comma);
                         }
@@ -1498,7 +1566,7 @@ public class Parser
                     {
                         single = SingleParse();
 
-                        if (CurrentToken.Type != TokenType.RightBracket) 
+                        if (CurrentToken.Type != TokenType.RightBrace) 
                         {
                             Eat(TokenType.Comma);
                         }
@@ -1517,7 +1585,7 @@ public class Parser
                     {
                         predicate = PredicateParse();
 
-                        if (CurrentToken.Type != TokenType.RightBracket) 
+                        if (CurrentToken.Type != TokenType.RightBrace) 
                         {
                             Eat(TokenType.Comma);
                         }
@@ -1537,7 +1605,7 @@ public class Parser
             }
 
             // Consumir el corchete derecho
-            Eat(TokenType.RightBracket);
+            Eat(TokenType.RightBrace);
 
             // Crear el nodo de selector
             Selector node;
@@ -1578,7 +1646,7 @@ public class Parser
             Eat(TokenType.Colon);
 
             // Consumir el corchete izquierdo
-            Eat(TokenType.LeftBracket);
+            Eat(TokenType.LeftBrace);
 
             // Inicializar variables para almacenar los resultados
             EffectOnActivation effectOnActivation = null;
@@ -1586,7 +1654,7 @@ public class Parser
             Selector selector = null;
 
             // Bucle para procesar diferentes partes de la post-action
-            while (CurrentToken.Type != TokenType.RightBracket && CurrentToken.Type != TokenType.EndOfFile)
+            while (CurrentToken.Type != TokenType.RightBrace && CurrentToken.Type != TokenType.EndOfFile)
             {
                 // Manejar el efecto al activarse
                 if (CurrentToken.Type == TokenType.OnActivation_Effect)
@@ -1595,7 +1663,7 @@ public class Parser
                     {
                         effectOnActivation = EffectOnActivationParse();
 
-                        if (CurrentToken.Type != TokenType.RightBracket) 
+                        if (CurrentToken.Type != TokenType.RightBrace) 
                         {
                             Eat(TokenType.Comma);
                         }
@@ -1614,7 +1682,7 @@ public class Parser
                     {
                         selector = SelectorParse();
 
-                        if (CurrentToken.Type != TokenType.RightBracket) 
+                        if (CurrentToken.Type != TokenType.RightBrace) 
                         {
                             Eat(TokenType.Comma);
                         }
@@ -1634,7 +1702,7 @@ public class Parser
             }
 
             // Consumir el corchete derecho
-            Eat(TokenType.RightBracket);
+            Eat(TokenType.RightBrace);
 
             // Crear el nodo de post-action
             PostAction node;
@@ -1669,7 +1737,7 @@ public class Parser
         try
         {
             // Consumir el corchete izquierdo
-            Eat(TokenType.LeftBracket);
+            Eat(TokenType.LeftBrace);
             
             // Inicializar variables para el efecto, selector y accion posterior
             EffectOnActivation effectOnActivation = null;
@@ -1679,7 +1747,7 @@ public class Parser
             PostAction postAction = null;
 
             // Bucle hasta que se alcance el corchete derecho
-            while (CurrentToken.Type != TokenType.RightBracket && CurrentToken.Type != TokenType.EndOfFile)
+            while (CurrentToken.Type != TokenType.RightBrace && CurrentToken.Type != TokenType.EndOfFile)
             {
                 // Manejar token OnActivation_Effect
                 if (CurrentToken.Type == TokenType.OnActivation_Effect)
@@ -1689,8 +1757,10 @@ public class Parser
                         // Analizar el efecto
                         effectOnActivation = EffectOnActivationParse();
 
+                        Debug.Log("luego de parsear el effect: " + CurrentToken.Type + "  " + CurrentToken.Lexeme);
+
                         // Verificar si hay otro elemento despues del efecto
-                        if (CurrentToken.Type != TokenType.RightBracket) 
+                        if (CurrentToken.Type != TokenType.RightBrace) 
                         {
                             Eat(TokenType.Comma);
                         }
@@ -1710,8 +1780,10 @@ public class Parser
                         // Analizar el selector
                         selector = SelectorParse();
 
+                        Debug.Log("luego de parsear el selector: " + CurrentToken.Type);
+
                         // Verificar si hay otro elemento despues del selector
-                        if (CurrentToken.Type != TokenType.RightBracket) 
+                        if (CurrentToken.Type != TokenType.RightBrace) 
                         {
                             Eat(TokenType.Comma);
                         }
@@ -1733,7 +1805,7 @@ public class Parser
                         postAction = PostActionParse();
 
                         // Verificar si hay otro elemento despues de la accion posterior
-                        if (CurrentToken.Type != TokenType.RightBracket) 
+                        if (CurrentToken.Type != TokenType.RightBrace) 
                         {
                             Eat(TokenType.Comma);
                         }
@@ -1753,7 +1825,7 @@ public class Parser
             }
 
             // Consumir el corchete derecho
-            Eat(TokenType.RightBracket);
+            Eat(TokenType.RightBrace);
 
             // Crear el nodo OnActivationElement basado en los elementos analizados
             OnActivationElement node;
@@ -1806,10 +1878,10 @@ public class Parser
             List<OnActivationElement> nodes = new List<OnActivationElement>();
 
             // Bucle mientras no se alcance el corchete derecho o el fin del archivo
-            while (CurrentToken.Type != TokenType.RightBrace && CurrentToken.Type != TokenType.EndOfFile)
+            while (CurrentToken.Type != TokenType.RightBracket && CurrentToken.Type != TokenType.EndOfFile)
             {
                 // Si el token actual es un corchete izquierdo
-                if (CurrentToken.Type == TokenType.LeftBracket)
+                if (CurrentToken.Type == TokenType.LeftBrace)
                 {
                     // Analizar un elemento de activacion
                     OnActivationElement node = OnActivationElementParse();
@@ -1817,8 +1889,10 @@ public class Parser
                     // Agregar el nodo a la lista
                     nodes.Add(node);
 
+                    Debug.Log("luego de parsear el onActivation: " + CurrentToken.Type);
+
                     // Si no estamos al final de los elementos, consumir una coma
-                    if (CurrentToken.Type != TokenType.RightBrace) 
+                    if (CurrentToken.Type != TokenType.RightBracket) 
                     {
                         Eat(TokenType.Comma);
                     }
@@ -1852,13 +1926,15 @@ public class Parser
             Eat(TokenType.Colon);
 
             // Consumir el corchete izquierdo            
-            Eat(TokenType.LeftBrace);
+            Eat(TokenType.LeftBracket);
 
             // Obtener la lista de elementos de activacion            
             List<OnActivationElement> list = OnActivationList();
+
+            Debug.Log("este es el token que sale desp de que se parsea ONA: " + CurrentToken.Type);
             
             // Consumir el corchete derecho
-            Eat(TokenType.RightBrace);
+            Eat(TokenType.RightBracket);
 
             // Crear un nuevo nodo OnActivation
             OnActivation node = new OnActivation();
@@ -1881,11 +1957,16 @@ public class Parser
     {
         try
         {
+            //Debug.Log("este es el token antes de card:  " + CurrentToken.Type);
             // Consumir el token Card
             Eat(TokenType.Card);
 
+            //Debug.Log("este es el token antes de la llave :  " + CurrentToken.Type);
+
             // Consumir el corchete izquierdo
-            Eat(TokenType.LeftBracket);
+            Eat(TokenType.LeftBrace);
+
+            //Debug.Log(CurrentToken.Type + " este es el token luego de comer la llave");
 
             // Variables para almacenar los datos del card
             ParamName name = null;
@@ -1901,7 +1982,7 @@ public class Parser
             OnActivation onActivation = null;
 
             // Bucle mientras no se alcance el corchete derecho o el fin del archivo
-            while (CurrentToken.Type != TokenType.RightBracket && CurrentToken.Type != TokenType.EndOfFile)
+            while (CurrentToken.Type != TokenType.RightBrace && CurrentToken.Type != TokenType.EndOfFile)
             {
                 if (CurrentToken.Type == TokenType.Name)
                 {
@@ -1947,7 +2028,7 @@ public class Parser
                         type = TypeParse();
 
                         // Si no estamos al final de los elementos, consumir una coma
-                        if (CurrentToken.Type != TokenType.RightBracket) 
+                        if (CurrentToken.Type != TokenType.RightBrace) 
                         {
                             Eat(TokenType.Comma);
                         }
@@ -1969,7 +2050,7 @@ public class Parser
                         faction = FactionParse();
 
                         // Si no estamos al final de los elementos, consumir una coma
-                        if (CurrentToken.Type != TokenType.RightBracket) 
+                        if (CurrentToken.Type != TokenType.RightBrace) 
                         {
                             Eat(TokenType.Comma);
                         }
@@ -1991,7 +2072,7 @@ public class Parser
                         power = PowerParse();
 
                         // Si no estamos al final de los elementos, consumir una coma
-                        if (CurrentToken.Type != TokenType.RightBracket) 
+                        if (CurrentToken.Type != TokenType.RightBrace) 
                         {
                             Eat(TokenType.Comma);
                         }
@@ -2011,8 +2092,10 @@ public class Parser
                         // Analizar el rango de la carta
                         range = RangeParse();
 
+                       // Debug.Log(CurrentToken.Type + "este es el token luego de parsear el rango");
+
                         // Si no estamos al final de los elementos, consumir una coma
-                        if (CurrentToken.Type != TokenType.RightBracket) 
+                        if (CurrentToken.Type != TokenType.RightBrace) 
                         {
                             //Repeticion invalida de Range
                             Eat(TokenType.Comma);
@@ -2034,7 +2117,7 @@ public class Parser
                         onActivation = OnActivationParse();
 
                         // Si no estamos al final de los elementos, consumir una coma
-                        if (CurrentToken.Type != TokenType.RightBracket) 
+                        if (CurrentToken.Type != TokenType.RightBrace) 
                         {
                             Eat(TokenType.Comma);
                         }
@@ -2054,7 +2137,7 @@ public class Parser
             }
 
             // Consumir el corchete derecho
-            Eat(TokenType.RightBracket);
+            Eat(TokenType.RightBrace);
 
             // Crear un nuevo nodo CArdNode con todos los datos analizados
             CardNode node = new CardNode(name, type, faction, power, range, onActivation);
@@ -2125,7 +2208,7 @@ public class Parser
             Args args = new Args();
 
             // Bucle mientras el token actual no sea corchete derecho o fin del archivo
-            while (CurrentToken.Type != TokenType.RightBracket && CurrentToken.Type != TokenType.EndOfFile)
+            while (CurrentToken.Type != TokenType.RightBrace && CurrentToken.Type != TokenType.EndOfFile)
             {
                 // Analizar la variaable
                 Var variable = Variable(scope);
@@ -2153,7 +2236,7 @@ public class Parser
                     Eat(CurrentToken.Type);
 
                     // Si no estamos al final de los parametros, consumir una coma
-                    if (CurrentToken.Type != TokenType.RightBracket)
+                    if (CurrentToken.Type != TokenType.RightBrace)
                     {
                         Eat(TokenType.Comma);
                     }
@@ -2194,13 +2277,13 @@ public class Parser
             Eat(TokenType.Colon);
 
             // Consumir el corchete izquierdo
-            Eat(TokenType.LeftBracket);
+            Eat(TokenType.LeftBrace);
 
             // Obtener los parametros en el metodo GetParametersInParams
             Args node = GetParametersInParams(scope);
 
             // Consumir el corchete derecho
-            Eat(TokenType.RightBracket);
+            Eat(TokenType.RightBrace);
 
             return node;
         }
@@ -2227,7 +2310,13 @@ public class Parser
             // Analizar las variables para los targets y el contexto
             Var targets = Variable(outScope);
 
+            //Debug.Log("este es el token que sale luego de declarar Targets:  " + CurrentToken.Type);
+
+            Eat(TokenType.Comma);
+
             Var context = Variable(outScope);
+
+            //Debug.Log("este es el token que salio luego de declarar el contexto: " + CurrentToken.Type);
 
             // Configurar tipos para targets y contexto
             targets.type = ASTType.Type.Field;
@@ -2246,9 +2335,6 @@ public class Parser
                 // Agregar targets al alcance
                 outScope.Set(targets, targets.type);
             }
-
-            // Consumir coma
-            Eat(TokenType.Comma);
       
             if (outScope.IsInScope(context) || context.GetType() == typeof(VarComp))
             {
@@ -2267,6 +2353,8 @@ public class Parser
 
             // Consumir el simbolo =>
             Eat(TokenType.EqualGreater);
+
+            //Debug.Log(CurrentToken.Type + " luego de Arrow (se espera Llave)");
 
             // Analizar el cuerpo de la accion
             Compound body = CompoundStatement(outScope);
@@ -2291,7 +2379,7 @@ public class Parser
             Eat(TokenType.Effect);
 
             // Consumir el corchete izquierdo
-            Eat(TokenType.LeftBracket);
+            Eat(TokenType.LeftBrace);
 
             // Crear un nuevo alcance para los efectos
             Scope<ASTType.Type> scope = new Scope<ASTType.Type>(GlobalScope);
@@ -2304,7 +2392,7 @@ public class Parser
             Action action = null;
 
             // Bucle para procesar los elementos del efecto
-            while (CurrentToken.Type != TokenType.RightBracket && CurrentToken.Type != TokenType.EndOfFile)
+            while (CurrentToken.Type != TokenType.RightBrace && CurrentToken.Type != TokenType.EndOfFile)
             {
                 // Manejar el token Name
                 if (CurrentToken.Type == TokenType.Name)
@@ -2327,7 +2415,7 @@ public class Parser
                         }
 
                         // Si no estamos al final de los elementos, consumir una coma
-                        if (CurrentToken.Type != TokenType.RightBracket)
+                        if (CurrentToken.Type != TokenType.RightBrace)
                         {
                             Eat(TokenType.Comma);
                         }    
@@ -2348,7 +2436,7 @@ public class Parser
                         parameters = ParamsEffectParse(scope);
 
                         // Si no estamos al final de los elementos, consumir una coma
-                        if (CurrentToken.Type != TokenType.RightBracket)
+                        if (CurrentToken.Type != TokenType.RightBrace)
                         {
                             Eat(TokenType.Comma);
                         }
@@ -2366,10 +2454,11 @@ public class Parser
                 {
                     if (action == null)
                     {
+                       // Debug.Log("Aqui va a parsear la accion  " + CurrentToken.Type);
                         action = ActionParse(scope);
 
                         // Si no estamos al final de los elementos, consumir una coma
-                        if (CurrentToken.Type != TokenType.RightBracket)
+                        if (CurrentToken.Type != TokenType.RightBrace)
                         {
                             Eat(TokenType.Comma);
                         }                            
@@ -2389,7 +2478,9 @@ public class Parser
             }
 
             // Consumir el corchete derecho
-            Eat(TokenType.RightBracket);
+            Eat(TokenType.RightBrace);
+
+            Debug.Log("Ultimo cierre de Llave, sig. token: " + CurrentToken.Type);
 
             // Crear el nodo EffectNode basado en los elementos analizados
             EffectNode node;
@@ -2450,6 +2541,11 @@ public class Parser
 
                     // Agregar el nodo de efecto a la lista
                     listOfCardAndEffect.Add(node);
+                }
+
+                else if (CurrentToken.Type == TokenType.RightBrace)
+                {
+                    Eat(TokenType.RightBrace);
                 }
 
                 else 
@@ -2542,8 +2638,9 @@ public class Parser
                 }
 
                 // Verificar si el operador es igualdad o desigualdad
-                if (node.Operator.Type == TokenType.Equal || node.Operator.Type == TokenType.BangEqual)
+                if (node.Operator.Type == TokenType.Equal || node.Operator.Type == TokenType.Differ)
                 {
+                    Debug.Log(node.Operator.Type + " se espera differ");
                     // Operacion valida para comparaciones
                     return true;
                 }
@@ -2577,13 +2674,13 @@ public class Parser
         try
         {
             // Consumir el corchete izquierdo
-            Eat(TokenType.LeftBrace);
+            Eat(TokenType.LeftBracket);
 
             // Analizar la expresion para el indice
             ASTType index = Expression(scope);
 
             // Consumir el corchete derecho
-            Eat(TokenType.RightBrace);
+            Eat(TokenType.RightBracket);
 
             // Crear un nuevo nodo Indexer
             Indexer node = new Indexer(index);
@@ -2691,7 +2788,16 @@ public class Parser
                 string s = otherVar.value;
 
                 // Verificar si el valor es válido (Type, Name, Faction, Range, Power)
-                return (s == "Type" || s == "Name" || s == "Faction" || s == "Range" || s == "Power");
+                return (s == "Type" || s == "Name" || s == "Faction" || s == "Range" || s == "Power" || s == "Owner");
+            }
+
+            else if(var.GetType() == typeof(Pointer))
+            {
+                Pointer p = var as Pointer;
+
+                string s = p.pointer;
+                
+                return s == "Owner";
             }
 
             // Si no es una Var, la composicion no es valida
@@ -2933,7 +3039,7 @@ public class Parser
         string s = token.Lexeme;
 
         // Verificar si el lexema es uno de los valores validos para fuentes
-        return (s == "board" || s == "hand" || s == "deck" || s == "field" || s == "parent" || s == "otherBoard" || s == "otherHand" || s == "otherDeck" || s == "otherField");
+        return (s == "board" || s == "hand" || s == "deck" || s == "field" || s == "parent" || s == "otherBoard" || s == "otherHand" || s == "otherDeck" || s == "otherField" || s== "Graveyard");
     }
 
     public void ErrorAlReadyDefinesMember(string name)

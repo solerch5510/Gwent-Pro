@@ -21,3 +21,4 @@ MonoBehaviour:
   playerID: 1
   description: Unidad de Asedio
   classCard: SilverCard
+  Faction: 0

@@ -21,6 +21,8 @@ public class BinaryOperators : ASTType
         this.Operator = Operator;
 
         this.Right = Right;
+
+        FindType();
     }
 
     // Metodo para expresar la estructura del operador binario en el AST
@@ -52,7 +54,7 @@ public class BinaryOperators : ASTType
             type = Type.Int;
         }
 
-        if(Operator.Type == TokenType.And || Operator.Type == TokenType.Or || Operator.Type == TokenType.Greater || Operator.Type == TokenType.Less || Operator.Type == TokenType.LessEqual || Operator.Type == TokenType.GreaterEqual || Operator.Type == TokenType.BangEqual || Operator.Type == TokenType.Equal)
+        if(Operator.Type == TokenType.And || Operator.Type == TokenType.Or || Operator.Type == TokenType.Greater || Operator.Type == TokenType.Less || Operator.Type == TokenType.LessEqual || Operator.Type == TokenType.GreaterEqual || Operator.Type == TokenType.Differ || Operator.Type == TokenType.Equal)
         {
             type = Type.Bool;
         }

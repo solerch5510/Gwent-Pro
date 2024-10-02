@@ -9,9 +9,29 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 804183190788923785, guid: 9879dc9af39258c41961ddd385c3bc11, type: 3}
+      propertyPath: Zone
+      value: Siege
+      objectReference: {fileID: 0}
+    - target: {fileID: 804183190788923785, guid: 9879dc9af39258c41961ddd385c3bc11, type: 3}
       propertyPath: card
       value: 
       objectReference: {fileID: 11400000, guid: 16d14e3b6a622a24d90a58a6cd17bb16, type: 2}
+    - target: {fileID: 804183190788923785, guid: 9879dc9af39258c41961ddd385c3bc11, type: 3}
+      propertyPath: cardFaction
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1399014440924609763, guid: 9879dc9af39258c41961ddd385c3bc11, type: 3}
+      propertyPath: m_Text
+      value: SilverCard
+      objectReference: {fileID: 0}
+    - target: {fileID: 2933048833816595125, guid: 9879dc9af39258c41961ddd385c3bc11, type: 3}
+      propertyPath: m_Text
+      value: Resta de Poder
+      objectReference: {fileID: 0}
+    - target: {fileID: 3717589672270081694, guid: 9879dc9af39258c41961ddd385c3bc11, type: 3}
+      propertyPath: m_Text
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 5515767062637245745, guid: 9879dc9af39258c41961ddd385c3bc11, type: 3}
       propertyPath: m_Name
       value: Void (1) Variant
@@ -95,6 +115,14 @@ PrefabInstance:
     - target: {fileID: 7985330375737115061, guid: 9879dc9af39258c41961ddd385c3bc11, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8281458868468745244, guid: 9879dc9af39258c41961ddd385c3bc11, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 9051993463012034499, guid: 9879dc9af39258c41961ddd385c3bc11, type: 3}
+      propertyPath: m_Text
+      value: Creacion del usuario (con suerte funciona)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

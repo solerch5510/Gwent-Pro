@@ -108,9 +108,17 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 0.21960786
       objectReference: {fileID: 0}
+    - target: {fileID: 1281560345430341457, guid: 8f279014b5949f046822c6fb9dddcd98, type: 3}
+      propertyPath: m_Text
+      value: Creacion del usuario (con suerte funciona)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2214511762075628686, guid: 8f279014b5949f046822c6fb9dddcd98, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 2368278412934333859, guid: 8f279014b5949f046822c6fb9dddcd98, type: 3}
       propertyPath: m_Name
-      value: Void
+      value: Void-1
       objectReference: {fileID: 0}
     - target: {fileID: 3654574095533499961, guid: 8f279014b5949f046822c6fb9dddcd98, type: 3}
       propertyPath: card
@@ -128,6 +136,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4963644224167000615, guid: 8f279014b5949f046822c6fb9dddcd98, type: 3}
+      propertyPath: m_Text
+      value: Multiplicador de Poder
+      objectReference: {fileID: 0}
     - target: {fileID: 5108946447368495832, guid: 8f279014b5949f046822c6fb9dddcd98, type: 3}
       propertyPath: m_SizeDelta.x
       value: 79.674
@@ -137,8 +149,16 @@ PrefabInstance:
       value: -0.00010157
       objectReference: {fileID: 0}
     - target: {fileID: 6899981219081362956, guid: 8f279014b5949f046822c6fb9dddcd98, type: 3}
+      propertyPath: m_Text
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6899981219081362956, guid: 8f279014b5949f046822c6fb9dddcd98, type: 3}
       propertyPath: m_Color.a
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7457723598492913947, guid: 8f279014b5949f046822c6fb9dddcd98, type: 3}
+      propertyPath: Zone
+      value: Siege
       objectReference: {fileID: 0}
     - target: {fileID: 7457723598492913947, guid: 8f279014b5949f046822c6fb9dddcd98, type: 3}
       propertyPath: card
@@ -148,6 +168,10 @@ PrefabInstance:
       propertyPath: powerText
       value: 
       objectReference: {fileID: 6545991942993422464}
+    - target: {fileID: 9168322206463446129, guid: 8f279014b5949f046822c6fb9dddcd98, type: 3}
+      propertyPath: m_Text
+      value: SilverCard
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

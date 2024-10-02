@@ -35,7 +35,7 @@ public enum TokenType
 
     // Tokens Condicionales 
     And, Or, Not, Greater, Less, GreaterEqual, LessEqual, EqualGreater,
-    Equal, Bang, BangEqual, Null,
+    Equal, Bang, Differ, Null,
 
     // Tokens de un solo caracter
     Colon, SemiColon, Slash,  Comma, LeftParenthesis, RightParenthesis, LeftBrace, RightBrace,
@@ -43,7 +43,7 @@ public enum TokenType
 
     // Palabras Clave
     If, For, While, Action, Card, Effect, Name, Params, Type, Faction, Power, Range,
-    OnActivation, Targets, Context, Single, Predicate, PostAction, In, OnActivation_Effect,
+    OnActivation, Targets, Context, Single, Predicate, PostAction, In, OnActivation_Effect, Owner,
 
     // Indicador de fin de archivo.
     EndOfFile,
@@ -55,7 +55,7 @@ public enum TokenType
     Var_Int, Var_Bool, Var_String,
 
     //Operadores
-    Plus, Minus, Multiply, Divide, Mod, Pow, Plus1, String_Sum, String_Sum_S, Decrement, Assign
+    Plus, Minus, Multiply, Divide, Mod, Pow, Plus1, String_Sum, String_Sum_S, Decrement, Assign,
 
 
 

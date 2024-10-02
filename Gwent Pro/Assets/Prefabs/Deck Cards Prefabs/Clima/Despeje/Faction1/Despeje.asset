@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: Despeje
   m_EditorClassIdentifier: 
   name: Sale el Sol
-  description: Despeja las cartas de clima.
-  classCard: Clima
   power: 0
   basedPower: 0
+  whichEffectIs: 0
   spriteImage: {fileID: 21300000, guid: e9662d779c740d44b88abd7c613b057b, type: 3}
   Zone: C(R)
   playerID: 1
+  description: Despeja las cartas de clima.
+  classCard: Clima

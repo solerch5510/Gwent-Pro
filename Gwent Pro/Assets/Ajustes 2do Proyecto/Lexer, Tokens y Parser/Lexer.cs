@@ -109,15 +109,17 @@ public class Lexer
 
         reservedWords.Add("Range", new Token(TokenType.Range, "Range", 0, 0));
 
+        reservedWords.Add("Owner" , new Token(TokenType.Owner, "Owner" , 0 , 0));
+
         reservedWords.Add("OnActivation", new Token(TokenType.OnActivation, "OnActivation", 0, 0));
 
-        reservedWords.Add("OnActivationEffect", new Token(TokenType.OnActivation_Effect, "OnActivation Effect", 0, 0));
+        reservedWords.Add("Effect", new Token(TokenType.OnActivation_Effect, "OnActivation Effect", 0, 0));
 
         reservedWords.Add("PostAction", new Token(TokenType.PostAction, "PostAction", 0, 0));
 
-        reservedWords.Add("targets", new Token(TokenType.Targets, "Target", 0, 0));
+        reservedWords.Add("Selector", new Token(TokenType.Targets, "Target", 0, 0));
 
-        reservedWords.Add("Context", new Token(TokenType.Context, "Context", 0, 0));
+        reservedWords.Add("Source", new Token(TokenType.Context, "Context", 0, 0));
 
         reservedWords.Add("Single", new Token(TokenType.Single, "Single", 0, 0));
 
@@ -195,19 +197,51 @@ public class Lexer
                 AddToken(TokenType.SemiColon, currentLine, currentPosition);
                 break;
             case '*':
-                AddToken(TokenType.Multiply, currentLine, currentPosition);
+
+                if(IsMatch('='))
+                {
+                    AddToken(TokenType.Assign, currentLine , ++currentPosition);
+                    currentPosition++;
+                }
+                else 
+                {
+                    AddToken(TokenType.Multiply, currentLine, currentPosition);
+                }
                 break;
             case '!':
-                if(character == '=') AddToken(TokenType.BangEqual, currentLine, currentPosition);
-                else AddToken(TokenType.Bang,currentLine, currentPosition);
+                if(IsMatch('='))
+                {
+                    AddToken(TokenType.Differ, currentLine, ++currentPosition);
+                    currentPosition++;
+                } 
+
+                else 
+                {
+                    AddToken(TokenType.Bang,currentLine, currentPosition);
+                }
                 break;
             case '<':
-                if(character == '=') AddToken(TokenType.LessEqual, currentLine, currentPosition);
-                else AddToken(TokenType.Less, currentLine, currentPosition);
+                if(IsMatch('=')) 
+                {
+                    AddToken(TokenType.LessEqual, currentLine, ++currentPosition);
+                    currentPosition++;
+                }
+
+                else 
+                {
+                    AddToken(TokenType.Less, currentLine, currentPosition);
+                }
                 break;
             case '>':
-                if(character == '=') AddToken(TokenType.GreaterEqual, currentLine, currentPosition);
-                else AddToken(TokenType.Greater, currentLine, currentPosition);
+                if(IsMatch('='))
+                {
+                    AddToken(TokenType.GreaterEqual, currentLine, ++currentPosition);
+                } 
+
+                else 
+                {
+                    AddToken(TokenType.Greater, currentLine, currentPosition);
+                }
                 break;
             case '|':
                 if (IsMatch('|')) 
@@ -247,6 +281,13 @@ public class Lexer
                     
                     currentPosition++;
                 }
+
+                else if(IsMatch('='))
+                {
+                    AddToken(TokenType.Assign, currentLine, ++currentPosition);
+
+                    currentPosition++;
+                }
                 
                 else AddToken(TokenType.Plus, currentLine, currentPosition);
                 break;
@@ -255,6 +296,12 @@ public class Lexer
                 {
                     AddToken(TokenType.Decrement, currentLine, ++currentPosition);
                     
+                    currentPosition++;
+                }
+
+                else if(IsMatch('='))
+                {
+                    AddToken(TokenType.Assign, currentLine, ++currentPosition);
                     currentPosition++;
                 }
                 else AddToken(TokenType.Minus, currentLine, currentPosition);
@@ -267,10 +314,46 @@ public class Lexer
                         Advance();
                     }
                 }
+
+                else if(IsMatch('='))
+                {
+                    AddToken(TokenType.Assign , currentLine, ++currentPosition);
+                    currentPosition++;
+                }
                 else AddToken(TokenType.Slash, currentLine, currentPosition);
                 break;
             case '%':
-                AddToken(TokenType.Mod, currentLine, currentPosition);
+
+                if (IsMatch('='))
+                {
+                    AddToken(TokenType.Assign, currentLine, ++currentPosition);
+                    currentPosition++;
+                }
+
+                else
+                {
+                    AddToken(TokenType.Mod, currentLine, currentPosition);
+                }
+                
+                break;
+            case '@':
+                if(IsMatch('@'))
+                {
+                    AddToken(TokenType.String_Sum_S, currentLine, ++currentPosition);
+                    currentPosition++;
+                }
+
+                else if(IsMatch('='))
+                {
+                    AddToken(TokenType.Assign, currentLine, ++currentPosition);
+                    currentPosition++;
+                }
+
+                else
+                {
+                    AddToken(TokenType.String_Sum, currentLine, currentPosition);
+                }
+
                 break;
             
             //Casos para saltos de linea y espacios

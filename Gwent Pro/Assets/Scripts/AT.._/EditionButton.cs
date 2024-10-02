@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class EditionButtom : MonoBehaviour
 {
+    public GameObject TextField;
+
+    bool IsActive = false;
     private string ReadInput ;
     // Start is called before the first frame update
     void Start()
@@ -17,6 +20,24 @@ public class EditionButtom : MonoBehaviour
         
     }
 
+    public void ActivationField()
+    {
+        if(IsActive == false)
+        {
+            TextField.SetActive(true);
+            
+            IsActive = true;
+        }
+
+        else if(IsActive == true)
+        {
+            TextField.SetActive(false);
+            IsActive = false;
+        }
+        
+
+    }
+
     public void ReadStringInput (string Input)
     {
         ReadInput = Input;
@@ -28,7 +49,7 @@ public class EditionButtom : MonoBehaviour
 
             Lexer lexer = new Lexer(ReadInput);
 
-           /* foreach ( Token token in lexer.tokenList )
+           /*sforeach ( Token token in lexer.tokenList )
             {
                 Debug.Log(token.Lexeme);
 
@@ -39,7 +60,7 @@ public class EditionButtom : MonoBehaviour
 
            Parser parser = new Parser(lexer);
 
-           parser.Parse();
+           Interpreter interpreter = new Interpreter(parser);
         }
 
         else

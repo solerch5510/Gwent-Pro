@@ -92,6 +92,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Caballero Abandonado-2
       objectReference: {fileID: 0}
+    - target: {fileID: 3305401011494352729, guid: 40eb1d92629ea03448e75c52a4fbd1c2, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7673531265270473697, guid: 40eb1d92629ea03448e75c52a4fbd1c2, type: 3}
       propertyPath: card
       value: 

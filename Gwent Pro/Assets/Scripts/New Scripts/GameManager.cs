@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -9,12 +10,16 @@ public class GameManager : MonoBehaviour
     public static bool whichPlayerIs = true; // para controlar el flujo del juego (es decir que player esta jugando en el momento (true-player1 ; false-player2))
     public static bool endTurn1;
     public static bool endTurn2;   
+
+    private bool IsAllInstantiate = false;
     public static int pointsPlayer1;
     public static int pointsPlayer2; 
     public static int roundsWonByPlayer1;
     public static int roundsWonByPlayer2;
     public  GameObject readyToPLay1; 
     public GameObject readyToPLay2;
+    public GameObject deck1;
+    public GameObject deck2;
     public GameObject CongratulationsPlayer1;  
     public GameObject CongratulationsPlayer2;
     public GameObject trophy; // O chapita de ganar la ronda , como prefieras ... 
@@ -62,6 +67,16 @@ public class GameManager : MonoBehaviour
 
         List<GameObject> player2Cards = players.Player2.Cards;
 
+        GameManager gameManager = GameObject.FindObjectOfType<GameManager>();
+
+        List<GameObject> deck1 , deck2;
+
+        deck1 = gameManager.drawCard.Cards;
+        
+        deck2 = gameManager.drawCard2.Cards;
+
+        //gameManager.VerifyCardsRemoved(gameManager);
+
         if(playerID == true) // Si la carta es del player uno entonces:
         {
             player1Cards.Remove(thisCard); //Quita la carta que colisiono de la lista de player1
@@ -82,8 +97,6 @@ public class GameManager : MonoBehaviour
             {
                 card.SetActive(false);
             }
-
-            GameManager gameManager = GameObject.FindObjectOfType<GameManager>();
 
             gameManager.readyToPLay2.SetActive(true); // Activa el readyToPlay2 del player2
 
@@ -110,8 +123,6 @@ public class GameManager : MonoBehaviour
             {
                 card.SetActive(false);
             }
-
-            GameManager gameManager = GameObject.FindObjectOfType<GameManager>();
 
             gameManager.readyToPLay1.SetActive(true);//Activa el readyToPlay1 del Player1.
 
@@ -372,16 +383,12 @@ public class GameManager : MonoBehaviour
         MGraveyard = new FieldStruct(Graveyard2);
     
         // Agregar todas las estructuras a sus facciones correspondientes
-        PaladinsFaction.Add(PaladinsHand); 
-        MonsterFaction.Add(MonstersHand);
         PaladinsFaction.Add(PSiege); 
         MonsterFaction.Add(MSiege);
         PaladinsFaction.Add(PRange); 
         MonsterFaction.Add(MRange);
         PaladinsFaction.Add(PMelee); 
         MonsterFaction.Add(MMelee);
-        PaladinsFaction.Add(PDeck); 
-        MonsterFaction.Add(MDeck);
         PaladinsFaction.Add(PGraveyard); 
         MonsterFaction.Add(MGraveyard);
     
@@ -400,7 +407,7 @@ public class GameManager : MonoBehaviour
         allBoard.Add(MGraveyard);
     }
 
-    private void Start()
+    public void Start()
     {
         StartCoroutine(StartDalayedCoroutine());
     }
@@ -408,6 +415,8 @@ public class GameManager : MonoBehaviour
     IEnumerator StartDalayedCoroutine()
     {
         yield return new WaitForEndOfFrame();
+
+        InstantiateAllCards();
         
         ResetBoard();
     }
@@ -543,6 +552,82 @@ public class GameManager : MonoBehaviour
             
         // Retornar el campo con solo una carta
         return target;
+    }
+
+    public void InstantiateAllCards()
+    {
+        if( IsAllInstantiate == true)
+        {
+            return;
+        }
+
+        else
+        {
+            List<GameObject> deckCards1 , deckCards2;
+
+            deckCards1 = drawCard.Cards;
+
+            deckCards2 = drawCard2.Cards;
+
+            GameObject parent1 = deck1;
+
+            GameObject parent2 = deck2;
+
+            foreach(GameObject card in deckCards1)
+            {
+                GameObject instantiateCard = Instantiate(card, new Vector3(0,0,0), Quaternion.identity);
+
+                instantiateCard.SetActive(false);
+
+                instantiateCard.transform.SetParent(parent1.transform, false);
+            }
+
+            foreach (GameObject card in deckCards2)
+            {
+                GameObject instantiateCard = Instantiate(card,new Vector3(0,0,0), Quaternion.identity);
+
+                instantiateCard.SetActive(false);
+
+                instantiateCard.transform.SetParent(parent2.transform, false);                
+            }
+        }
+
     }  
+
+    void VerifyCardsRemoved(GameManager gameManager)
+    {
+        GameObject deckInScene1 = deck1;
+
+        GameObject deckInScene2 = deck2;
+
+        List<GameObject> temporal1 = new List<GameObject>();
+
+        List<GameObject> temporal2 = new List<GameObject>();
+
+        foreach(Transform child in deckInScene1.transform )
+        {
+            GameObject goChild = child.gameObject;
+            
+            if(gameManager.drawCard.Cards.Contains(goChild))
+            {
+                temporal1.Add(goChild);
+            }
+        }
+
+        foreach (Transform child in deckInScene2.transform )
+        {
+            GameObject goChild = child.gameObject;
+           
+            if (gameManager.drawCard2.Cards.Contains(goChild))
+            {
+                temporal2.Add(goChild);
+            } 
+        }
+
+        gameManager.drawCard.Cards = temporal1;
+
+        gameManager.drawCard2.Cards = temporal2;
+
+    }
 
 }

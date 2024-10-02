@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: NieblaDensa
   m_EditorClassIdentifier: 
   name: Niebla Abrumadora
-  description: Niebla que afecta a las unidades de rango.
-  classCard: Clima
   power: 0
   basedPower: 0
+  whichEffectIs: 0
   spriteImage: {fileID: 21300000, guid: d2b80038ee869204b8ac492ec88dc221, type: 3}
   Zone: C(R)
   playerID: 1
+  description: Niebla que afecta a las unidades de rango.
+  classCard: Clima

@@ -28,8 +28,17 @@ public class CardStruct : Struct
         // Convertir la clave a string
         string k = key as string;
 
+       
+       // Agregar una comprobación de null aquí
+      /* if (card == null || card.GetComponent<CardDisplay>() == null)
+       {
+           Debug.Log("Card or CardDisplay component is null");
+           return null; // o algún valor por defecto apropiado
+       }*/
+
         // Obtener el componente CardDisplay de la carta
         CardDisplay cardDisplay = card.GetComponent<CardDisplay>();
+
 
         // Verificar el tipo de informacion solicitada
         if (k == "Power") 
@@ -41,13 +50,13 @@ public class CardStruct : Struct
         if (k == "Name") 
         {
             // Retornar el nombre de la carta
-            return cardDisplay.card.name;
+            return cardDisplay.name;
         }
 
         if (k == "Type") 
         {
             // Determinar el tipo de carta (GoldenCard o SilverCard)
-            if(cardDisplay.card.classCard == "GoldenCard")
+            if(cardDisplay.card.Faction == 1)
             {
                 return  "GoldenCard";
             }
@@ -61,7 +70,7 @@ public class CardStruct : Struct
         if (k == "Range")
         {
             // Determinar la zona de la carta
-            string zone = cardDisplay.card.Zone;
+            string zone = cardDisplay.Zone;
             
             if (zone == "Melee") 
             {
@@ -90,15 +99,28 @@ public class CardStruct : Struct
         {   
             // Determinar la facción de la carta
             // Player uno es la faccion con true
-            if( cardDisplay.card.playerID == true)
+            if( cardDisplay.card.Faction == 1)
             {
-                return true;
+                return "Paladins";
             }
 
             // Player dos es la Faccion que se identifica con false
             else
             {
-                return false;
+                return "Monsters";
+            }
+        } 
+
+        if (k == "Owner")
+        {
+            if(cardDisplay.card.playerID == true)
+            {
+                return gameBoardReferences.PaladinsFaction;
+            }
+
+            else
+            {
+                return gameBoardReferences.MonsterFaction;
             }
         } 
 
@@ -115,13 +137,15 @@ public class CardStruct : Struct
         // Obtener el componente CardDisplay de la carta
         CardDisplay cardDisplay = card.GetComponent<CardDisplay>();
 
+        Debug.Log("esta llegado hasta aqui, cambio de las propiedades de las cartas; el bool isLast es: =>  " + isLast);
+
         // Verificar si es la ultima operacion
         if (isLast)
         {
             // Establecer el poder base de la carta
             if (k == "Power")
             {
-                cardDisplay.card.basedPower = ((int)value);
+                cardDisplay.card.power = ((int)value);
             }
 
             // Establecer el nombre de la carta
@@ -135,12 +159,12 @@ public class CardStruct : Struct
             // Establecer el tipo de carta
             if (k == "Type")
             {
-                if (value as string == "Oro") 
+                if (value as string == "Gold") 
                 {
                     cardDisplay.card.Zone = "GoldenCard";
                 }
 
-                if (value as string == "Plata") 
+                if (value as string == "Silver") 
                 {
                     cardDisplay.card.Zone = "SilverCard";
                 }
@@ -191,7 +215,21 @@ public class CardStruct : Struct
                 
             }
         }
-        
+        if (k == "Owner")
+        {
+            if(cardDisplay.card.Faction == 1)
+            {
+                return gameBoardReferences.PaladinsFaction;
+            }
+
+            else
+            {
+                return gameBoardReferences.MonsterFaction;
+            }
+        }
+
+        cardDisplay.Start();
+               
         // Si no se encuentra la informacion solicitada, retornar el valor por defecto
         return default;
     }
@@ -202,6 +240,11 @@ public class CardStruct : Struct
         this.card = card;
 
         gameBoardReferences = GameObject.Find("GameManager").GetComponent<GameManager>();
+
+        if(!card.TryGetComponent(out CardDisplay cardDisplay))
+        {
+            Debug.Log($"CardDisplay component missing from card: {card.gameObject.name}");
+        }
     }
 }
 
@@ -347,8 +390,11 @@ public class FieldStruct : Struct
     // Metodo para eliminar y devolver la primera carta del campo
     public CardStruct Pop()
     {
-        CardStruct toReturn = cardList[0];
-        cardList.RemoveAt(0);
+
+        CardStruct toReturn = cardList[1];
+
+        cardList.RemoveAt(1);
+        
         return toReturn;
     }
 
@@ -434,7 +480,7 @@ public class ContextStruct : Struct
         {
             if (k == "Hand") 
             {
-                return gameBoardReferences.PaladinsHand;
+                return GameObject.Find("Hand");
             }
 
             if (k == "Graveyard") 
@@ -472,7 +518,7 @@ public class ContextStruct : Struct
         {
             if (k == "Hand") 
             {
-                return gameBoardReferences.MonstersHand;
+                return GameObject.Find("Hand");
             }
 
             if (k == "Graveyard") 
@@ -679,7 +725,7 @@ public class ContextStruct : Struct
         {
             if (k == "Hand") 
             {
-                return refToBoard.gameObject;
+                return GameObject.Find("Hand");
             }
 
             if (k == "Graveyard") 
@@ -689,7 +735,7 @@ public class ContextStruct : Struct
 
             if (k == "Deck") 
             {
-                return refToBoard.gameObject;
+                return refToBoard.deck1;
             }
 
             if (k == "Melee") 
@@ -711,7 +757,7 @@ public class ContextStruct : Struct
         {
             if (k == "Hand") 
             {
-                return refToBoard.gameObject;
+                return GameObject.Find("Hand");
             }
 
             if (k == "Graveyard") 
@@ -721,7 +767,7 @@ public class ContextStruct : Struct
 
             if (k == "Deck") 
             {
-                return refToBoard.gameObject;
+                return refToBoard.deck2;
             }
 
             if (k == "Melee") 

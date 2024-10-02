@@ -68,6 +68,14 @@ public class Effects: EffectsDefinition
                 ApplyEffect5();
                 ClearLists(cardPowersStrong, cardPowersWeak);
                 break;
+            case 9:
+                ApplyEffect9();
+                ClearLists(cardPowersStrong, cardPowersWeak);
+                break;
+            case 10:
+                ApplyEffect10(maxPowerCardDisplay);
+                ClearLists(cardPowersStrong, cardPowersWeak);
+                break;
             default:
             // Maneja el caso de un efecto desconocido
                 Debug.LogError("Efecto no reconocido");
@@ -277,5 +285,25 @@ public class Effects: EffectsDefinition
         }
     }
 
-   
+    protected virtual void ApplyEffect9()
+    {
+        Interpreter interpreter = GetComponent<CardDisplay>().card.interpreter;
+
+        interpreter.InterpretEffectToPlay();
+    }   
+
+    public virtual void ApplyEffect10(CardDisplay maxPowerCardDisplay)
+    {
+        if (maxPowerCardDisplay == null) return;
+
+        if (maxPowerCardDisplay.card.playerID)
+        {
+            maxPowerCardDisplay.card.power -=5;
+        }
+
+        else
+        {
+            maxPowerCardDisplay.card.power -=5;
+        }
+    }
 }

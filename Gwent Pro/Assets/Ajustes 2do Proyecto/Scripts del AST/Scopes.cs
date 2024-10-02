@@ -135,7 +135,7 @@ public class Scope <T>
 // Clase adicional para manejar multiples ambitos (scopes) aniidados
 public class MultiScope
 {
-    Scope<object> scope;
+    public Scope<object> scope;
 
     public MultiScope()
     {

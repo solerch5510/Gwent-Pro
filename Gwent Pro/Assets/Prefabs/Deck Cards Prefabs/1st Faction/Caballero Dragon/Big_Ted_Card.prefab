@@ -206,8 +206,9 @@ MonoBehaviour:
   artImage: {fileID: 8331342810969906107}
   powerText: {fileID: 3667283387935797561}
   classCardText: {fileID: 1304085572913521476}
-  Zone: 
+  Zone: Melee
   ActivateOnClick: 1
+  cardFaction: 0
 --- !u!61 &-3396155175711189756
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -575,6 +576,19 @@ PrefabInstance:
       propertyPath: m_Color.a
       value: 0.36862746
       objectReference: {fileID: 0}
+    - target: {fileID: 3740090576000542696, guid: ca77ff312aa92f047a9a46029dcaa5d1, type: 3}
+      propertyPath: m_Text
+      value: Unidad cuerpo a cuerpo. Elimina la fila con menor cantidad de cartas
+        en el campo.
+      objectReference: {fileID: 0}
+    - target: {fileID: 4365670836244800567, guid: ca77ff312aa92f047a9a46029dcaa5d1, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: e2970be26ca1280408aff390e60f2e44, type: 3}
+    - target: {fileID: 6706441146282941640, guid: ca77ff312aa92f047a9a46029dcaa5d1, type: 3}
+      propertyPath: m_Text
+      value: GoldenCard
+      objectReference: {fileID: 0}
     - target: {fileID: 6993589060961631066, guid: ca77ff312aa92f047a9a46029dcaa5d1, type: 3}
       propertyPath: m_Color.a
       value: 0.40784314
@@ -595,6 +609,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7407318403673942686, guid: ca77ff312aa92f047a9a46029dcaa5d1, type: 3}
+      propertyPath: m_Text
+      value: 'Verdugo Primordiano '
+      objectReference: {fileID: 0}
     - target: {fileID: 7540458991361699155, guid: ca77ff312aa92f047a9a46029dcaa5d1, type: 3}
       propertyPath: m_Color.a
       value: 0.40784314
@@ -606,6 +624,10 @@ PrefabInstance:
     - target: {fileID: 7717032983074068670, guid: ca77ff312aa92f047a9a46029dcaa5d1, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9074705507534524085, guid: ca77ff312aa92f047a9a46029dcaa5d1, type: 3}
+      propertyPath: m_Text
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -91,7 +91,7 @@ public class DrawCard2 : MonoBehaviour
             int cardsToDrawn = Mathf.Min(10, Cards.Count); // Asegura no dibujar mas cartas de las que ya tengo.
             for(var i = 0 ; i < cardsToDrawn ; i++)
             {
-                int randomIndex = Random.Range(0, Cards.Count);
+                int randomIndex = 0;
 
                 GameObject playerCard = Instantiate(Cards[randomIndex], new Vector3((-450 + (i*100)),0,0), Quaternion.identity ) ;
                 
@@ -112,6 +112,9 @@ public class DrawCard2 : MonoBehaviour
         {
             foreach(GameObject card in playerCards2)
             {
+                Debug.Log(" Este es el nombre de la carta de P2 =>  " + card.name);
+                card.GetComponent<CardDisplay>().Start();
+                
                 card.SetActive(true);
             }
         }
@@ -182,7 +185,7 @@ public class DrawCard2 : MonoBehaviour
                 Debug.LogError("No hay mas cartas en el deck para dibujar");
             }
 
-            int randomIndex = Random.Range(0, Cards.Count);
+            int randomIndex = 0;
 
             GameObject playerCard = Instantiate(Cards[randomIndex], new Vector3((-450 + (i*100)),0,0), Quaternion.identity ) ;
                 
